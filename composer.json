@@ -1,0 +1,27 @@
+{
+  "name": "ByTIC/Common",
+  "description": "Common Classes used by Nip Framework",
+  "authors": [
+    {
+      "name": "Gabriel Solomon",
+      "email": "hello@gabrielsolomon.ro"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"ByTIC\\Common\\": "src/"}
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/ByTIC/Framework.git"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "ByTIC/Framework": "dev-develop"
+  },
+  "require-dev": {
+    "codeception/codeception": "2.2.*",
+    "codeception/mockery-module": "0.2.*"
+  }
+}
