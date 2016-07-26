@@ -43,7 +43,15 @@ trait RecordsTrait
 
     protected function initTranslator()
     {
-        $this->_translator = $this->newTranslator();
+        $this->setTranslator($this->newTranslator());
+    }
+
+    /**
+     * @param Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->_translator = $translator;
     }
 
     /**
