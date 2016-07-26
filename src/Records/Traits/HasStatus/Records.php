@@ -74,7 +74,7 @@ trait RecordsTrait
 
     public function getStatusRootNamespace()
     {
-        return 'KM42\Common\Models\\';
+        return $this->getRootNamespace();
     }
 
     public function getDefaultStatus()
