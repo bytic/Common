@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Records\Statuses;
 
-use Nip_Records as Records;
-use Nip_Record as Record;
+use Nip\Records\RecordManager as Records;
+use Nip\Records\Record as Record;
 use ReflectionClass;
 
 abstract class Generic

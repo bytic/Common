@@ -1,8 +1,11 @@
 <?php
 
+
+namespace ByTIC\Common\Records\Traits\I18n;
+
 use Nip_I18n as Translator;
 
-trait App_Records_I18nTrait
+trait RecordsTrait
 {
     /**
      * @var Translator
@@ -17,7 +20,7 @@ trait App_Records_I18nTrait
 
     public function getMessage($name, $params = array(), $language = false)
     {
-        $slug ='messages.' . $name;
+        $slug = 'messages.' . $name;
         return $this->translate($slug, $params, $language);
     }
 
