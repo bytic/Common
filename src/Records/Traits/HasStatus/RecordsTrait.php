@@ -34,7 +34,7 @@ trait RecordsTrait
         foreach ($files as $name) {
             $name = str_replace('.php', '', $name);
             if (!in_array($name, array('Abstract', 'Generic', 'AbstractStatus'))) {
-                $object = $this->getStatus($name);
+                $object = $this->newStatus($name);
                 $this->_statuses[$object->getName()] = $object;
             }
         }
@@ -55,10 +55,20 @@ trait RecordsTrait
     }
 
     /**
+     * @param string $name
+     * @return \ByTIC\Common\Records\Statuses\Generic
+     */
+    public function getStatus($name = null)
+    {
+        $statuses = $this->getStatuses();
+        return $statuses[$name];
+    }
+
+    /**
      * @param string $type
      * @return \ByTIC\Common\Records\Statuses\Generic
      */
-    public function getStatus($type = null)
+    public function newStatus($type = null)
     {
         $className = $this->getStatusClass($type);
         $object = new $className();

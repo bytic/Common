@@ -30,7 +30,7 @@ trait RecordTrait
      */
     public function getNewStatus($status)
     {
-        $object = $this->getManager()->getStatus($status);
+        $object = clone $this->getManager()->getStatus($status);
         $object->setItem($this);
         return $object;
     }
