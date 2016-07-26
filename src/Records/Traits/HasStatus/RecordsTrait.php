@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
+use Exception;
+
 trait RecordsTrait
 {
     protected $_statuses = null;
@@ -62,7 +64,7 @@ trait RecordsTrait
     {
         $statuses = $this->getStatuses();
         if (!isset($statuses[$name])) {
-            throw new Exception('Bad status ['.$name.'] for ['.$this->getController().']');
+            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
         }
         return $statuses[$name];
     }
