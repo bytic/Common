@@ -61,6 +61,9 @@ trait RecordsTrait
     public function getStatus($name = null)
     {
         $statuses = $this->getStatuses();
+        if (!isset($statuses[$name])) {
+            throw new Exception('Bad status ['.$name.'] for ['.$this->getController().']');
+        }
         return $statuses[$name];
     }
 
