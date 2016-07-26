@@ -2,12 +2,14 @@
 
 namespace ByTIC\Common\Records\Traits\HasForms;
 
+use Nip\FrontController;
+
 trait RecordsTrait
 {
 
     protected $_formClassNameSlug = null;
 
-    public function newForm($type = NULL)
+    public function newForm($type = null)
     {
         $class = $this->getFormClassName($type);
         return new $class;
@@ -19,16 +21,16 @@ trait RecordsTrait
             $type = $this->getFormTypeDefault();
         }
 
-        $module = \Nip_Request::instance()->getModuleName();
+        $module = FrontController::instance()->getRequest()->getModuleName();
         if (strpos($type, 'admin-') !== false) {
             $module = 'admin';
-            $type   = str_replace('admin-', '', $type);
+            $type = str_replace('admin-', '', $type);
         } elseif (strpos($type, 'default-') !== false) {
             $type = str_replace('default-', '', $type);
         }
 
-        $name = ucfirst($module).'_Forms_';
-        $name .= $this->getFormClassNameSlug().'_';
+        $name = ucfirst($module) . '_Forms_';
+        $name .= $this->getFormClassNameSlug() . '_';
         $name .= inflector()->classify($type);
         return $name;
     }

@@ -6,7 +6,7 @@ namespace ByTIC\Common\Controllers\Traits;
  * Class HasStatus
  * @package ByTIC\Common\Controllers\Traits
  *
- * @property \ApplicationController $this
+ * @property \Nip\Controller $this
  *
  */
 trait HasStatus
