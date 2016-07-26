@@ -3,7 +3,7 @@
 
 namespace ByTIC\Common\Records\Traits\I18n;
 
-use Nip_I18n as Translator;
+use \Nip_I18n as Translator;
 
 trait RecordsTrait
 {
