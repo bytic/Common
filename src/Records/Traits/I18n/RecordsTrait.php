@@ -51,6 +51,6 @@ trait RecordsTrait
      */
     protected function newTranslator()
     {
-        return Nip_I18n::instance();
+        return Translator::instance();
     }
 }
