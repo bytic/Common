@@ -25,7 +25,7 @@ trait Gallery
             'mkdir_mode' => 0777,
 
             // File size restrictions (in bytes):
-            'max_file_size' => null,
+            'max_file_size' => $this->getRequest()->server->getMaxFileSize(),
             'min_file_size' => 1,
 
             // Image resolution restrictions (in px):
@@ -102,7 +102,6 @@ trait Gallery
                 }
             }
         );
-
         if (@$_POST['action'] == 'crop') {
             // Image versions:
             $options['versions'] = array(
@@ -119,6 +118,12 @@ trait Gallery
                     'crop' => $item->getImageHeight()
                 ),
             );
+        }
+
+        if(intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0){
+            $maxSize = round(($this->getRequest()->server->getMaxFileSize() / 1048576), 2) . 'MB';
+            $this->_response['error'] = 'File to big. Max size ['.$maxSize.']';
+            return $this->_output();
         }
 
         // Create new ImgPicker instance
