@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\_Traits\Controllers\Async;
+namespace ByTIC\Common\Controllers\Traits\Async;
 
 use ImgPicker;
 
