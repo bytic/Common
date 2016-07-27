@@ -22,7 +22,6 @@ trait Images
         $this->_response['message'] = $item->errors['upload'];
     }
 
-
     public function cropImage()
     {
         $item = $this->checkItem($_POST);
@@ -36,7 +35,6 @@ trait Images
         }
     }
 
-
     public function setDefaultImage()
     {
         $item = $this->checkItem();
@@ -46,7 +44,6 @@ trait Images
         }
     }
 
-
     public function removeImage()
     {
         $item = $this->checkItem();
@@ -55,8 +52,5 @@ trait Images
             $this->_response['type'] = 'success';
         }
     }
-
-    
-
 
 }
