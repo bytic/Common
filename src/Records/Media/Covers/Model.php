@@ -1,6 +1,7 @@
 <?php
 
 namespace ByTIC\Common\Records\Media\Covers;
+use Nip_File_System;
 
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
