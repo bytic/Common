@@ -1,6 +1,8 @@
 <?php
 
-trait App_Records_DbCacheTrait
+namespace ByTIC\Common\Records\Traits;
+
+trait DbCacheTrait
 {
     protected $_records = null;
     protected $_localCache;

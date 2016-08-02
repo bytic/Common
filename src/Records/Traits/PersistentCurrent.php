@@ -3,11 +3,12 @@
 namespace ByTIC\Common\Records\Traits;
 
 use Nip\Cookie\Jar as CookieJar;
+use Nip\Records\Record as Record;
 
 trait PersistentCurrent
 {
     /**
-     * @return \Organizer
+     * @return Record
      */
     public function getCurrent()
     {
