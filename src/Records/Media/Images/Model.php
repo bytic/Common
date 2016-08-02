@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Records\Media\Images;
 
+use Nip\Records\Record;
+
 class Model extends \Nip_File_Image
 {
 
