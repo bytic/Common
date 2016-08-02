@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Records\Media\Logos;
 
+use Nip_File_System;
+
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model {
 
     public $fHeight = false;
