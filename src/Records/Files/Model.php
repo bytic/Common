@@ -102,9 +102,14 @@ class Model
 
     public function getExtension()
     {
-        return Nip_File_System::instance()->getExtension($this->_path);
+        return Nip_File_System::instance()->getExtension($this->getPath());
     }
 
+    public function getContentType()
+    {
+        $fInfo = finfo_open(FILEINFO_MIME_TYPE);
+        return finfo_file($fInfo, $this->getPath());
+    }
 
     public function getSize()
     {
