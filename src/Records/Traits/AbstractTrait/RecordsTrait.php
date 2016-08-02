@@ -8,9 +8,10 @@ trait RecordsTrait
 {
 
     /**
+     * @param array $data [optional]
      * @return Record
      */
-    abstract public function getNew();
+    abstract public function getNew($data = array());
 
 
     /**
