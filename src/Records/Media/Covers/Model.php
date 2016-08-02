@@ -90,10 +90,4 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         return parent::save();
     }
 
-
-    public function __toString()
-    {
-        return $this->getUrl();
-    }
-
 }
