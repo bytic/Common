@@ -7,6 +7,7 @@ class Model extends \Nip_File_Image
 
     protected $_model;
     protected $_type;
+
     public $basePath;
     public $baseURL;
     public $cropWidth;
