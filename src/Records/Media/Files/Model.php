@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Records\Files;
+namespace ByTIC\Common\Records\Media\Files;
 
 use Nip\Records\Record;
 use Nip_File_System;

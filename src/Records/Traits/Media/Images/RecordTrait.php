@@ -5,7 +5,6 @@ namespace ByTIC\Common\Records\Traits\Media\Images;
 use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as GenericMediaTrait;
 use Nip\HelperBroker;
 use Nip_File_System;
-use Nip_Helper_URL;
 
 trait RecordTrait
 {
