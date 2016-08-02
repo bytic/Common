@@ -2,10 +2,14 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
+use ByTIC\Common\Records\Statuses\Generic as GenericStatus;
 use Exception;
+use Nip\Records\Record;
 
 trait RecordsTrait
 {
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
+
     protected $_statuses = null;
     protected $_statusesPath = null;
 
@@ -53,12 +57,13 @@ trait RecordsTrait
     public function initStatusesDirectory()
     {
         $reflector = new \ReflectionObject($this);
-        $this->_statusesPath = dirname($reflector->getFilename()) . '/Statuses';
+        $this->_statusesPath = dirname($reflector->getFileName()) . '/Statuses';
     }
 
     /**
      * @param string $name
-     * @return \ByTIC\Common\Records\Statuses\Generic
+     * @return GenericStatus
+     * @throws Exception
      */
     public function getStatus($name = null)
     {
@@ -71,12 +76,13 @@ trait RecordsTrait
 
     /**
      * @param string $type
-     * @return \ByTIC\Common\Records\Statuses\Generic
+     * @return GenericStatus
      */
     public function newStatus($type = null)
     {
         $className = $this->getStatusClass($type);
         $object = new $className();
+        /** @var GenericStatus $object */
         $object->setManager($this);
         return $object;
     }
@@ -96,5 +102,4 @@ trait RecordsTrait
     {
         return 'in-progress';
     }
-
 }

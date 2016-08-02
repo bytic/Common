@@ -4,6 +4,7 @@ namespace ByTIC\Common\Records\Traits\HasForms;
 
 trait RecordTrait
 {
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     protected $_forms = array();
 

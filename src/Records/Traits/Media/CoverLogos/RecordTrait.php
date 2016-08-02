@@ -7,6 +7,9 @@ use ByTIC\Common\Records\Traits\Media\Logos\RecordTrait as LogosTrait;
 
 trait RecordTrait
 {
+
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+
     use CoversTrait, LogosTrait {
         CoversTrait::getUploadPath insteadof LogosTrait;
         CoversTrait::getUploadURL insteadof LogosTrait;

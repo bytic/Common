@@ -5,6 +5,8 @@ namespace ByTIC\Common\Records\Traits\Media\Generic;
 trait RecordTrait
 {
 
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+
     public function getUploadPath()
     {
         return UPLOADS_PATH;

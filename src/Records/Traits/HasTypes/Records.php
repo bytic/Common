@@ -4,6 +4,8 @@ namespace ByTIC\Common\Records\Traits\HasTypes;
 
 trait RecordsTrait
 {
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
+
     protected $_types = array();
 
     public function getTypeProperty($name)
