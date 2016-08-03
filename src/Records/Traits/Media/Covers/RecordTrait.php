@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Covers;
 
-use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as GenericMediaTrait;
 use Nip_File_System;
 
 trait RecordTrait
@@ -94,18 +93,6 @@ trait RecordTrait
 
         $cover = new $class();
         return $cover;
-    }
-
-    protected function getCropCoordinates($request)
-    {
-        $return = array();
-
-        $return['x'] = (int) $request['x'];
-        $return['y'] = (int) $request['y'];
-        $return['width'] = (int) $request['width'];
-        $return['height'] = (int) $request['height'];
-
-        return $return;
     }
 
     public function getCoverBasePath($type = false)

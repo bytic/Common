@@ -36,5 +36,17 @@ trait RecordTrait
     {
         return $this->getImageBasePath($type) . $image;
     }
+
+    protected function getCropCoordinates($request)
+    {
+        $return = array();
+
+        $return['x'] = (int) $request['x'];
+        $return['y'] = (int) $request['y'];
+        $return['width'] = (int) $request['width'];
+        $return['height'] = (int) $request['height'];
+
+        return $return;
+    }
     
 }

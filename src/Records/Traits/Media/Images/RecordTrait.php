@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Images;
 
-use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as GenericMediaTrait;
 use Nip\HelperBroker;
 use Nip_File_System;
 
@@ -38,7 +37,7 @@ trait RecordTrait
 
                 $ratio = $imageCrop->getRatio();
                 $max_width = $imageCrop->minWidth > 600 ? $imageCrop->minWidth : 600;
-                $heightCalculated = round($max_width/$ratio);
+                $heightCalculated = round($max_width / $ratio);
                 if ($heightCalculated < $imageCrop->minHeight) {
                     $max_width = round($imageCrop->minHeight * $ratio);
                 }
@@ -71,18 +70,6 @@ trait RecordTrait
         return $image;
     }
 
-    protected function getCropCoordinates($request)
-    {
-        $return = array();
-
-        $return['x'] = (int) $request['x'];
-        $return['y'] = (int) $request['y'];
-        $return['width'] = (int) $request['width'];
-        $return['height'] = (int) $request['height'];
-
-        return $return;
-    }
-
     public function getImageWidth($type = null)
     {
         $image = $this->getImageByType($type);
@@ -97,7 +84,7 @@ trait RecordTrait
 
     public function getImageRatio($type = null)
     {
-        return number_format(($this->getImageWidth($type)/$this->getImageHeight($type)),2,'.','');
+        return number_format(($this->getImageWidth($type) / $this->getImageHeight($type)), 2, '.', '');
     }
 
     public function getImageByType($type = null)
