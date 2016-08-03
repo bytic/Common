@@ -10,9 +10,8 @@ trait RecordTrait
 
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    public $covers = array();
-
-    protected $_coversCache = array();
+    protected $_cover = [];
+    protected $_coversCache = null;
     protected $_coverTypes = array('full', 'default');
 
     /**
@@ -154,29 +153,41 @@ trait RecordTrait
         return $return;
     }
 
-    public function findCovers($type = "default")
+    public function checkCovers()
     {
-        if (!$this->_coverCache[$type]) {
-            $return = array();
-
-            $files = Nip_File_System::instance()->scanDirectory($this->getCoverBasePath($type));
-
-            foreach ($files as $file) {
-                $cover = $this->getNewCover($type);
-                $cover->setName($file);
-
-                if ($file == $this->default_cover) {
-                    $return = array($cover->name => $cover) + $return;
-                } else {
-                    $return[$cover->name] = $cover;
-                }
-            }
-
-            $this->_coverCache[$type] = $return;
+        if ($this->_coversCache === null) {
+            $this->initCovers();
         }
-        $this->covers = $this->_coverCache[$type];
+    }
 
-        return $this->covers;
+    public function initCovers()
+    {
+        foreach ($this->_coverTypes as $type) {
+            $this->initCoversByType($type);
+        }
+    }
+
+    public function getCovers($type = "default")
+    {
+        if (!$this->_coversCache[$type]) {
+            $this->initCoversByType($type);
+        }
+        return $this->_coversCache[$type];
+    }
+
+    public function initCoversByType($type = "default")
+    {
+
+        $files = Nip_File_System::instance()->scanDirectory($this->getCoverBasePath($type));
+        $return = array();
+        foreach ($files as $file) {
+            $cover = $this->getNewCover($type);
+            $cover->setName($file);
+
+            $return[$cover->name] = $cover;
+        }
+
+        $this->_coversCache[$type] = $return;
     }
 
     public function findCover($type = "default")
@@ -184,25 +195,43 @@ trait RecordTrait
         $this->findCovers($type);
 
         if ($this->covers) {
-            if ($this->default_cover && $this->covers[$this->default_cover]) {
-                $this->cover = $this->covers[$this->default_cover];
-            } else {
-                $this->cover = reset($this->covers);
-                $this->default_cover = $this->cover->name;
-//                $this->update();
-            }
         }
     }
 
     public function getCover($type = "default")
     {
-        $this->findCover($type);
-
-        if ($this->cover) {
-            return $this->cover->url;
+        if (!isset($this->cover[$type])) {
+            $this->initCover($type);
         }
 
-        return false;
+        return $this->cover[$type];
+    }
+
+    public function initCover($type = "default")
+    {
+        $this->checkCovers();
+        $covers = $this->getCovers($type);
+
+        if (count($covers)) {
+            if ($this->default_cover && $covers[$this->default_cover]) {
+                $cover = $covers[$this->default_cover];
+            } else {
+                $cover = reset($covers);
+                $this->default_cover = $this->cover->name;
+                //                $this->update();
+            }
+        } else {
+            $cover = $this->getNewCover($type);
+        }
+
+        $this->cover[$type] = $cover;
+
+    }
+
+    public function hasCover($type = "default")
+    {
+        $this->checkCovers();
+        return isset($this->_coversCache[$type]) && count($this->_coversCache[$type]) > 0;
     }
 
     public function deleteCovers()
@@ -292,9 +321,9 @@ trait RecordTrait
     public function removeCover($request)
     {
         foreach ($this->_coverTypes as $type) {
-            $this->findCovers($type);
+            $covers = $this->getCovers($type);
 
-            if ($this->covers[$request['image']]) {
+            if ($covers[$request['image']]) {
                 $this->deleteCover($request['image']);
             }
         }
