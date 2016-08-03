@@ -9,6 +9,7 @@ class Model extends \Nip_File_Image
 
     protected $_model;
     protected $_type;
+    protected $_mediaType = 'images';
 
     public $basePath;
     public $baseURL;
@@ -62,6 +63,18 @@ class Model extends \Nip_File_Image
         $this->setName($image->name);
 
         return $this;
+    }
+
+    public function getDefaultWidth()
+    {
+        $option = "images_" . $this->getModel()->getManager()->getTable() . "_" . $this->_type . "_width";
+        return Options::instance()->$option;
+    }
+
+    public function getDefaultHeight()
+    {
+        $option = "images_" . $this->getManager()->getTable() . "_" . $this->_type . "_height";
+        return Options::instance()->$option;
     }
 //
 //	public function resize($width = false, $height = false)
