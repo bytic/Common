@@ -54,7 +54,7 @@ trait RecordTrait
 
     public function serializeOptions()
     {
-        $this->_options = serialize($this->_options);
+        $this->options = serialize($this->_options);
     }
 
 }
