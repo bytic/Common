@@ -2,14 +2,18 @@
 
 namespace ByTIC\Common\Records\Traits;
 
+use Nip\Records\CacheManager;
+use Nip\Records\Record;
+
 trait DbCacheTrait
 {
+    protected $_cacheManager = null;
+
     protected $_records = null;
     protected $_localCache;
-    
 
      /**
-     * @return Category_Abstract
+     * @return Record
      */
     public function findOne($primary) {
         if (!$this->_records) {
@@ -25,19 +29,19 @@ trait DbCacheTrait
         return $this->_records;
     }
     
-    public function getCachedAll($params = array()) {        
+    public function getCachedAll() {
         $cacheManager = $this->getCacheManager();
         $itemsCache = $cacheManager->get('all');
         
 //        var_dump($items);
 
         if (is_array($itemsCache)) {
-            $class = $this->getCollectionClass();
-            $items = new $class();
+            $items = $this->newCollection();
                         
             foreach ($itemsCache as $itemCache) {
-                $item = $this->getNew($itemCache);           
-                $items->add($item);               
+                $item = $this->getNew();
+                $item->writeData($itemCache);
+                $items->add($item);
             }
             
         } else {
@@ -57,6 +61,19 @@ trait DbCacheTrait
     public function initColection(&$items)
     {
         return;
-    }    
+    }
+
+    /**
+     * @return CacheManager
+     */
+    public function getCacheManager()
+    {
+        if (!$this->_cacheManager) {
+            $this->_cacheManager = new CacheManager();
+            $this->_cacheManager->setManager($this);
+        }
+
+        return $this->_cacheManager;
+    }
     
 }
