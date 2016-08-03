@@ -11,7 +11,7 @@ use Nip\Records\Record;
  * @property string $options
  *
  */
-trait RecordsTrait
+trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
