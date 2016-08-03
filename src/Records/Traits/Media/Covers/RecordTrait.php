@@ -60,6 +60,33 @@ trait RecordTrait
     }
 
     /**
+     * Uploads cover to temporary directory
+     *
+     * @return mixed
+     */
+    public function uploadCoverAutoCrop($file)
+    {
+        $cover = $this->getTempCover();
+        $uploadError = Nip_File_System::instance()->getUploadError($file, $cover->extensions);
+
+        if (!$uploadError) {
+            $cover->setResourceFromUpload($file);
+            if ($cover->validate()) {
+                /** @var \Organization_Cover_Default $defaultCover */
+                $defaultCover = $this->getNewCover('default');
+                $defaultCover->copyResource($cover);
+                $defaultCover->cropToCenter($defaultCover->cropWidth, $defaultCover->cropHeight);
+                $defaultCover->save();
+                return $defaultCover;
+            } else {
+                $this->errors['upload'] = 'Eroare dimensiuni.';
+            }
+        } else {
+            $this->errors['upload'] = $uploadError;
+        }
+    }
+
+    /**
      * @return Cover_Temp
      */
     public function getTempCover()
