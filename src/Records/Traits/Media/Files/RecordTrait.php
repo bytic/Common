@@ -9,7 +9,6 @@ trait RecordTrait
 {
 
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
-    use GenericMediaTrait;
 
     public $files = array();
 
