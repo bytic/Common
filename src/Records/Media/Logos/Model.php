@@ -4,46 +4,72 @@ namespace ByTIC\Common\Records\Media\Logos;
 
 use Nip_File_System;
 
-abstract class Model extends \ByTIC\Common\Records\Media\Images\Model {
+abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
+{
 
     public $fHeight = false;
     public $fWidth = false;
 
-    public function setName($name) {
+    public function setName($name)
+    {
         parent::setName($name);
-        $this->url  = $this->getUrlPath() . $this->name;
-        $this->path  = $this->getDirPath() . $this->name;
+        $this->url = $this->getUrlPath() . $this->name;
+        $this->path = $this->getDirPath() . $this->name;
     }
 
-    public function getDirRoot() {
+    public function getDirRoot()
+    {
         return dirname($this->getDirPath());
     }
 
-    public function getDirPath() {
+    public function getDirPath()
+    {
         return UPLOADS_PATH . $this->getRoutePath();
     }
 
-    public function getUrlPath() {
+    public function getUrlPath()
+    {
         return UPLOADS_URL . $this->getRoutePath();
     }
 
-    public function getUrl() {
-        return $this->url ? $this->url : IMAGES_URL . $this->getDirectoryName() . '/' . $this->_type . '.png';
+    public function getUrl()
+    {
+        if (!$this->url) {
+            $this->initUrl();
+        }
+        return $this->url;
     }
 
-    public function getPath() {
-        return $this->path ? $this->path : IMAGES_PATH . $this->getDirectoryName() . '/' . $this->_type . '.png';
+    public function initUrl()
+    {
+        return IMAGES_URL . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
-    public function getRoutePath() {
+    public function getPath()
+    {
+        if (!$this->path) {
+            $this->initPath();
+        }
+        return $this->path;
+    }
+
+    public function initPath()
+    {
+        return IMAGES_PATH . $this->getDirectoryName() . '/' . $this->_type . '.png';
+    }
+
+    public function getRoutePath()
+    {
         return 'images/' . $this->getDirectoryName() . '/' . $this->getModel()->id . '/logo-' . $this->_type . '/';
     }
 
-    public function getDefaultName() {
+    public function getDefaultName()
+    {
         return 'logo';
     }
 
-    public function getDirectoryName() {
+    public function getDirectoryName()
+    {
         return $this->getModel()->getManager()->getController();
     }
 
@@ -52,15 +78,18 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model {
         return is_file($this->getPath());
     }
 
-    public function delete($bubble = false) {
+    public function delete($bubble = false)
+    {
         return Nip_File_System::instance()->removeDirectory($this->getDirPath());
     }
 
-    public function validate() {
+    public function validate()
+    {
         return true;
     }
 
-    public function  save() {
+    public function save()
+    {
         if (is_dir($this->getDirPath())) {
             Nip_File_System::instance()->emptyDirectory($this->getDirPath());
         }
