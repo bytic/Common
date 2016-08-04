@@ -100,6 +100,9 @@ class Model extends \Nip_File_Image
 //		return $this;
 //	}
 
+    /**
+     * @param Record|\ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait $model
+     */
     public function setModel(Record $model)
     {
         $this->_model = $model;
