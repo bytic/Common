@@ -24,12 +24,12 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 
     public function getDirPath()
     {
-        return UPLOADS_PATH . $this->getRoutePath();
+        return $this->getUploadRootPath() . $this->getRoutePath();
     }
 
     public function getUrlPath()
     {
-        return UPLOADS_URL . $this->getRoutePath();
+        return $this->getUploadRootURL() . $this->getRoutePath();
     }
 
     public function getUrl()
@@ -42,7 +42,7 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 
     public function initUrl()
     {
-        return IMAGES_URL . $this->getDirectoryName() . '/' . $this->_type . '.png';
+        return $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
     public function getPath()
@@ -55,7 +55,7 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 
     public function initPath()
     {
-        return IMAGES_PATH . $this->getDirectoryName() . '/' . $this->_type . '.png';
+        return $this->getImagesRootPath() . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
     public function getRoutePath()

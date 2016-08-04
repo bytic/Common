@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Records\Media\Images;
 
-use Nip\Records\Record;
+use Nip\Records\Record as Record;
 
 class Model extends \Nip_File_Image
 {
@@ -108,6 +108,9 @@ class Model extends \Nip_File_Image
         $this->_model = $model;
     }
 
+    /**
+     * @return Record
+     */
     public function getModel()
     {
         return $this->_model;
@@ -145,6 +148,26 @@ class Model extends \Nip_File_Image
     public function __toString()
     {
         return $this->url;
+    }
+
+    public function getUploadRootPath()
+    {
+        return UPLOADS_PATH;
+    }
+
+    public function getUploadRootURL()
+    {
+        return UPLOADS_URL;
+    }
+
+    public function getImagesRootURL()
+    {
+        return IMAGES_URL;
+    }
+
+    public function getImagesRootPath()
+    {
+        return IMAGES_PATH;
     }
 
 }
