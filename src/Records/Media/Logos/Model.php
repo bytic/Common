@@ -42,7 +42,7 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 
     public function initUrl()
     {
-        return $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
+        $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
     public function getPath()
@@ -55,7 +55,7 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 
     public function initPath()
     {
-        return $this->getImagesRootPath() . $this->getDirectoryName() . '/' . $this->_type . '.png';
+        $this->path = $this->getImagesRootPath() . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
     public function getRoutePath()
