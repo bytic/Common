@@ -17,7 +17,7 @@ trait RecordTrait
 
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    protected $logoTypes = [];
+    protected $_logoTypes = [];
 
     /**
      * @param string|null $type
@@ -56,15 +56,19 @@ trait RecordTrait
 
     public function initLogoTypes()
     {
-        $this->logoTypes = array();
+        if (isset($this->logoTypes)) {
+            $this->_logoTypes = $this->logoTypes;
+        } else {
+            $this->_logoTypes = array();
+        }
     }
 
     public function getLogoTypes()
     {
-        if (count($this->logoTypes) < 1) {
+        if (count($this->_logoTypes) < 1) {
             $this->initLogoTypes();
         }
-        return $this->logoTypes;
+        return $this->_logoTypes;
     }
 
     /**
