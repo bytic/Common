@@ -88,16 +88,20 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         return true;
     }
 
-    public function save()
-    {
+    public function  save() {
         if (is_dir($this->getDirPath())) {
             Nip_File_System::instance()->emptyDirectory($this->getDirPath());
         }
 
         $newName = $this->getDefaultName();
         $this->setBaseName($newName);
-        $this->resize($this->fWidth, $this->fHeight);
+        $this->processSize();
         return parent::save();
+    }
+
+    public function processSize()
+    {
+        $this->resize($this->fWidth, $this->fHeight);
     }
 
 }

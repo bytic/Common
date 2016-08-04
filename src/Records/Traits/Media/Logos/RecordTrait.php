@@ -29,6 +29,7 @@ trait RecordTrait
             $this->initLogos();
         }
 
+        $type = $this->checkType($type);
         $logos = $this->getRegistry()->get('logos');
         return $logos[$type];
     }
@@ -79,8 +80,8 @@ trait RecordTrait
     {
         $type = $this->checkType($type);
 
-        $logos = $this->getLogos();
-        $logo = is_array($logos[$type]) ? reset($logos[$type]) : null;
+        $logos = $this->getLogos($type);
+        $logo = is_array($logos) ? reset($logos) : null;
 
         if ($logo) {
             return $logo;
@@ -97,10 +98,9 @@ trait RecordTrait
     {
         $type = $this->checkType($type);
 
-        $logos = $this->getLogos();
-        $logo = is_array($logos[$type]) ? reset($logos[$type]) : null;
+        $logos = $this->getLogos($type);
 
-        if ($logo) {
+        if (is_array($logos[$type])) {
             return true;
         }
 
