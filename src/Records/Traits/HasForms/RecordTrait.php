@@ -10,7 +10,7 @@ trait RecordTrait
 
     /**
      * @param string $type
-     * @return \Nip\Form
+     * @return \Nip_Form
      */
     public function getForm($type = NULL)
     {
