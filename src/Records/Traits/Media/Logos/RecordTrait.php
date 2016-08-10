@@ -190,7 +190,7 @@ trait RecordTrait
     public function getGenericLogoType()
     {
         $types = $this->getLogoTypes();
-        if (is_array($types)) {
+        if (is_array($types) && count($types)) {
             return reset($types);
         }
         return 'listing';
