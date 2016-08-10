@@ -7,7 +7,8 @@ use Nip_File_System;
 
 trait RecordTrait
 {
-    use GenericMediaTrait;
+
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     public $files = array();
 

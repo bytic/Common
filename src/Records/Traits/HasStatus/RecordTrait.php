@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
 use ByTIC\Common\Records\Statuses\Generic;
+use Nip\Records\RecordManager;
 
 /**
  * Class RecordTrait
@@ -10,10 +11,11 @@ use ByTIC\Common\Records\Statuses\Generic;
  *
  * @property string $status
  *
- * @method \Nip_Records getManager
  */
 trait RecordTrait
 {
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+
     protected $_status;
 
     public function getStatus()

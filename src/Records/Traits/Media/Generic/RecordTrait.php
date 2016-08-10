@@ -5,6 +5,8 @@ namespace ByTIC\Common\Records\Traits\Media\Generic;
 trait RecordTrait
 {
 
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+
     public function getUploadPath()
     {
         return UPLOADS_PATH;
@@ -33,6 +35,18 @@ trait RecordTrait
     public function getImagePath($type, $image)
     {
         return $this->getImageBasePath($type) . $image;
+    }
+
+    protected function getCropCoordinates($request)
+    {
+        $return = array();
+
+        $return['x'] = (int) $request['x'];
+        $return['y'] = (int) $request['y'];
+        $return['width'] = (int) $request['width'];
+        $return['height'] = (int) $request['height'];
+
+        return $return;
     }
     
 }

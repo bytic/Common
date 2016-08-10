@@ -2,10 +2,13 @@
 
 namespace ByTIC\Common\Records\Traits;
 
+use Nip\Cookie\Jar as CookieJar;
+use Nip\Records\Record as Record;
+
 trait PersistentCurrent
 {
     /**
-     * @return \Organizer
+     * @return Record
      */
     public function getCurrent()
     {
@@ -64,10 +67,10 @@ trait PersistentCurrent
         $varName = $this->getCurrentVarName();
         if (is_object($item)) {
             $_SESSION[$varName] = $item->toArray();
-            \Nip_Cookie_Jar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
+            CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
         } else {
             unset($_SESSION[$varName]);
-            \Nip_Cookie_Jar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
+            CookieJar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
         }
 
         return $this;

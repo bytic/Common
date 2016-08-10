@@ -83,7 +83,7 @@ abstract class Generic
 
     public function getLabelHTML($short = false)
     {
-        return '<span class="label label-'.$this->getColorClass().'" rel="tooltip" title="'.$this->getLabel().'"  style="font-size:100%;'.$this->getColorCSS().'">
+        return '<span class="label label-'.$this->getColorClass().'" rel="tooltip" title="'.$this->getLabel().'"  style="'.$this->getColorCSS().'">
             '.$this->getLabel($short).'
         </span>';
     }

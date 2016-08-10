@@ -2,89 +2,91 @@
 
 namespace ByTIC\Common\Security\Auth;
 
+use Nip\Database\Query\Select as SelectQuery;
+
 class Auth extends Record
 {
 
-	protected $_authenticated = false;
+    protected $_authenticated = false;
 
-	public function authenticate($request = array())
-	{
-		if ($request) {
-			$this->email = clean($request['email']);
-			$this->password = clean($request['password']);
-		}
+    public function authenticate($request = array())
+    {
+        if ($request) {
+            $this->email = clean($request['email']);
+            $this->password = clean($request['password']);
+        }
 
-		$query = $this->_getAuthenticateQuery();
-		$user = $this->getManager()->findOneByQuery($query);
+        $query = $this->_getAuthenticateQuery();
+        $user = $this->getManager()->findOneByQuery($query);
 
-		if ($user) {
-			$this->writeData($user->toArray());
-			
-			$this->id_session = session_id();
-			$this->last_login = date(DATE_DB);
-			$this->save();
+        if ($user) {
+            $this->writeData($user->toArray());
 
-			$this->authenticated(true);
+            $this->id_session = session_id();
+            $this->last_login = date(DATE_DB);
+            $this->save();
 
-			$_SESSION[$this->_getSessionVar()]['id'] = $this->id;
-		}
+            $this->authenticated(true);
 
-		return $this->authenticated();
-	}
+            $_SESSION[$this->_getSessionVar()]['id'] = $this->id;
+        }
 
-	public function deauthenticate()
-	{
-		unset($_SESSION[$this->_getSessionVar()]);
-		$this->authenticated(false);
-		return $this;
-	}
+        return $this->authenticated();
+    }
 
-	public function authenticated($value = null)
-	{
-		if (!is_null($value)) {
-			$this->_authenticated = $value;
-		}
-		return $this->_authenticated;
-	}
+    public function deauthenticate()
+    {
+        unset($_SESSION[$this->_getSessionVar()]);
+        $this->authenticated(false);
+        return $this;
+    }
 
-	public function updatePassword()
-	{
-		$this->password = Nip_Helper_Passwords::instance()->hash($this->new_password);
-		$this->save();
-		return $this;
-	}
+    public function authenticated($value = null)
+    {
+        if (!is_null($value)) {
+            $this->_authenticated = $value;
+        }
+        return $this->_authenticated;
+    }
 
-	public function recoverPassword()
-	{
-		$user = $this->getManager()->findOneByEmail($this->email);
-		$this->writeData($user->toArray());
+    public function updatePassword()
+    {
+        $this->password = Nip_Helper_Passwords::instance()->hash($this->new_password);
+        $this->save();
+        return $this;
+    }
 
-		$this->generatePassword()->updatePassword();
-		$this->sendRecoverPasswordMail();
-	}
+    public function recoverPassword()
+    {
+        $user = $this->getManager()->findOneByEmail($this->email);
+        $this->writeData($user->toArray());
 
-	public function generatePassword()
-	{
-		$this->new_password = Nip_Helper_Passwords::instance()->generate(8, false, true, true, false);
-		return $this;
-	}
+        $this->generatePassword()->updatePassword();
+        $this->sendRecoverPasswordMail();
+    }
 
-	/**
-	 * @return Nip_DB_Query_Select
-	 */
-	protected function _getAuthenticateQuery()
-	{
-		$query = $this->getManager()->newQuery();
+    public function generatePassword()
+    {
+        $this->new_password = Nip_Helper_Passwords::instance()->generate(8, false, true, true, false);
+        return $this;
+    }
 
-		$query->where("email = ?", $this->email);
-		$query->where("password = ?", Nip_Helper_Passwords::instance()->hash($this->password));
+    /**
+     * @return SelectQuery
+     */
+    protected function _getAuthenticateQuery()
+    {
+        $query = $this->getManager()->newQuery();
 
-		return $query;
-	}
+        $query->where("email = ?", $this->email);
+        $query->where("password = ?", Nip_Helper_Passwords::instance()->hash($this->password));
 
-	protected function _getSessionVar()
-	{
-		return $this->getManager()->getModel();
-	}
+        return $query;
+    }
+
+    protected function _getSessionVar()
+    {
+        return $this->getManager()->getModel();
+    }
 
 }

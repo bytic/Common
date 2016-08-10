@@ -2,23 +2,37 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Logos;
 
-use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as GenericMediaTrait;
+use ByTIC\Common\Records\Media\Logos\Model as LogoModel;
 use Nip_File_System;
 
+/**
+ * Class RecordTrait
+ * @package ByTIC\Common\Records\Traits\Media\Logos
+ *
+ * @property array $errors
+ *
+ */
 trait RecordTrait
 {
-    use GenericMediaTrait;
 
-    protected $logoTypes = null;
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    public function getLogos($type = NULL)
+    protected $_logoTypes = [];
+
+    /**
+     * @param string|null $type
+     * @return mixed
+     */
+    public function getLogos($type = null)
     {
         if (!$this->getRegistry()->exists('logos')) {
-            $logos = $this->initLogos();
-            $this->getRegistry()->set('logos', $logos);
+            $this->initLogos();
         }
 
-        return $this->getRegistry()->get('logos');
+        $type = $this->checkType($type);
+        $logos = $this->getRegistry()->get('logos');
+
+        return $logos[$type];
     }
 
     public function initLogos()
@@ -39,28 +53,37 @@ trait RecordTrait
 //                    $logos[$type][] = $image;
             }
         }
-        return $logos;
+        $this->getRegistry()->set('logos', $logos);
     }
 
     public function initLogoTypes()
     {
-        $this->logoTypes = array();
+        if (isset($this->logoTypes)) {
+            $this->_logoTypes = $this->logoTypes;
+        } else {
+            $this->_logoTypes = array();
+        }
     }
 
     public function getLogoTypes()
     {
-        if ($this->logoTypes === null) {
+        if (count($this->_logoTypes) < 1) {
             $this->initLogoTypes();
         }
-        return $this->logoTypes;
+
+        return $this->_logoTypes;
     }
 
-    public function getLogo($type = NULL)
+    /**
+     * @param string|null $type
+     * @return LogoModel
+     */
+    public function getLogo($type = null)
     {
         $type = $this->checkType($type);
 
-        $logos = $this->getLogos();
-        $logo = is_array($logos[$type]) ? reset($logos[$type]) : null;
+        $logos = $this->getLogos($type);
+        $logo = is_array($logos) ? reset($logos) : null;
 
         if ($logo) {
             return $logo;
@@ -69,47 +92,62 @@ trait RecordTrait
         return $this->getGenericLogo($type);
     }
 
-    public function hasLogo($type = NULL)
+    /**
+     * @param string|null $type
+     * @return bool
+     */
+    public function hasLogo($type = null)
     {
         $type = $this->checkType($type);
 
-        $logos = $this->getLogos();
-        $logo = is_array($logos[$type]) ? reset($logos[$type]) : null;
+        $logos = $this->getLogos($type);
 
-        if ($logo) {
+        if (is_array($logos) && count($logos) > 0) {
             return true;
         }
 
         return false;
     }
 
-    public function getGenericLogo($type = NULL)
+    /**
+     * @param string|null $type
+     * @return LogoModel
+     */
+    public function getGenericLogo($type = null)
     {
         $type = $this->checkType($type);
 
         $image = $this->getNewLogo($type);
+
         return $image;
     }
 
     /**
-     * @return Manufacturer_Logos_Abstract
+     * @param string $type
+     * @return LogoModel
      */
-    public function getNewLogo($type = NULL)
+    public function getNewLogo($type = null)
     {
         $type = $this->checkType($type);
         $class = $this->getLogoModelName($type);
 
-        $image = new $class();
-        $image->setModel($this);
+        $logo = new $class();
+        /** @var LogoModel $logo */
+        $logo->setModel($this);
 
-        return $image;
+        return $logo;
     }
 
-    public function getLogoModelName($type = NULL)
+    /**
+     * @param string|null $type
+     * @return string
+     */
+    public function getLogoModelName($type = null)
     {
         $type = $this->checkType($type);
         $type = inflector()->camelize($type);
-        return $this->getManager()->getModel() . "_Logos_" . $type;
+
+        return $this->getManager()->getModel()."_Logos_".$type;
     }
 
     public function uploadLogo($type = null, $file = false)
@@ -121,7 +159,7 @@ trait RecordTrait
         $uploadError = Nip_File_System::instance()->getUploadError($file, $image->extensions);
 
         if ($uploadError) {
-            $this->errors['upload'] = 'Error Upload:' . $uploadError;
+            $this->errors['upload'] = 'Error Upload:'.$uploadError;
         } else {
             $image->setResourceFromUpload($file);
             if ($image->validate()) {
@@ -130,8 +168,9 @@ trait RecordTrait
                 }
                 $this->errors['upload'] = 'Error saving file';
             } else {
-                $error = is_array($image->errors) && count($image->errors) > 0 ? implode(', ', $image->errors) : 'Error validating file';
-                $this->errors['upload'] = 'Error validate:' . $error;
+                $error = is_array($image->errors) && count($image->errors) > 0 ? implode(', ',
+                    $image->errors) : 'Error validating file';
+                $this->errors['upload'] = 'Error validate:'.$error;
             }
         }
 
@@ -142,6 +181,7 @@ trait RecordTrait
     {
         $request = is_array($request) ? $request : array('type' => $request);
         $image = $this->getNewLogo($request['type']);
+
         return $image->delete(true);
     }
 
@@ -150,6 +190,7 @@ trait RecordTrait
         if (in_array($type, $this->getLogoTypes())) {
             return $type;
         }
+
         return $this->getGenericLogoType();
     }
 
@@ -159,6 +200,7 @@ trait RecordTrait
         if (is_array($types)) {
             return reset($types);
         }
+
         return 'listing';
     }
 

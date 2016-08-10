@@ -7,6 +7,8 @@ use Nip\FrontController;
 trait RecordsTrait
 {
 
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
+
     protected $_formClassNameSlug = null;
 
     public function newForm($type = null)

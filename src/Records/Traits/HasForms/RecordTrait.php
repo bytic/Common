@@ -4,12 +4,13 @@ namespace ByTIC\Common\Records\Traits\HasForms;
 
 trait RecordTrait
 {
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     protected $_forms = array();
 
     /**
      * @param string $type
-     * @return \Nip\Form
+     * @return \Nip_Form
      */
     public function getForm($type = NULL)
     {
