@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Records\_Abstract\Row;
+
 trait CrudModels
 {
     protected $_urls = array();
@@ -196,7 +198,7 @@ trait CrudModels
     {
         $url = $this->_urls["after-delete"] ? $this->_urls['after-delete'] : $this->getModelManager()->getURL();
         $flashName = $this->_flash["after-delete"] ? $this->_flash['after-delete'] : $this->getModelManager()->getController();
-        $this->flashRedirect($this->getModelManager()->getMessage('delete'), $url, 'success', $flashName);        
+        $this->flashRedirect($this->getModelManager()->getMessage('delete'), $url, 'success', $flashName);
     }
 
     public function activate()
