@@ -23,7 +23,7 @@ trait RecordTrait
      * @param string|null $type
      * @return mixed
      */
-    public function getLogos($type = NULL)
+    public function getLogos($type = null)
     {
         if (!$this->getRegistry()->exists('logos')) {
             $this->initLogos();
@@ -31,6 +31,7 @@ trait RecordTrait
 
         $type = $this->checkType($type);
         $logos = $this->getRegistry()->get('logos');
+
         return $logos[$type];
     }
 
@@ -69,6 +70,7 @@ trait RecordTrait
         if (count($this->_logoTypes) < 1) {
             $this->initLogoTypes();
         }
+
         return $this->_logoTypes;
     }
 
@@ -76,7 +78,7 @@ trait RecordTrait
      * @param string|null $type
      * @return LogoModel
      */
-    public function getLogo($type = NULL)
+    public function getLogo($type = null)
     {
         $type = $this->checkType($type);
 
@@ -94,13 +96,13 @@ trait RecordTrait
      * @param string|null $type
      * @return bool
      */
-    public function hasLogo($type = NULL)
+    public function hasLogo($type = null)
     {
         $type = $this->checkType($type);
 
         $logos = $this->getLogos($type);
 
-        if (is_array($logos[$type])) {
+        if (is_array($logos) && count($logos) > 0) {
             return true;
         }
 
@@ -111,11 +113,12 @@ trait RecordTrait
      * @param string|null $type
      * @return LogoModel
      */
-    public function getGenericLogo($type = NULL)
+    public function getGenericLogo($type = null)
     {
         $type = $this->checkType($type);
 
         $image = $this->getNewLogo($type);
+
         return $image;
     }
 
@@ -123,7 +126,7 @@ trait RecordTrait
      * @param string $type
      * @return LogoModel
      */
-    public function getNewLogo($type = NULL)
+    public function getNewLogo($type = null)
     {
         $type = $this->checkType($type);
         $class = $this->getLogoModelName($type);
@@ -139,11 +142,12 @@ trait RecordTrait
      * @param string|null $type
      * @return string
      */
-    public function getLogoModelName($type = NULL)
+    public function getLogoModelName($type = null)
     {
         $type = $this->checkType($type);
         $type = inflector()->camelize($type);
-        return $this->getManager()->getModel() . "_Logos_" . $type;
+
+        return $this->getManager()->getModel()."_Logos_".$type;
     }
 
     public function uploadLogo($type = null, $file = false)
@@ -155,7 +159,7 @@ trait RecordTrait
         $uploadError = Nip_File_System::instance()->getUploadError($file, $image->extensions);
 
         if ($uploadError) {
-            $this->errors['upload'] = 'Error Upload:' . $uploadError;
+            $this->errors['upload'] = 'Error Upload:'.$uploadError;
         } else {
             $image->setResourceFromUpload($file);
             if ($image->validate()) {
@@ -164,8 +168,9 @@ trait RecordTrait
                 }
                 $this->errors['upload'] = 'Error saving file';
             } else {
-                $error = is_array($image->errors) && count($image->errors) > 0 ? implode(', ', $image->errors) : 'Error validating file';
-                $this->errors['upload'] = 'Error validate:' . $error;
+                $error = is_array($image->errors) && count($image->errors) > 0 ? implode(', ',
+                    $image->errors) : 'Error validating file';
+                $this->errors['upload'] = 'Error validate:'.$error;
             }
         }
 
@@ -176,6 +181,7 @@ trait RecordTrait
     {
         $request = is_array($request) ? $request : array('type' => $request);
         $image = $this->getNewLogo($request['type']);
+
         return $image->delete(true);
     }
 
@@ -184,15 +190,17 @@ trait RecordTrait
         if (in_array($type, $this->getLogoTypes())) {
             return $type;
         }
+
         return $this->getGenericLogoType();
     }
 
     public function getGenericLogoType()
     {
         $types = $this->getLogoTypes();
-        if (is_array($types) && count($types)) {
+        if (is_array($types)) {
             return reset($types);
         }
+
         return 'listing';
     }
 
