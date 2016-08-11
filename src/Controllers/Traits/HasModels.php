@@ -2,9 +2,21 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Dispatcher;
+use Nip\FrontController;
 use Nip\Records\_Abstract\Row;
 use Nip\Records\_Abstract\Table;
+use Nip\Request;
 
+/**
+ * Class HasModels
+ * @package ByTIC\Common\Controllers\Traits
+ *
+ * @method string getName
+ * @method Request getRequest
+ * @method Dispatcher getDispatcher
+ * @method mixed call()
+ */
 trait HasModels
 {
     protected $_model = null;
@@ -21,7 +33,13 @@ trait HasModels
 
     protected function initModel()
     {
-        $name = str_replace(array("async-", "modal-"), '', $this->_name);
+        $name = str_replace(array("async-", "modal-"), '', $this->getName());
+
+        return $this->stringToModelName($name);
+    }
+
+    protected function stringToModelName($name)
+    {
         $class = inflector()->classify($name);
         $elements = explode("_", $class);
         $this->_model = implode("_", $elements);
@@ -35,6 +53,7 @@ trait HasModels
         if ($this->_modelManager == null) {
             $this->initModelManager();
         }
+
         return $this->_modelManager;
     }
 
@@ -43,26 +62,92 @@ trait HasModels
      */
     protected function initModelManager()
     {
-        $this->_modelManager = call_user_func(array($this->getModel(), "instance"));
+        $this->_modelManager = $this->newModelManagerInstance($this->getModel());
     }
 
     /**
-     * @return null|Row
+     * @param string $managerName
+     * @return Table
      */
-    protected function getItemFromRequest()
+    protected function newModelManagerInstance($managerName)
     {
-        if ($this->getRequest()->attributes->has('item-crud') === false) {
-
-        }
-        return $this->getRequest()->attributes->has('item-crud');
+        return call_user_func(array($managerName, "instance"));
     }
 
+    /**
+     * @param bool $key
+     * @return Row|null
+     */
+    protected function getModelFromRequest($key = false)
+    {
+        $requestKey = 'model-'.$this->getModelManager()->getTable();
+        if ($this->getRequest()->attributes->has($requestKey) === false) {
+            $this->initModelFromRequest($key);
+        }
+
+        return $this->getRequest()->attributes->get($requestKey);
+    }
+
+    protected function initModelFromRequest($key = false)
+    {
+        $item = $this->checkItem($this->getRequest(), $key);
+        $requestKey = 'model-'.$this->getModelManager()->getTable();
+        $this->getRequest()->attributes->set($requestKey, $item);
+    }
+
+    /**
+     * @param string $name
+     * @param bool|string $key
+     * @return Row|null
+     */
+    protected function checkForeignModelFromRequest($name, $key = false)
+    {
+        $requestKey = 'model-'.$name;
+        if ($this->getRequest()->attributes->has($requestKey) === false) {
+            $this->initForeignModelFromRequest($name, $key);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return Row|null
+     */
+    protected function getForeignModelFromRequest($name)
+    {
+        $this->checkForeignModelFromRequest($name);
+        $requestKey = 'model-'.$name;
+
+        return $this->getRequest()->attributes->get($requestKey);
+    }
+
+    /**
+     * @param $name
+     * @param $key
+     * @throws \Exception
+     */
+    protected function initForeignModelFromRequest($name, $key)
+    {
+        if ($key == false) {
+            throw new \Exception('initForeignModelFromRequest needs a key parameter');
+        }
+        $this->call('getModelFromRequest', $name, false, array($key));
+    }
+
+    /**
+     * @param Row $model
+     */
+    protected function checkAndSetForeignModelInRequest($model)
+    {
+        $requestKey = 'model-'.$model->getManager()->getTable();
+        if ($this->call('checkItemResult', $model->getManager()->getController(), false, array($model)) == true) {
+            $this->getRequest()->attributes->set($requestKey, $model);
+        }
+    }
 
     protected function checkItem($request = false, $key = false)
     {
         $item = $this->findItemFromRequest($request, $key);
         if ($this->checkItemResult($item)) {
-            $this->getRequest()->attributes->set('item-crud', $item);
             return $item;
         }
 
@@ -72,19 +157,28 @@ trait HasModels
     protected function checkItemResult($item)
     {
         $manager = $this->getModelManager();
-
         $class = $manager->getModel();
+
         if ($item instanceof $class) {
-            if ($this->checkItemAccess($item)) {
+            if ($this->checkItemAccess($item) === false) {
+                $this->dispatchAccessDeniedResponse();
+            } else {
                 return true;
             }
         }
+
         return false;
+    }
+
+    protected function dispatchAccessDeniedResponse()
+    {
+        FrontController::instance()->getTrace()->add('Acces denied to item');
+        $this->getDispatcher()->forward("index", "access");
     }
 
     protected function checkItemError($item)
     {
-        \Nip\FrontController::instance()->getTrace()->add('No valid item');
+        FrontController::instance()->getTrace()->add('No valid item');
         $this->getDispatcher()->forward("index", "error");
     }
 
@@ -114,6 +208,7 @@ trait HasModels
         $value = $this->getItemValueFromRequest($request, $urlKey);
         $params = array();
         $params['where'][] = array("`{$modelKey}` = ?", $value);
+
         return $manager->findOneByParams($params);
     }
 
@@ -130,6 +225,7 @@ trait HasModels
             $urlKey = $manager->getUrlPK();
             $modelKey = $manager->getPrimaryKey();
         }
+
         return array($urlKey, $modelKey);
     }
 
@@ -139,18 +235,14 @@ trait HasModels
             $request = $this->getRequest();
         }
 
-        if ($request instanceof \Nip\Request) {
-            $value = $request->$urlKey;
+        if ($request instanceof Request) {
+            $value = $request->get($urlKey);
         } else {
             $value = $request[$urlKey];
         }
 
         $value = clean($value);
-        return $value;
-    }
 
-    public function getRequestKey()
-    {
-        return $this->getModel();
+        return $value;
     }
 }

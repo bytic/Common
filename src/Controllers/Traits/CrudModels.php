@@ -111,9 +111,7 @@ trait CrudModels
 
     public function view()
     {
-        if (!$this->item) {
-            $this->item = $this->checkItem();
-        }
+        $this->initExistingItem();
 
         $this->clone = clone $this->item;
         $this->form = $this->getModelForm($this->clone);
@@ -134,9 +132,7 @@ trait CrudModels
 
     public function edit()
     {
-        if (!$this->item) {
-            $this->item = $this->checkItem();
-        }
+        $this->initExistingItem();
 
         $this->clone = clone $this->item;
         $this->form = $this->getModelForm($this->clone);
@@ -177,9 +173,9 @@ trait CrudModels
 
     public function duplicate()
     {
-        $item = $this->item ? $this->item : $this->checkItem();
+        $this->initExistingItem();
 
-        $item->duplicate();
+        $this->item->duplicate();
 
         $url = $this->_urls["after-duplicate"] ? $this->_urls['after-duplicate'] : $this->getModelManager()->getURL();
         $this->_flashName = $this->_flashName ? $this->_flashName : $this->getModelManager()->getController();
@@ -188,7 +184,7 @@ trait CrudModels
 
     public function delete()
     {
-        $this->item = $this->item ? $this->item : $this->checkItem();
+        $this->initExistingItem();
 
         $this->item->delete();
         $this->deleteRedirect();
@@ -203,23 +199,23 @@ trait CrudModels
 
     public function activate()
     {
-        $item = $this->checkItem();
+        $this->initExistingItem();
 
-        $item->activate();
-        $this->flashRedirect($this->getModelManager()->getMessage('activate'), $item->getURL());
+        $this->item->activate();
+        $this->flashRedirect($this->getModelManager()->getMessage('activate'), $this->item->getURL());
     }
 
     public function deactivate()
     {
-        $item = $this->checkItem();
+        $this->initExistingItem();
 
-        $item->deactivate();
-        $this->flashRedirect($this->getModelManager()->getMessage('deactivate'), $item->getURL());
+        $this->item->deactivate();
+        $this->flashRedirect($this->getModelManager()->getMessage('deactivate'), $this->item->getURL());
     }
 
     public function inplace()
     {
-        $item = $this->checkItem();
+        $this->initExistingItem();
 
         $pk = $this->getModelManager()->getPrimaryKey();
 
@@ -230,10 +226,10 @@ trait CrudModels
         }
 
         if ($field) {
-            $item->getFromRequest($_POST, array($field));
-            if ($item->validate()) {
-                $item->save();
-                $this->Async()->json(array(
+            $this->item->getFromRequest($_POST, array($field));
+            if ($this->item->validate()) {
+                $this->item->save();
+                $this->item->Async()->json(array(
                     "type" => "success",
                     "value" => $item->$field,
                     "message" => $this->getModelManager()->getMessage("update")
@@ -246,9 +242,9 @@ trait CrudModels
 
     public function uploadFile()
     {
-        $item = $this->checkItem();
+        $this->initExistingItem();
 
-        $file = $item->uploadFile($_FILES['Filedata']);
+        $file = $this->item->uploadFile($_FILES['Filedata']);
 
         if ($file) {
             $response['type'] = "success";
@@ -262,5 +258,12 @@ trait CrudModels
         }
 
         $this->Async()->json($response);
+    }
+
+    protected function initExistingItem()
+    {
+        if (!$this->item) {
+            $this->item = $this->getModelFromRequest();
+        }
     }
 }
