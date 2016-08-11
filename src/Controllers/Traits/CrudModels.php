@@ -16,6 +16,7 @@ use Nip\View;
 trait CrudModels
 {
     protected $_urls = array();
+    protected $_flash = array();
 
     protected function beforeAction()
     {
