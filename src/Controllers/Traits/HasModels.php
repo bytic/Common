@@ -16,7 +16,7 @@ use Nip\Request;
  * @method Request getRequest
  * @method Dispatcher getDispatcher
  *
- * @method mixed call($action, $controller, $module, $params)
+ * @method mixed call($action = false, $controller = false, $module = false, $params = array())
  */
 trait HasModels
 {
