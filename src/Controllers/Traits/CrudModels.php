@@ -12,6 +12,7 @@ use Nip\View;
  *
  * @method Table getModelManager()
  * @method View getView()
+ * @method Row getModelFromRequest($key = false)
  */
 trait CrudModels
 {
@@ -40,9 +41,12 @@ trait CrudModels
         $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('title'));
     }
 
+    /**
+     * @param bool|Row $item
+     */
     protected function setItemBreadcrumbs($item = false)
     {
-        $item = $item ? $item : $this->item;
+        $item = $item ? $item : $this->getModelFromRequest();
         $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
 
         $this->getView()->Meta()->prependTitle($item->getName());
@@ -244,7 +248,7 @@ trait CrudModels
 
     public function inplace()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
         $pk = $this->getModelManager()->getPrimaryKey();
 
@@ -255,10 +259,10 @@ trait CrudModels
         }
 
         if ($field) {
-            $this->item->getFromRequest($_POST, array($field));
-            if ($this->item->validate()) {
-                $this->item->save();
-                $this->item->Async()->json(array(
+            $item->getFromRequest($_POST, array($field));
+            if ($item->validate()) {
+                $item->save();
+                $item->Async()->json(array(
                     "type" => "success",
                     "value" => $item->$field,
                     "message" => $this->getModelManager()->getMessage("update"),
@@ -271,9 +275,9 @@ trait CrudModels
 
     public function uploadFile()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $file = $this->item->uploadFile($_FILES['Filedata']);
+        $file = $item->uploadFile($_FILES['Filedata']);
 
         if ($file) {
             $response['type'] = "success";
@@ -289,10 +293,14 @@ trait CrudModels
         $this->Async()->json($response);
     }
 
+    /**
+     * @return Row
+     */
     protected function initExistingItem()
     {
         if (!$this->item) {
             $this->item = $this->getModelFromRequest();
         }
+        return $this->item;
     }
 }
