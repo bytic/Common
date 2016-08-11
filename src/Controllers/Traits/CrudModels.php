@@ -3,7 +3,16 @@
 namespace ByTIC\Common\Controllers\Traits;
 
 use Nip\Records\_Abstract\Row;
+use Nip\Records\_Abstract\Table;
+use Nip\View;
 
+/**
+ * Class CrudModels
+ * @package ByTIC\Common\Controllers\Traits
+ *
+ * @method Table getModelManager()
+ * @method View getView()
+ */
 trait CrudModels
 {
     protected $_urls = array();
@@ -71,30 +80,44 @@ trait CrudModels
 
     public function add()
     {
+
+        $item = $this->addNewModel();
+        $form = $this->addGetForm($item);
+
+        if ($form->execute()) {
+            $this->addRedirect($item);
+        }
+
+        $this->getView()->set('item', $item);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $this->getModelManager()->getLabel('add'));
+
         $this->getView()->Breadcrumbs()->addItem($this->getModelManager()->getLabel('add'));
-
-        $this->item = $this->item ? $this->item : $this->newModel();
-
-        if (!$this->form) {
-            $this->form = $this->getModelForm($this->item);
-            $this->form->setAction($this->getModelManager()->getAddURL($_GET));
-        }
-
-        if ($_POST) {
-            if ($this->form->validate($_POST)) {
-                $this->form->process();
-
-                $this->addRedirect();
-            }
-        }
-
-        $this->getView()->item = $this->item;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->getModelManager()->getLabel('add');
-
         $this->getView()->TinyMCE()->setEnabled();
-
         $this->getView()->section .= ".add";
+    }
+
+    public function addNewModel()
+    {
+        $item = $this->item ? $this->item : $this->newModel();
+
+        return $item;
+    }
+
+    /**
+     * @param Row $item
+     * @return mixed
+     */
+    public function addGetForm($item)
+    {
+        if ($this->form) {
+            $form = $this->form;
+        } else {
+            $form = $this->getModelForm($item);
+            $form->setAction($this->getModelManager()->getAddURL($_GET));
+        }
+
+        return $form;
     }
 
     public function newModel()
@@ -102,10 +125,15 @@ trait CrudModels
         return $this->getModelManager()->getNew();
     }
 
-    public function addRedirect()
+    /**
+     * @param Row $item
+     * @return mixed
+     */
+    public function addRedirect($item)
     {
-        $url = $this->_urls["after-add"] ? $this->_urls['after-add'] : $this->item->getURL();
-        $flashName = $this->_flash["after-add"] ? $this->_flash['after-add'] : $this->getView()->controller;
+        $url = $this->_urls["after-add"] ? $this->_urls['after-add'] : $item->getURL();
+        $flashName = $this->_flash["after-add"] ? $this->_flash['after-add'] : $this->getModelManager()->getController();
+
         return $this->flashRedirect($this->getModelManager()->getMessage('add'), $url, 'success', $flashName);
     }
 
@@ -161,7 +189,7 @@ trait CrudModels
 
     public function viewRedirect()
     {
-        $url = $this->_urls['after-edit'] ? $this->_urls['after-edit'] : $this->item->getURL() . "#details";
+        $url = $this->_urls['after-edit'] ? $this->_urls['after-edit'] : $this->item->getURL()."#details";
         $flashName = $this->_flash["after-edit"] ? $this->_flash['after-edit'] : $this->getView()->controller;
         $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
     }
@@ -232,7 +260,7 @@ trait CrudModels
                 $this->item->Async()->json(array(
                     "type" => "success",
                     "value" => $item->$field,
-                    "message" => $this->getModelManager()->getMessage("update")
+                    "message" => $this->getModelManager()->getMessage("update"),
                 ));
             }
         }

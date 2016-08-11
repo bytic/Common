@@ -15,7 +15,8 @@ use Nip\Request;
  * @method string getName
  * @method Request getRequest
  * @method Dispatcher getDispatcher
- * @method mixed call()
+ *
+ * @method mixed call($action, $controller, $module, $params)
  */
 trait HasModels
 {
@@ -106,6 +107,7 @@ trait HasModels
         if ($this->getRequest()->attributes->has($requestKey) === false) {
             $this->initForeignModelFromRequest($name, $key);
         }
+        return $this->getRequest()->attributes->get($requestKey);
     }
 
     /**
@@ -135,13 +137,16 @@ trait HasModels
 
     /**
      * @param Row $model
+     * @return null|Row
      */
     protected function checkAndSetForeignModelInRequest($model)
     {
         $requestKey = 'model-'.$model->getManager()->getTable();
         if ($this->call('checkItemResult', $model->getManager()->getController(), false, array($model)) == true) {
             $this->getRequest()->attributes->set($requestKey, $model);
+            return $model;
         }
+        return null;
     }
 
     protected function checkItem($request = false, $key = false)
@@ -178,7 +183,7 @@ trait HasModels
 
     protected function checkItemError($item)
     {
-        FrontController::instance()->getTrace()->add('No valid item');
+        FrontController::instance()->getTrace()->add('No valid item ['.get_class($item).']');
         $this->getDispatcher()->forward("index", "error");
     }
 
@@ -196,7 +201,7 @@ trait HasModels
 
     protected function checkItemAccess($item)
     {
-        return true;
+        return $item instanceof Row;
     }
 
 
