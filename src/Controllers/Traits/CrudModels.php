@@ -263,25 +263,4 @@ trait CrudModels
 
         $this->Async()->json($response);
     }
-
-    /**
-     * @param array $request
-     * @param string $key
-     * @return \Record
-     */
-    protected function checkItem($request = false, $key = false)
-    {
-        $return = parent::checkItem($request, $key);
-        if ($return) {
-            if ($this->checkAccess($return) !== false) {
-                return $return;
-            }
-        }
-        $this->forward('access', 'error');
-    }
-
-    protected function checkAccess($item)
-    {
-        return true;
-    }
 }
