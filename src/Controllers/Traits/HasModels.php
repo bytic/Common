@@ -123,6 +123,16 @@ trait HasModels
     }
 
     /**
+     * @param string $name
+     * @return Row|null
+     */
+    protected function hasForeignModelFromRequest($name)
+    {
+        $requestKey = 'model-'.$name;
+        return $this->getRequest()->attributes->has($requestKey);
+    }
+
+    /**
      * @param $name
      * @param $key
      * @throws \Exception
