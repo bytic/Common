@@ -166,7 +166,7 @@ trait HasModels
             return $item;
         }
 
-        return $this->checkItemError($item);
+        return $this->dispatchNotFoundResponse();
     }
 
     protected function checkItemResult($item)
@@ -191,9 +191,9 @@ trait HasModels
         $this->getDispatcher()->forward("index", "access");
     }
 
-    protected function checkItemError($item)
+    protected function dispatchNotFoundResponse()
     {
-        FrontController::instance()->getTrace()->add('No valid item ['.get_class($item).']');
+        FrontController::instance()->getTrace()->add('No valid item [manager:'.get_class($this->getModelManager()).']');
         $this->getDispatcher()->forward("index", "error");
     }
 
