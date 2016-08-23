@@ -2,27 +2,49 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Records\Traits\HasForms\RecordTrait as HasFormsRecord;
+use Nip_Form_Model as Form;
+
 trait HasForms
 {
 
+    /**
+     * @var Form[]
+     */
     protected $forms;
 
+    /**
+     * @param $name
+     * @param Form $form
+     */
     protected function addForm($name, $form)
     {
         $this->forms[$name] = $form;
     }
 
-    protected function getForm($name, $form)
+    /**
+     * @param $name
+     * @return Form
+     */
+    protected function getForm($name)
     {
         return $this->forms[$name];
     }
 
+    /**
+     * @return Form[]
+     */
     protected function getForms()
     {
         return $this->forms;
     }
 
-    public function getModelForm(\Record $model, $action = null)
+    /**
+     * @param HasFormsRecord $model
+     * @param null $action
+     * @return Form
+     */
+    public function getModelForm($model, $action = null)
     {
         return $model->getForm($action);
     }
