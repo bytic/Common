@@ -92,6 +92,11 @@ trait HasModels
     protected function initModelFromRequest($key = false)
     {
         $item = $this->checkItem($this->getRequest(), $key);
+        $this->setModelFromRequest($item);
+    }
+
+    protected function setModelFromRequest($item)
+    {
         $requestKey = 'model-'.$this->getModelManager()->getTable();
         $this->getRequest()->attributes->set($requestKey, $item);
     }
@@ -246,7 +251,7 @@ trait HasModels
 
     protected function getItemValueFromRequest($request = false, $urlKey)
     {
-        if (!$request) {
+        if (!$request) {http://register.42km.loc/organizers-admin/confirmation_letters/view?id=102#sidebarOptionsSubmenu
             $request = $this->getRequest();
         }
 
