@@ -16,7 +16,7 @@ use Nip_Form_Model as Form;
  * @method View getView()
  * @method Form getModelForm($model, $action = null)
  * @method Row getModelFromRequest($key = false)
- * @method string flashRedirect
+ * @method string flashRedirect($message, $url, $type = 'success', $name = false)
  */
 trait CrudModels
 {
