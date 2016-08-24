@@ -16,7 +16,7 @@ trait HasView
     protected $_layout = 'default';
 
     /**
-     * @return Nip_View
+     * @return \Nip\View
      */
     public function loadView()
     {
@@ -63,7 +63,7 @@ trait HasView
      */
     protected function initViewVars(\App_View $view)
     {
-        $view->controller = $this->controller = $this->getRequest()->controller;
+        $view->controller = $this->controller = $this->getRequest()->getControllerName();
         $view->action = $this->action = $this->getRequest()->getActionName();
         $view->options = $this->options;
         return $view;
