@@ -2,11 +2,13 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\View;
+
 trait HasView
 {
 
     /**
-     * @var \App_View
+     * @var View
      */
     protected $_view;
 
@@ -16,7 +18,7 @@ trait HasView
     protected $_layout = 'default';
 
     /**
-     * @return \Nip\View
+     * @return View
      */
     public function loadView()
     {
@@ -24,7 +26,7 @@ trait HasView
     }
 
     /**
-     * @return \App_View
+     * @return View
      */
     public function getView()
     {
@@ -35,7 +37,7 @@ trait HasView
     }
 
     /**
-     * @return \App_View
+     * @return View
      */
     protected function initView()
     {
@@ -46,10 +48,10 @@ trait HasView
 
 
     /**
-     * @param \App_View $view
-     * @return \App_View
+     * @param View $view
+     * @return View
      */
-    protected function populateView(\App_View $view)
+    protected function populateView($view)
     {
         $view->setBasePath(MODULES_PATH . $this->getRequest()->getModuleName() . '/views/');
         $view = $this->initViewVars($view);
@@ -59,16 +61,22 @@ trait HasView
 
 
     /**
-     * @return \App_View
+     * @param View $view
+     * @return View
      */
-    protected function initViewVars(\App_View $view)
+    protected function initViewVars($view)
     {
+        $view->setRequest($this->getRequest());
         $view->controller = $this->controller = $this->getRequest()->getControllerName();
         $view->action = $this->action = $this->getRequest()->getActionName();
         $view->options = $this->options;
         return $view;
     }
 
+    /**
+     * @param View $view
+     * @return View
+     */
     protected function initViewContentBlocks($view)
     {
         $view->setBlock('content', $this->getRequest()->getControllerName() . '/' . $this->getRequest()->getActionName());
@@ -76,7 +84,7 @@ trait HasView
     }
 
     /**
-     * @return \App_View
+     * @return View
      */
     protected function getViewObject()
     {
