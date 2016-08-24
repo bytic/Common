@@ -5,14 +5,18 @@ namespace ByTIC\Common\Controllers\Traits;
 use Nip\Records\_Abstract\Row;
 use Nip\Records\_Abstract\Table;
 use Nip\View;
+use Nip_Form_Model as Form;
 
 /**
  * Class CrudModels
  * @package ByTIC\Common\Controllers\Traits
  *
+ * @method string getModel()
  * @method Table getModelManager()
  * @method View getView()
+ * @method Form getModelForm($model, $action = null)
  * @method Row getModelFromRequest($key = false)
+ * @method string flashRedirect($message, $url, $type = 'success', $name = false)
  */
 trait CrudModels
 {
@@ -22,13 +26,13 @@ trait CrudModels
     protected function beforeAction()
     {
         parent::beforeAction();
-        $this->getView()->section = inflector()->underscore($this->getModel());
+        $this->getView()->set('section', inflector()->underscore($this->getModel()));
     }
 
     protected function afterAction()
     {
-        if (!$this->getView()->modelManager) {
-            $this->getView()->modelManager = $this->getModelManager();
+        if (!$this->getView()->has('modelManager')) {
+            $this->getView()->set('modelManager', $this->getModelManager());
         }
         parent::afterAction();
     }
@@ -59,25 +63,28 @@ trait CrudModels
         $this->filters = $this->filters ? $this->filters : $this->getModelManager()->requestFilters($_GET);
         $this->query = $this->getModelManager()->filter($this->query, $this->filters);
 
-        $this->paginator = $this->paginator ? $this->paginator : new \Nip_Record_Paginator();
+        $paginator = $this->paginator ? $this->paginator : new \Nip_Record_Paginator();
 
-        $this->paginator->setPage(intval($_GET['page']));
-        $this->paginator->setItemsPerPage(50);
-        $this->paginator->paginate($this->query);
+        $paginator->setPage(intval($_GET['page']));
+        $paginator->setItemsPerPage(50);
+        $paginator->paginate($this->query);
 
         if ($this->items) {
         } else {
             $this->items = $this->getModelManager()->findByQuery($this->query);
-            $this->paginator->count();
+            $paginator->count();
         }
 
         $this->getView()->items = $this->items;
         $this->getView()->filters = $this->filters;
         $this->getView()->title = $this->getModelManager()->getLabel('title');
 
-        $this->getView()->Paginator()->setPaginator($this->paginator)->setURL($this->getModelManager()->getURL());
+        $this->getView()->Paginator()->setPaginator($paginator)->setURL($this->getModelManager()->getURL());
     }
 
+    /**
+     * @return \Nip\Database\Query\Select
+     */
     protected function newIndexQuery()
     {
         return $this->getModelManager()->paramsToQuery();
@@ -144,19 +151,19 @@ trait CrudModels
 
     public function view()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $this->clone = clone $this->item;
+        $this->clone = clone $item;
         $this->form = $this->getModelForm($this->clone);
 
-        $this->processView();
+        $this->processForm($this->form);
 
-        $this->getView()->item = $this->item;
-        $this->getView()->clone = $this->clone;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->item->getName();
+        $this->getView()->set('item', $item);
+        $this->getView()->set('clone', $this->clone);
+        $this->getView()->set('form', $this->form);
+        $this->getView()->set('title', $item->getName());
 
-        $this->getView()->section .= ".view";
+        $this->getView()->append('section', ".view");
         $this->getView()->TinyMCE()->setEnabled();
 
         $this->setItemBreadcrumbs();
@@ -165,30 +172,39 @@ trait CrudModels
 
     public function edit()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $this->clone = clone $this->item;
+        $this->clone = clone $item;
         $this->form = $this->getModelForm($this->clone);
 
-        $this->processView();
+        $this->processForm($this->form);
 
-        $this->getView()->item = $this->item;
-        $this->getView()->clone = $this->clone;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->item->getName();
+        $this->getView()->set('item', $item);
+        $this->getView()->set('clone', $this->clone);
+        $this->getView()->set('form', $this->form);
+        $this->getView()->set('title', $item->getName());
 
-        $this->getView()->section .= ".edit";
+        $this->getView()->append('section', ".edit");
         $this->getView()->TinyMCE()->setEnabled();
 
         $this->setItemBreadcrumbs();
     }
 
+    /**
+     * @deprecated Use new processForm($form)
+     */
     public function processView()
     {
-        if ($this->form->submited() && $this->form->validate()) {
-            $this->form->process();
+        return $this->processForm($this->form);
+    }
 
-            return $this->viewRedirect();
+    /**
+     * @param Form $form
+     */
+    public function processForm($form)
+    {
+        if ($form->execute()) {
+            $this->viewRedirect();
         }
     }
 
@@ -217,9 +233,9 @@ trait CrudModels
 
     public function delete()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $this->item->delete();
+        $item->delete();
         $this->deleteRedirect();
     }
 
@@ -232,17 +248,17 @@ trait CrudModels
 
     public function activate()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $this->item->activate();
+        $item->activate();
         $this->flashRedirect($this->getModelManager()->getMessage('activate'), $this->item->getURL());
     }
 
     public function deactivate()
     {
-        $this->initExistingItem();
+        $item = $this->initExistingItem();
 
-        $this->item->deactivate();
+        $item->deactivate();
         $this->flashRedirect($this->getModelManager()->getMessage('deactivate'), $this->item->getURL());
     }
 
@@ -301,6 +317,7 @@ trait CrudModels
         if (!$this->item) {
             $this->item = $this->getModelFromRequest();
         }
+
         return $this->item;
     }
 }
