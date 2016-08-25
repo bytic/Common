@@ -5,8 +5,21 @@ namespace ByTIC\Common\Records\Traits;
 use Nip\Cookie\Jar as CookieJar;
 use Nip\Records\Record as Record;
 
+/**
+ * Class PersistentCurrent
+ * @package ByTIC\Common\Records\Traits
+ *
+ *
+ * @method Record findOne($ID)
+ * @method string getTable()
+ */
 trait PersistentCurrent
 {
+    /**
+     * @var Record
+     */
+    protected $_current;
+
     /**
      * @return Record
      */
@@ -28,11 +41,23 @@ trait PersistentCurrent
         return $this->_current;
     }
 
-    public function checkAccessCurrent($item)
+    /**
+     * @param Record|boolean $item
+     * @return $this
+     */
+    public function setCurrent($item = false)
     {
-        return true;
-    }
+        $varName = $this->getCurrentVarName();
+        if (is_object($item)) {
+            $_SESSION[$varName] = $item->toArray();
+            CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
+        } else {
+            unset($_SESSION[$varName]);
+            CookieJar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
+        }
 
+        return $this;
+    }
 
     public function getFromSession()
     {
@@ -46,6 +71,11 @@ trait PersistentCurrent
             }
         }
         return false;
+    }
+
+    public function getCurrentVarName()
+    {
+        return $this->getTable();
     }
 
     public function getFromCookie()
@@ -62,22 +92,8 @@ trait PersistentCurrent
         return false;
     }
 
-    public function setCurrent($item = false)
+    public function checkAccessCurrent($item)
     {
-        $varName = $this->getCurrentVarName();
-        if (is_object($item)) {
-            $_SESSION[$varName] = $item->toArray();
-            CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
-        } else {
-            unset($_SESSION[$varName]);
-            CookieJar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
-        }
-
-        return $this;
-    }
-
-    public function getCurrentVarName()
-    {
-        return $this->getTable();
+        return is_object($item);
     }
 }
