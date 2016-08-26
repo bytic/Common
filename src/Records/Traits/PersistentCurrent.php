@@ -61,9 +61,8 @@ trait PersistentCurrent
 
     public function getFromSession()
     {
-        $varName = $this->getCurrentVarName();
+        $sessionInfo = $this->getCurrentSessionData();
 
-        $sessionInfo = $_SESSION[$varName];
         if (is_array($sessionInfo)) {
             if ($sessionInfo['id']) {
                 $ID = intval($sessionInfo['id']);
@@ -71,6 +70,12 @@ trait PersistentCurrent
             }
         }
         return false;
+    }
+
+    public function getCurrentSessionData()
+    {
+        $varName = $this->getCurrentVarName();
+        return $_SESSION[$varName];
     }
 
     public function getCurrentVarName()
