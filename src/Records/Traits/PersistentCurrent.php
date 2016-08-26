@@ -34,11 +34,35 @@ trait PersistentCurrent
             }
 
             if ($item && $this->checkAccessCurrent($item)) {
-                $this->_current = $item;
+                $this->beforeSetCurrent($item);
+                $this->setAndSaveCurrent($item);
+            } else {
+                $this->setCurrent($this->getCurrentDefault());
             }
         }
 
         return $this->_current;
+    }
+
+    public function getCurrentDefault()
+    {
+        return false;
+    }
+
+    /**
+     * @param Record|boolean $item
+     * @return $this
+     */
+    public function setAndSaveCurrent($item = false)
+    {
+        $this->setCurrent($item);
+        $this->savePersistCurrent($item);
+
+        return $this;
+    }
+
+    public function beforeSetCurrent($item)
+    {
     }
 
     /**
@@ -47,14 +71,47 @@ trait PersistentCurrent
      */
     public function setCurrent($item = false)
     {
-        $varName = $this->getCurrentVarName();
+        $this->_current = $item;
+
+        return $this;
+    }
+
+    /**
+     * @param Record|boolean $item
+     * @return $this
+     */
+    public function savePersistCurrent($item)
+    {
         if (is_object($item)) {
-            $_SESSION[$varName] = $item->toArray();
-            CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
+            $this->savePersistentCurrent($item);
         } else {
-            unset($_SESSION[$varName]);
-            CookieJar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
+            $this->removePersistentCurrent();
         }
+
+        return $this;
+    }
+
+    /**
+     * @param Record|boolean $item
+     * @return $this
+     */
+    public function savePersistentCurrent($item)
+    {
+        $varName = $this->getCurrentVarName();
+        $_SESSION[$varName] = $item->toArray();
+        CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function removePersistentCurrent()
+    {
+        $varName = $this->getCurrentVarName();
+        unset($_SESSION[$varName]);
+        CookieJar::instance()->newCookie()->setName($varName)->setValue(0)->setExpire(time() - 1000)->save();
 
         return $this;
     }
@@ -66,15 +123,18 @@ trait PersistentCurrent
         if (is_array($sessionInfo)) {
             if ($sessionInfo['id']) {
                 $ID = intval($sessionInfo['id']);
+
                 return $this->findOne($ID);
             }
         }
+
         return false;
     }
 
     public function getCurrentSessionData()
     {
         $varName = $this->getCurrentVarName();
+
         return $_SESSION[$varName];
     }
 
@@ -94,6 +154,7 @@ trait PersistentCurrent
                 return $item;
             }
         }
+
         return false;
     }
 
