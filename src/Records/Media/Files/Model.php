@@ -142,6 +142,13 @@ class Model
         return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
+    /**
+     * @return mixed
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * @param Record $model
