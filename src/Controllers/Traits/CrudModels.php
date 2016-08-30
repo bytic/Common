@@ -2,82 +2,58 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use Nip\Records\_Abstract\Row;
-use Nip\Records\_Abstract\Table;
+use Nip\Records\Record;
+use Nip\Records\RecordManager;
+use Nip\Request;
 use Nip\View;
 use Nip_Form_Model as Form;
+use Nip_Record_Paginator as RecordPaginator;
 
 /**
  * Class CrudModels
  * @package ByTIC\Common\Controllers\Traits
  *
  * @method string getModel()
- * @method Table getModelManager()
+ * @method RecordManager getModelManager()
  * @method View getView()
+ * @method Request getRequest()
  * @method Form getModelForm($model, $action = null)
- * @method Row getModelFromRequest($key = false)
+ * @method Record getModelFromRequest($key = false)
  * @method string flashRedirect($message, $url, $type = 'success', $name = false)
  */
 trait CrudModels
 {
     protected $_urls = array();
     protected $_flash = array();
-
-    protected function beforeAction()
-    {
-        parent::beforeAction();
-        $this->getView()->set('section', inflector()->underscore($this->getModel()));
-    }
-
-    protected function afterAction()
-    {
-        if (!$this->getView()->has('modelManager')) {
-            $this->getView()->set('modelManager', $this->getModelManager());
-        }
-        parent::afterAction();
-    }
-
-    protected function setClassBreadcrumbs($parent = false)
-    {
-        $this->getView()->Breadcrumbs()->addItem(
-            $this->getModelManager()->getLabel('title'),
-            $this->getModelManager()->getURL());
-        $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('title'));
-    }
-
     /**
-     * @param bool|Row $item
+     * @var null|RecordPaginator
      */
-    protected function setItemBreadcrumbs($item = false)
-    {
-        $item = $item ? $item : $this->getModelFromRequest();
-        $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
-
-        $this->getView()->Meta()->prependTitle($item->getName());
-    }
-
+    protected $_paginator = null;
 
     public function index()
     {
-        $this->query = $this->query ? $this->query : $this->newIndexQuery();
-        $this->filters = $this->filters ? $this->filters : $this->getModelManager()->requestFilters($_GET);
-        $this->query = $this->getModelManager()->filter($this->query, $this->filters);
+        $query = $this->query ? $this->query : $this->newIndexQuery();
+        $filters = $this->filters ? $this->filters : $this->getModelManager()->requestFilters($_GET);
+        $query = $this->getModelManager()->filter($query, $filters);
 
-        $paginator = $this->paginator ? $this->paginator : new \Nip_Record_Paginator();
-
-        $paginator->setPage(intval($_GET['page']));
-        $paginator->setItemsPerPage(50);
-        $paginator->paginate($this->query);
+        if ($this->paginator) {
+            trigger_error('use paginator functions instead of paginator attribute', E_USER_DEPRECATED);
+            $this->setRecordPaginator($this->paginator);
+        }
+        $this->prepareRecordPaginator();
+        $paginator = $this->getRecordPaginator();
+        $paginator->paginate($query);
 
         if ($this->items) {
+            $items = $this->items;
         } else {
-            $this->items = $this->getModelManager()->findByQuery($this->query);
+            $items = $this->getModelManager()->findByQuery($query);
             $paginator->count();
         }
 
-        $this->getView()->items = $this->items;
-        $this->getView()->filters = $this->filters;
-        $this->getView()->title = $this->getModelManager()->getLabel('title');
+        $this->getView()->set('items', $items);
+        $this->getView()->set('filters', $filters);
+        $this->getView()->set('title', $this->getModelManager()->getLabel('title'));
 
         $this->getView()->Paginator()->setPaginator($paginator)->setURL($this->getModelManager()->getURL());
     }
@@ -88,6 +64,46 @@ trait CrudModels
     protected function newIndexQuery()
     {
         return $this->getModelManager()->paramsToQuery();
+    }
+
+    /**
+     * @param RecordPaginator $paginator
+     * @return $this
+     */
+    public function setRecordPaginator($paginator)
+    {
+        $this->_paginator = $paginator;
+        return $this;
+    }
+
+    public function prepareRecordPaginator()
+    {
+        $this->getRecordPaginator()->setPage(intval($_GET['page']));
+        $this->getRecordPaginator()->setItemsPerPage(50);
+    }
+
+    /**
+     * @return RecordPaginator
+     */
+    public function getRecordPaginator()
+    {
+        if ($this->_paginator == null) {
+            $this->initRecordPaginator();
+        }
+        return $this->_paginator;
+    }
+
+    public function initRecordPaginator()
+    {
+        $this->setRecordPaginator($this->newRecordPaginator());
+    }
+
+    /**
+     * @return RecordPaginator
+     */
+    public function newRecordPaginator()
+    {
+        return new RecordPaginator();
     }
 
     public function add()
@@ -116,8 +132,13 @@ trait CrudModels
         return $item;
     }
 
+    public function newModel()
+    {
+        return $this->getModelManager()->getNew();
+    }
+
     /**
-     * @param Row $item
+     * @param Record $item
      * @return mixed
      */
     public function addGetForm($item)
@@ -132,13 +153,8 @@ trait CrudModels
         return $form;
     }
 
-    public function newModel()
-    {
-        return $this->getModelManager()->getNew();
-    }
-
     /**
-     * @param Row $item
+     * @param Record $item
      * @return mixed
      */
     public function addRedirect($item)
@@ -170,6 +186,79 @@ trait CrudModels
         $this->postView();
     }
 
+    /**
+     * @return Record
+     */
+    protected function initExistingItem()
+    {
+        if (!$this->item) {
+            $this->item = $this->getModelFromRequest();
+        }
+
+        return $this->item;
+    }
+
+    /**
+     * @param Form $form
+     */
+    public function processForm($form)
+    {
+        if ($form->execute()) {
+            $this->viewRedirect($form->getModel());
+        }
+    }
+
+    /**
+     * @param Record|boolean $item
+     */
+    public function viewRedirect($item = null)
+    {
+        if ($item == null) {
+            $item = $this->item;
+            trigger_error('$item needed in viewRedirect', E_USER_DEPRECATED);
+        }
+
+        $url = $this->getAfterUrl('after-edit', $item->getURL());
+        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getControllerName());
+        $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
+    }
+
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return string
+     */
+    public function getAfterUrl($key, $default = null)
+    {
+        return isset($this->_urls[$key]) && $this->_urls[$key] ? $this->_urls[$key] : $default;
+    }
+
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return string
+     */
+    public function getAfterFlashName($key, $default = null)
+    {
+        return isset($this->_flash[$key]) && $this->_flash[$key] ? $this->_flash[$key] : $default;
+    }
+
+    /**
+     * @param bool|Record $item
+     */
+    protected function setItemBreadcrumbs($item = false)
+    {
+        $item = $item ? $item : $this->getModelFromRequest();
+        $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
+
+        $this->getView()->Meta()->prependTitle($item->getName());
+    }
+
+    public function postView()
+    {
+        $this->setItemBreadcrumbs();
+    }
+
     public function edit()
     {
         $item = $this->initExistingItem();
@@ -198,37 +287,15 @@ trait CrudModels
         return $this->processForm($this->form);
     }
 
-    /**
-     * @param Form $form
-     */
-    public function processForm($form)
-    {
-        if ($form->execute()) {
-            $this->viewRedirect();
-        }
-    }
-
-    public function viewRedirect()
-    {
-        $url = $this->_urls['after-edit'] ? $this->_urls['after-edit'] : $this->item->getURL()."#details";
-        $flashName = $this->_flash["after-edit"] ? $this->_flash['after-edit'] : $this->getView()->controller;
-        $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
-    }
-
-    public function postView()
-    {
-        $this->setItemBreadcrumbs();
-    }
-
     public function duplicate()
     {
         $this->initExistingItem();
 
         $this->item->duplicate();
 
-        $url = $this->_urls["after-duplicate"] ? $this->_urls['after-duplicate'] : $this->getModelManager()->getURL();
-        $this->_flashName = $this->_flashName ? $this->_flashName : $this->getModelManager()->getController();
-        $this->flashRedirect($this->getModelManager()->getMessage('duplicate'), $url, 'success', $this->_flashName);
+        $url = $this->getAfterUrl("after-duplicate", $this->getModelManager()->getURL());
+        $flashName = $this->getAfterFlashName("after-duplicate", $this->getModelManager()->getController());
+        $this->flashRedirect($this->getModelManager()->getMessage('duplicate'), $url, 'success', $flashName);
     }
 
     public function delete()
@@ -241,8 +308,8 @@ trait CrudModels
 
     public function deleteRedirect()
     {
-        $url = $this->_urls["after-delete"] ? $this->_urls['after-delete'] : $this->getModelManager()->getURL();
-        $flashName = $this->_flash["after-delete"] ? $this->_flash['after-delete'] : $this->getModelManager()->getController();
+        $url = $this->getAfterUrl("after-delete", $this->getModelManager()->getURL());
+        $flashName = $this->getAfterFlashName("after-delete", $this->getModelManager()->getController());
         $this->flashRedirect($this->getModelManager()->getMessage('delete'), $url, 'success', $flashName);
     }
 
@@ -309,15 +376,26 @@ trait CrudModels
         $this->Async()->json($response);
     }
 
-    /**
-     * @return Row
-     */
-    protected function initExistingItem()
+    protected function beforeAction()
     {
-        if (!$this->item) {
-            $this->item = $this->getModelFromRequest();
-        }
-
-        return $this->item;
+        parent::beforeAction();
+        $this->getView()->set('section', inflector()->underscore($this->getModel()));
     }
+
+    protected function afterAction()
+    {
+        if (!$this->getView()->has('modelManager')) {
+            $this->getView()->set('modelManager', $this->getModelManager());
+        }
+        parent::afterAction();
+    }
+
+    protected function setClassBreadcrumbs($parent = false)
+    {
+        $this->getView()->Breadcrumbs()->addItem(
+            $this->getModelManager()->getLabel('title'),
+            $this->getModelManager()->getURL());
+        $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('title'));
+    }
+
 }
