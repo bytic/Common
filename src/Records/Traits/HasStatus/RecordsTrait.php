@@ -90,12 +90,12 @@ trait RecordsTrait
     public function getStatusClass($type = null)
     {
         $type = $type ? $type : $this->getDefaultStatus();
-        return $this->getStatusRootNamespace() . inflector()->classify($this->getController()) . '\Statuses\\' . inflector()->classify($type);
+        return $this->getStatusRootNamespace() . inflector()->classify($type);
     }
 
     public function getStatusRootNamespace()
     {
-        return $this->getRootNamespace();
+        return $this->getRootNamespace() . inflector()->classify($this->getController()) . '\Statuses\\';
     }
 
     public function getDefaultStatus()

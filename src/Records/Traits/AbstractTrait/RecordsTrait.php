@@ -23,7 +23,7 @@ trait RecordsTrait
     /**
      * @return string
      */
-    abstract public function getRootNamespace();
+    abstract public static function getRootNamespace();
 
 
 }
