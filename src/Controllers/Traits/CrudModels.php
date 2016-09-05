@@ -33,7 +33,7 @@ trait CrudModels
     public function index()
     {
         $query = $this->query ? $this->query : $this->newIndexQuery();
-        $filters = $this->filters ? $this->filters : $this->getModelManager()->requestFilters($_GET);
+        $filters = $this->filters ? $this->filters : $this->getRequestFilters();
         $query = $this->getModelManager()->filter($query, $filters);
 
         if ($this->paginator) {
@@ -58,6 +58,11 @@ trait CrudModels
         $this->getView()->Paginator()->setPaginator($paginator)->setURL($this->getModelManager()->getURL());
     }
 
+    protected function getRequestFilters()
+    {
+        return $this->getModelManager()->requestFilters($this->getRequest());
+    }
+
     /**
      * @return \Nip\Database\Query\Select
      */
@@ -73,6 +78,7 @@ trait CrudModels
     public function setRecordPaginator($paginator)
     {
         $this->_paginator = $paginator;
+
         return $this;
     }
 
@@ -90,6 +96,7 @@ trait CrudModels
         if ($this->_paginator == null) {
             $this->initRecordPaginator();
         }
+
         return $this->_paginator;
     }
 
