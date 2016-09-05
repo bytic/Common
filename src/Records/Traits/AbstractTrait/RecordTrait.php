@@ -2,7 +2,8 @@
 
 namespace ByTIC\Common\Records\Traits\AbstractTrait;
 
-use Nip\Records\_Abstract\Table as RecordManager;
+use Nip\Records\AbstractModels\RecordManager;
+use Nip_Registry;
 
 trait RecordTrait
 {
@@ -14,7 +15,7 @@ trait RecordTrait
 
 
     /**
-     * @return \Nip_Registry
+     * @return Nip_Registry
      */
     abstract public function getRegistry();
 
