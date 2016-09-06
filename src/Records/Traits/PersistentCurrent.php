@@ -97,13 +97,21 @@ trait PersistentCurrent
      */
     public function savePersistentCurrent($item)
     {
-        $varName = $this->getCurrentVarName();
-        $_SESSION[$varName] = $item->toArray();
-
+        $this->savePersistCurrentSession($item);
         $this->savePersistCurrentCookie($item);
+
         return $this;
     }
 
+    /**
+     * @param Record|boolean $item
+     * @return void
+     */
+    public function savePersistCurrentSession($item)
+    {
+        $varName = $this->getCurrentVarName();
+        $_SESSION[$varName] = $item->toArray();
+    }
 
     /**
      * @param Record|boolean $item
