@@ -99,9 +99,20 @@ trait PersistentCurrent
     {
         $varName = $this->getCurrentVarName();
         $_SESSION[$varName] = $item->toArray();
-        CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
 
+        $this->savePersistCurrentCookie($item);
         return $this;
+    }
+
+
+    /**
+     * @param Record|boolean $item
+     * @return void
+     */
+    public function savePersistCurrentCookie($item)
+    {
+        $varName = $this->getCurrentVarName();
+        CookieJar::instance()->newCookie()->setName($varName)->setValue($item->id)->save();
     }
 
     /**
