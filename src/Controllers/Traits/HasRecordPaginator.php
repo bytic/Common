@@ -12,6 +12,9 @@ trait HasRecordPaginator
      */
     protected $paginator = null;
 
+    /**
+     * @return RecordPaginator
+     */
     public function getRecordPaginator()
     {
         if ($this->paginator === null) {
