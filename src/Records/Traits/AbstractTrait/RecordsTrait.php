@@ -19,11 +19,13 @@ trait RecordsTrait
      */
     abstract public function getController();
 
+    /**
+     * @return string
+     */
+    abstract public function getModel();
 
     /**
      * @return string
      */
-    abstract public function getRootNamespace();
-
-
+    abstract public function getTable();
 }

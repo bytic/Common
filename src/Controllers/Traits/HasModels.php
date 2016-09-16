@@ -4,8 +4,8 @@ namespace ByTIC\Common\Controllers\Traits;
 
 use Nip\Dispatcher;
 use Nip\FrontController;
-use Nip\Records\_Abstract\Row;
-use Nip\Records\_Abstract\Table;
+use Nip\Records\AbstractModels\Record;
+use Nip\Records\AbstractModels\RecordManager;
 use Nip\Request;
 
 /**
@@ -36,7 +36,7 @@ trait HasModels
     {
         $name = str_replace(array("async-", "modal-"), '', $this->getName());
 
-        return $this->stringToModelName($name);
+        $this->stringToModelName($name);
     }
 
     protected function stringToModelName($name)
@@ -47,7 +47,7 @@ trait HasModels
     }
 
     /**
-     * @return Table
+     * @return RecordManager
      */
     protected function getModelManager()
     {
@@ -59,7 +59,7 @@ trait HasModels
     }
 
     /**
-     * @return Table
+     * @return void
      */
     protected function initModelManager()
     {
@@ -68,7 +68,7 @@ trait HasModels
 
     /**
      * @param string $managerName
-     * @return Table
+     * @return RecordManager
      */
     protected function newModelManagerInstance($managerName)
     {
@@ -77,7 +77,7 @@ trait HasModels
 
     /**
      * @param bool $key
-     * @return Row|null
+     * @return Record|null
      */
     protected function getModelFromRequest($key = false)
     {
@@ -104,7 +104,7 @@ trait HasModels
     /**
      * @param string $name
      * @param bool|string $key
-     * @return Row|null
+     * @return Record|null
      */
     protected function checkForeignModelFromRequest($name, $key = false)
     {
@@ -117,7 +117,7 @@ trait HasModels
 
     /**
      * @param string $name
-     * @return Row|null
+     * @return Record|null
      */
     protected function getForeignModelFromRequest($name)
     {
@@ -129,7 +129,7 @@ trait HasModels
 
     /**
      * @param string $name
-     * @return Row|null
+     * @return bool|null
      */
     protected function hasForeignModelFromRequest($name)
     {
@@ -151,8 +151,8 @@ trait HasModels
     }
 
     /**
-     * @param Row $model
-     * @return null|Row
+     * @param Record $model
+     * @return null|Record
      */
     protected function checkAndSetForeignModelInRequest($model)
     {
@@ -164,6 +164,11 @@ trait HasModels
         return null;
     }
 
+    /**
+     * @param bool $request
+     * @param bool $key
+     * @return void|Record
+     */
     protected function checkItem($request = false, $key = false)
     {
         $item = $this->findItemFromRequest($request, $key);
@@ -171,7 +176,8 @@ trait HasModels
             return $item;
         }
 
-        return $this->dispatchNotFoundResponse();
+        $this->dispatchNotFoundResponse();
+        return null;
     }
 
     protected function checkItemResult($item)
@@ -207,7 +213,7 @@ trait HasModels
      *
      * @param bool $request
      * @param bool $key
-     * @return false|Row|void
+     * @return false|Record|void
      */
     protected function findItemOrFail($request = false, $key = false)
     {
@@ -216,7 +222,7 @@ trait HasModels
 
     protected function checkItemAccess($item)
     {
-        return $item instanceof Row;
+        return $item instanceof Record;
     }
 
 
