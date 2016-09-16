@@ -8,14 +8,11 @@ class Newrelic
 {
 
     static $licence;
+    static $name;
 
-
-    static function setAppname($name, $licence)
+    static function getAppname()
     {
-        self::$licence = $licence;
-        if (self::isLoaded()) {
-            newrelic_set_appname($name, $licence);
-        }
+        return self::$name;
     }
 
     static function init($name, $licence)
@@ -23,6 +20,20 @@ class Newrelic
         if (self::isLoaded()) {
             self::setAppname($name, $licence);
             newrelic_capture_params();
+        }
+    }
+
+    static function isLoaded()
+    {
+        return extension_loaded('newrelic');
+    }
+
+    static function setAppname($name, $licence)
+    {
+        self::$licence = $licence;
+        self::$name = $name;
+        if (self::isLoaded()) {
+            newrelic_set_appname($name, $licence);
         }
     }
 
@@ -50,10 +61,5 @@ class Newrelic
     static function getLicence()
     {
         return self::$licence;
-    }
-
-    static function isLoaded()
-    {
-        return extension_loaded('newrelic');
     }
 }
