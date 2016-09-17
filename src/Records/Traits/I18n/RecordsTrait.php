@@ -3,30 +3,42 @@
 
 namespace ByTIC\Common\Records\Traits\I18n;
 
-use \Nip_I18n as Translator;
+use Nip\I18n\Translator as Translator;
 
+/**
+ * Class RecordsTrait
+ * @package ByTIC\Common\Records\Traits\I18n
+ */
 trait RecordsTrait
 {
     /**
      * @var Translator
      */
-    protected $_translator = null;
+    protected $translator = null;
 
-    public function getLabel($type, $params = array(), $language = false)
+    /**
+     * @param $type
+     * @param array $params
+     * @param bool $language
+     * @return string
+     */
+    public function getLabel($type, $params = [], $language = false)
     {
-        $slug = 'labels.' . $type;
+        $slug = 'labels.'.$type;
+
         return $this->translate($slug, $params, $language);
     }
 
-    public function getMessage($name, $params = array(), $language = false)
+    /**
+     * @param $slug
+     * @param array $params
+     * @param bool $language
+     * @return string
+     */
+    public function translate($slug, $params = [], $language = false)
     {
-        $slug = 'messages.' . $name;
-        return $this->translate($slug, $params, $language);
-    }
+        $slug = $this->getController().'.'.$slug;
 
-    public function translate($slug, $params = array(), $language = false)
-    {
-        $slug = $this->getController() . '.' . $slug;
         return $this->getTranslator()->translate($slug, $params, $language);
     }
 
@@ -35,10 +47,19 @@ trait RecordsTrait
      */
     public function getTranslator()
     {
-        if ($this->_translator == null) {
+        if ($this->translator == null) {
             $this->initTranslator();
         }
-        return $this->_translator;
+
+        return $this->translator;
+    }
+
+    /**
+     * @param Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
     }
 
     protected function initTranslator()
@@ -47,18 +68,23 @@ trait RecordsTrait
     }
 
     /**
-     * @param Translator $translator
-     */
-    public function setTranslator($translator)
-    {
-        $this->_translator = $translator;
-    }
-
-    /**
      * @return Translator
      */
     protected function newTranslator()
     {
-        return Translator::instance();
+        return app('translator');
+    }
+
+    /**
+     * @param $name
+     * @param array $params
+     * @param bool $language
+     * @return string
+     */
+    public function getMessage($name, $params = [], $language = false)
+    {
+        $slug = 'messages.'.$name;
+
+        return $this->translate($slug, $params, $language);
     }
 }
