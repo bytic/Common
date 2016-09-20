@@ -21,6 +21,7 @@
     "ByTIC/Framework": "dev-develop"
   },
   "require-dev": {
+    "squizlabs/php_codesniffer": "2.*",
     "codeception/codeception": "2.2.*",
     "codeception/mockery-module": "0.2.*"
   }
