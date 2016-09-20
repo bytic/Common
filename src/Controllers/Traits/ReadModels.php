@@ -31,6 +31,11 @@ trait ReadModels
 
     public function index()
     {
+        $this->doModelsListing();
+    }
+
+    public function doModelsListing()
+    {
         $query = $this->newIndexQuery();
         $filters = $this->getRequestFilters();
         $query = $this->getModelManager()->filter($query, $filters);
