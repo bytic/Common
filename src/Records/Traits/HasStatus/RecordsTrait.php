@@ -4,7 +4,6 @@ namespace ByTIC\Common\Records\Traits\HasStatus;
 
 use ByTIC\Common\Records\Statuses\Generic as GenericStatus;
 use Exception;
-use Nip\Records\Record;
 
 trait RecordsTrait
 {
@@ -61,20 +60,6 @@ trait RecordsTrait
     }
 
     /**
-     * @param string $name
-     * @return GenericStatus
-     * @throws Exception
-     */
-    public function getStatus($name = null)
-    {
-        $statuses = $this->getStatuses();
-        if (!isset($statuses[$name])) {
-            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
-        }
-        return $statuses[$name];
-    }
-
-    /**
      * @param string $type
      * @return GenericStatus
      */
@@ -87,19 +72,43 @@ trait RecordsTrait
         return $object;
     }
 
+    /**
+     * @param null $type
+     * @return string
+     */
     public function getStatusClass($type = null)
     {
         $type = $type ? $type : $this->getDefaultStatus();
         return $this->getStatusRootNamespace() . inflector()->classify($type);
     }
 
-    public function getStatusRootNamespace()
-    {
-        return $this->getRootNamespace() . inflector()->classify($this->getController()) . '\Statuses\\';
-    }
-
+    /**
+     * @return string
+     */
     public function getDefaultStatus()
     {
         return 'in-progress';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusRootNamespace()
+    {
+        return $this->getModelNamespace() . 'Statuses\\';
+    }
+
+    /**
+     * @param string $name
+     * @return GenericStatus
+     * @throws Exception
+     */
+    public function getStatus($name = null)
+    {
+        $statuses = $this->getStatuses();
+        if (!isset($statuses[$name])) {
+            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
+        }
+        return $statuses[$name];
     }
 }
