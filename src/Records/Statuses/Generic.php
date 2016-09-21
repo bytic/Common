@@ -84,8 +84,8 @@ abstract class Generic
     public function getLabel($short = false)
     {
         if (!$this->label) {
-            $this->label = $this->getManager()->translate('statuses.'.$this->getName());
-            $this->label_short = $this->getManager()->translate('statuses.'.$this->getName().'.short');
+            $this->label = $this->getManager()->translate('statuses.' . $this->getName());
+            $this->label_short = $this->getManager()->translate('statuses.' . $this->getName() . '.short');
         }
 
         return $short ? $this->label_short : $this->label;
@@ -97,9 +97,9 @@ abstract class Generic
      */
     public function getLabelHTML($short = false)
     {
-        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
-        style="'.$this->getColorCSS().'">
-            '.$this->getLabel($short).'
+        return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
+        style="' . $this->getColorCSS() . '">
+            ' . $this->getLabel($short) . '
         </span>';
     }
 
@@ -108,7 +108,7 @@ abstract class Generic
      */
     public function getLabelClasses()
     {
-        return 'label label-'.$this->getColorClass();
+        return 'label label-' . $this->getColorClass();
     }
 
     /**
@@ -126,10 +126,10 @@ abstract class Generic
     {
         $css = [];
         if ($this->getBGColor()) {
-            $css[] = 'background-color: '.$this->getBGColor();
+            $css[] = 'background-color: ' . $this->getBGColor();
         }
         if ($this->getBGColor()) {
-            $css[] = 'color: '.$this->getFGColor();
+            $css[] = 'color: ' . $this->getFGColor();
         }
 
         return implode(';', $css);
@@ -159,6 +159,7 @@ abstract class Generic
         $item = $this->getItem();
         if ($item) {
             /** @noinspection PhpUndefinedFieldInspection */
+            $this->preStatusChange();
             $item->status = $this->getName();
             $this->preUpdate();
             $return = $item->saveRecord();
@@ -187,6 +188,10 @@ abstract class Generic
         $this->item = $i;
 
         return $this;
+    }
+
+    public function preStatusChange()
+    {
     }
 
     public function preUpdate()
