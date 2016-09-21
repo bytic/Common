@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Statuses;
 
+use ByTIC\Common\Records\Traits\HasStatus\RecordsTrait;
 use ByTIC\Common\Records\Traits\HasStatus\RecordTrait;
 use ByTIC\Common\Records\Traits\I18n\RecordsTrait as RecordsTranslated;
 use Nip\Records\Record as Record;
@@ -30,67 +31,14 @@ abstract class Generic
     protected $manager;
 
     /**
-     * @return Records|RecordsTranslated
+     * @var array
      */
-    public function getManager()
-    {
-        return $this->manager;
-    }
+    protected $next = [];
 
     /**
-     * @param Records $manager
-     * @return $this
+     * @var self[]
      */
-    public function setManager(Records $manager)
-    {
-        $this->manager = $manager;
-        $this->getName();
-        $this->getLabel();
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        if ($this->name == null) {
-            $this->initName();
-        }
-
-        return $this->name;
-    }
-
-    public function initName()
-    {
-        $this->name = $this->generateName();
-    }
-
-    /**
-     * @return string
-     */
-    public function generateName()
-    {
-        $name = (new ReflectionClass($this))->getShortName();
-        $name = inflector()->unclassify($name);
-
-        return $name;
-    }
-
-    /**
-     * @param bool $short
-     * @return null
-     */
-    public function getLabel($short = false)
-    {
-        if (!$this->label) {
-            $this->label = $this->getManager()->translate('statuses.' . $this->getName());
-            $this->label_short = $this->getManager()->translate('statuses.' . $this->getName() . '.short');
-        }
-
-        return $short ? $this->label_short : $this->label;
-    }
+    protected $nextStatuses = null;
 
     /**
      * @param bool $short
@@ -223,5 +171,97 @@ abstract class Generic
 
     public function postUpdate()
     {
+    }
+
+    /**
+     * @return self[]
+     */
+    public function getNextStatuses()
+    {
+        if ($this->nextStatuses == null) {
+            $this->initNextStatuses();
+        }
+        return $this->nextStatuses;
+    }
+
+    public function initNextStatuses()
+    {
+        $statuses = [];
+        foreach ($this->next as $next) {
+            $statuses[] = clone $this->getManager()->getStatus($next);
+        }
+
+        $this->nextStatuses = $statuses;
+    }
+
+    /**
+     * @return Records|RecordsTranslated|RecordsTrait
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * @param Records $manager
+     * @return $this
+     */
+    public function setManager(Records $manager)
+    {
+        $this->manager = $manager;
+        $this->getName();
+        $this->getLabel();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        if ($this->name == null) {
+            $this->initName();
+        }
+
+        return $this->name;
+    }
+
+    public function initName()
+    {
+        $this->name = $this->generateName();
+    }
+
+    /**
+     * @return string
+     */
+    public function generateName()
+    {
+        $name = (new ReflectionClass($this))->getShortName();
+        $name = inflector()->unclassify($name);
+
+        return $name;
+    }
+
+    /**
+     * @param bool $short
+     * @return null
+     */
+    public function getLabel($short = false)
+    {
+        if (!$this->label) {
+            $this->label = $this->getManager()->translate('statuses.' . $this->getName());
+            $this->label_short = $this->getManager()->translate('statuses.' . $this->getName() . '.short');
+        }
+
+        return $short ? $this->label_short : $this->label;
+    }
+
+    /**
+     * @return bool
+     */
+    public function needsAssessment()
+    {
+        return false;
     }
 }
