@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Statuses;
 
+use ByTIC\Common\Records\Traits\HasStatus\RecordTrait;
 use ByTIC\Common\Records\Traits\I18n\RecordsTrait as RecordsTranslated;
 use Nip\Records\Record as Record;
 use Nip\Records\RecordManager as Records;
@@ -99,6 +100,7 @@ abstract class Generic
     {
         return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
         style="' . $this->getColorCSS() . '">
+            ' . $this->getIconHTML() . '
             ' . $this->getLabel($short) . '
         </span>';
     }
@@ -152,6 +154,27 @@ abstract class Generic
     }
 
     /**
+     * @return string
+     */
+    public function getIconHTML()
+    {
+        $icon = $this->getIcon();
+        $return = '';
+        if ($icon) {
+            $return .= '<span class="glyphicon glyphicon-white ' . $icon . '"></span> ';
+        }
+        return $return;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getIcon()
+    {
+        return false;
+    }
+
+    /**
      * @return bool|void
      */
     public function update()
@@ -172,7 +195,7 @@ abstract class Generic
     }
 
     /**
-     * @return Record|null
+     * @return Record|null|RecordTrait
      */
     public function getItem()
     {
