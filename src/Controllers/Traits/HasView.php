@@ -2,8 +2,13 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Request;
 use Nip\View;
 
+/**
+ * Class HasView
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasView
 {
 
@@ -15,7 +20,7 @@ trait HasView
     /**
      * @var string
      */
-    protected $_layout = 'default';
+    protected $layout = 'default';
 
     /**
      * @return View
@@ -33,7 +38,13 @@ trait HasView
         if (!$this->_view) {
             $this->_view = $this->initView();
         }
+
         return $this->_view;
+    }
+
+    public function setView($view)
+    {
+        $this->_view = $view;
     }
 
     /**
@@ -43,43 +54,7 @@ trait HasView
     {
         $view = $this->getViewObject();
         $view = $this->populateView($view);
-        return $view;
-    }
 
-
-    /**
-     * @param View $view
-     * @return View
-     */
-    protected function populateView($view)
-    {
-        $view->setBasePath(MODULES_PATH . $this->getRequest()->getModuleName() . '/views/');
-        $view = $this->initViewVars($view);
-        $view = $this->initViewContentBlocks($view);
-        return $view;
-    }
-
-
-    /**
-     * @param View $view
-     * @return View
-     */
-    protected function initViewVars($view)
-    {
-        $view->setRequest($this->getRequest());
-        $view->controller = $this->controller = $this->getRequest()->getControllerName();
-        $view->action = $this->action = $this->getRequest()->getActionName();
-        $view->options = $this->options;
-        return $view;
-    }
-
-    /**
-     * @param View $view
-     * @return View
-     */
-    protected function initViewContentBlocks($view)
-    {
-        $view->setBlock('content', $this->getRequest()->getControllerName() . '/' . $this->getRequest()->getActionName());
         return $view;
     }
 
@@ -91,25 +66,52 @@ trait HasView
         return new \App_View();
     }
 
-    public function setView($view)
+    /**
+     * @param View $view
+     * @return View
+     */
+    protected function populateView($view)
     {
-        $this->_view = $view;
+        $view->setBasePath(MODULES_PATH.$this->getRequest()->getModuleName().'/views/');
+        $view = $this->initViewVars($view);
+        $view = $this->initViewContentBlocks($view);
+
+        return $view;
     }
 
     /**
-     * @param string $layout
+     * @return Request
      */
-    public function setLayout($layout)
+    abstract public function getRequest();
+
+    /**
+     * @param View $view
+     * @return View
+     */
+    protected function initViewVars($view)
     {
-        $this->_layout = $layout;
+        $view->setRequest($this->getRequest());
+
+        $this->controller = $this->getRequest()->getControllerName();
+        $view->set('controller', $this->controller);
+
+        $this->action = $this->getRequest()->getActionName();
+        $view->set('action', $this->action);
+
+        $view->options = $this->options;
+
+        return $view;
     }
 
     /**
-     * @return string
+     * @param View $view
+     * @return View
      */
-    public function getLayout()
+    protected function initViewContentBlocks($view)
     {
-        return $this->_layout;
+        $view->setBlock('content', $this->getRequest()->getControllerName().'/'.$this->getRequest()->getActionName());
+
+        return $view;
     }
 
     /**
@@ -117,6 +119,22 @@ trait HasView
      */
     public function getLayoutPath()
     {
-        return '/layouts/' . $this->getLayout();
+        return '/layouts/'.$this->getLayout();
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
     }
 }
