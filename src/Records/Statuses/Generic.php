@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Records\Statuses;
 
+use ByTIC\Common\Records\Traits\HasStatus\RecordsTrait;
+use ByTIC\Common\Records\Traits\HasStatus\RecordTrait;
 use ByTIC\Common\Records\Traits\I18n\RecordsTrait as RecordsTranslated;
 use Nip\Records\Record as Record;
 use Nip\Records\RecordManager as Records;
@@ -29,7 +31,171 @@ abstract class Generic
     protected $manager;
 
     /**
-     * @return Records|RecordsTranslated
+     * @var array
+     */
+    protected $next = [];
+
+    /**
+     * @var self[]
+     */
+    protected $nextStatuses = null;
+
+    /**
+     * @param bool $short
+     * @return string
+     */
+    public function getLabelHTML($short = false)
+    {
+        return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
+        style="' . $this->getColorCSS() . '">
+            ' . $this->getIconHTML() . '
+            ' . $this->getLabel($short) . '
+        </span>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelClasses()
+    {
+        return 'label label-' . $this->getColorClass();
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorClass()
+    {
+        return 'default';
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorCSS()
+    {
+        $css = [];
+        if ($this->getBGColor()) {
+            $css[] = 'background-color: ' . $this->getBGColor();
+        }
+        if ($this->getBGColor()) {
+            $css[] = 'color: ' . $this->getFGColor();
+        }
+
+        return implode(';', $css);
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getBGColor()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getFGColor()
+    {
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIconHTML()
+    {
+        $icon = $this->getIcon();
+        $return = '';
+        if ($icon) {
+            $return .= '<span class="glyphicon glyphicon-white ' . $icon . '"></span> ';
+        }
+        return $return;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function getIcon()
+    {
+        return false;
+    }
+
+    /**
+     * @return bool|void
+     */
+    public function update()
+    {
+        $item = $this->getItem();
+        if ($item) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $this->preStatusChange();
+            $item->status = $this->getName();
+            $this->preUpdate();
+            $return = $item->saveRecord();
+            $this->postUpdate();
+
+            return $return;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Record|null|RecordTrait
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param $i
+     * @return $this
+     */
+    public function setItem($i)
+    {
+        $this->item = $i;
+
+        return $this;
+    }
+
+    public function preStatusChange()
+    {
+    }
+
+    public function preUpdate()
+    {
+    }
+
+    public function postUpdate()
+    {
+    }
+
+    /**
+     * @return self[]
+     */
+    public function getNextStatuses()
+    {
+        if ($this->nextStatuses == null) {
+            $this->initNextStatuses();
+        }
+        return $this->nextStatuses;
+    }
+
+    public function initNextStatuses()
+    {
+        $statuses = [];
+        foreach ($this->next as $next) {
+            $statuses[] = clone $this->getManager()->getStatus($next);
+        }
+
+        $this->nextStatuses = $statuses;
+    }
+
+    /**
+     * @return Records|RecordsTranslated|RecordsTrait
      */
     public function getManager()
     {
@@ -84,116 +250,18 @@ abstract class Generic
     public function getLabel($short = false)
     {
         if (!$this->label) {
-            $this->label = $this->getManager()->translate('statuses.'.$this->getName());
-            $this->label_short = $this->getManager()->translate('statuses.'.$this->getName().'.short');
+            $this->label = $this->getManager()->translate('statuses.' . $this->getName());
+            $this->label_short = $this->getManager()->translate('statuses.' . $this->getName() . '.short');
         }
 
         return $short ? $this->label_short : $this->label;
     }
 
     /**
-     * @param bool $short
-     * @return string
+     * @return bool
      */
-    public function getLabelHTML($short = false)
-    {
-        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
-        style="'.$this->getColorCSS().'">
-            '.$this->getLabel($short).'
-        </span>';
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabelClasses()
-    {
-        return 'label label-'.$this->getColorClass();
-    }
-
-    /**
-     * @return string
-     */
-    public function getColorClass()
-    {
-        return 'default';
-    }
-
-    /**
-     * @return string
-     */
-    public function getColorCSS()
-    {
-        $css = [];
-        if ($this->getBGColor()) {
-            $css[] = 'background-color: '.$this->getBGColor();
-        }
-        if ($this->getBGColor()) {
-            $css[] = 'color: '.$this->getFGColor();
-        }
-
-        return implode(';', $css);
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function getBGColor()
+    public function needsAssessment()
     {
         return false;
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function getFGColor()
-    {
-        return false;
-    }
-
-    /**
-     * @return bool|void
-     */
-    public function update()
-    {
-        $item = $this->getItem();
-        if ($item) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $item->status = $this->getName();
-            $this->preUpdate();
-            $return = $item->saveRecord();
-            $this->postUpdate();
-
-            return $return;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Record|null
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param $i
-     * @return $this
-     */
-    public function setItem($i)
-    {
-        $this->item = $i;
-
-        return $this;
-    }
-
-    public function preUpdate()
-    {
-    }
-
-    public function postUpdate()
-    {
     }
 }

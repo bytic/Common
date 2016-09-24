@@ -4,18 +4,26 @@ namespace ByTIC\Common\Records\Traits\HasStatus;
 
 use ByTIC\Common\Records\Statuses\Generic as GenericStatus;
 use Exception;
-use Nip\Records\Record;
 
+/**
+ * Class RecordsTrait
+ * @package ByTIC\Common\Records\Traits\HasStatus
+ */
 trait RecordsTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
 
-    protected $_statuses = null;
-    protected $_statusesPath = null;
+    protected $statuses = null;
 
+    protected $statusesPath = null;
+
+    /**
+     * @param $name
+     * @return array
+     */
     public function getStatusProperty($name)
     {
-        $return = array();
+        $return = [];
         $types = $this->getStatuses();
 
         foreach ($types as $type) {
@@ -25,53 +33,73 @@ trait RecordsTrait
         return $return;
     }
 
+    /**
+     * @return null|GenericStatus[]
+     */
     public function getStatuses()
     {
-        if ($this->_statuses == null) {
+        if ($this->statuses == null) {
             $this->initStatuses();
         }
-        return $this->_statuses;
+        return $this->statuses;
     }
 
     public function initStatuses()
     {
-        $files = \Nip_File_System::instance()->scanDirectory($this->getStatusesDirectory());
-        $this->_statuses = array();
-        foreach ($files as $name) {
-            $name = str_replace('.php', '', $name);
-            if (!in_array($name, array('Abstract', 'Generic', 'AbstractStatus'))) {
+        $names = $this->getStatusesNames();
+        $this->statuses = [];
+        foreach ($names as $name) {
+            if (!$this->isIgnoredStatusesName($name)) {
                 $object = $this->newStatus($name);
-                $this->_statuses[$object->getName()] = $object;
+                $this->statuses[$object->getName()] = $object;
             }
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getStatusesNames()
+    {
+        $files = \Nip_File_System::instance()->scanDirectory($this->getStatusesDirectory());
+        foreach ($files as &$name) {
+            $name = str_replace('.php', '', $name);
+        }
+        return $files;
+    }
+
+    /**
+     * @return null|string
+     */
     public function getStatusesDirectory()
     {
-        if ($this->_statusesPath == null) {
+        if ($this->statusesPath == null) {
             $this->initStatusesDirectory();
         }
-        return $this->_statusesPath;
+        return $this->statusesPath;
     }
 
     public function initStatusesDirectory()
     {
         $reflector = new \ReflectionObject($this);
-        $this->_statusesPath = dirname($reflector->getFileName()) . '/Statuses';
+        $this->statusesPath = dirname($reflector->getFileName()) . '/Statuses';
     }
 
     /**
      * @param string $name
-     * @return GenericStatus
-     * @throws Exception
+     * @return bool
      */
-    public function getStatus($name = null)
+    public function isIgnoredStatusesName($name)
     {
-        $statuses = $this->getStatuses();
-        if (!isset($statuses[$name])) {
-            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
-        }
-        return $statuses[$name];
+        return in_array($name, $this->getIgnoredStatusesNames());
+    }
+
+    /**
+     * @return array
+     */
+    public function getIgnoredStatusesNames()
+    {
+        return ['Abstract', 'Generic', 'AbstractStatus'];
     }
 
     /**
@@ -87,19 +115,43 @@ trait RecordsTrait
         return $object;
     }
 
+    /**
+     * @param null $type
+     * @return string
+     */
     public function getStatusClass($type = null)
     {
         $type = $type ? $type : $this->getDefaultStatus();
         return $this->getStatusRootNamespace() . inflector()->classify($type);
     }
 
-    public function getStatusRootNamespace()
-    {
-        return $this->getRootNamespace() . inflector()->classify($this->getController()) . '\Statuses\\';
-    }
-
+    /**
+     * @return string
+     */
     public function getDefaultStatus()
     {
         return 'in-progress';
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusRootNamespace()
+    {
+        return $this->getModelNamespace() . 'Statuses\\';
+    }
+
+    /**
+     * @param string $name
+     * @return GenericStatus
+     * @throws Exception
+     */
+    public function getStatus($name = null)
+    {
+        $statuses = $this->getStatuses();
+        if (!isset($statuses[$name])) {
+            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
+        }
+        return $statuses[$name];
     }
 }

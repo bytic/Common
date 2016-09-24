@@ -28,4 +28,14 @@ trait RecordsTrait
      * @return string
      */
     abstract public function getTable();
+
+    /**
+     * @return string
+     */
+    abstract public function getRootNamespace();
+
+    /**
+     * @return string
+     */
+    abstract public function getModelNamespace();
 }
