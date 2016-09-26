@@ -91,7 +91,7 @@ trait HasView
     protected function initViewVars($view)
     {
         $view->setRequest($this->getRequest());
-        $view->set('controller', $this->getController());
+        $view->set('controller', $this->getName());
         $view->set('action', $this->getRequest()->getActionName());
         $view->set('options', $this->options);
 
@@ -101,7 +101,7 @@ trait HasView
     /**
      * @return string
      */
-    abstract public function getController();
+    abstract public function getName();
 
     /**
      * @param View $view
