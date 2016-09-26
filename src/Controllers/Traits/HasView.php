@@ -137,4 +137,19 @@ trait HasView
     {
         $this->layout = $layout;
     }
+
+
+    /**
+     * @param self $controller
+     * @param Request $newRequest
+     * @return static
+     */
+    protected function prepareCallController($controller, $newRequest)
+    {
+        $controller = parent::prepareCallController($controller, $newRequest);
+        $controller->setView($this->getView());
+
+        return $controller;
+    }
 }
+
