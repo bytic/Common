@@ -15,16 +15,13 @@ trait HasView
     /**
      * @var View
      */
-    protected $_view;
+    protected $view;
 
     /**
      * @var string
      */
     protected $layout = 'default';
 
-    /**
-     * @return View
-     */
     public function loadView()
     {
         echo $this->getView()->load($this->getLayoutPath());
@@ -35,16 +32,19 @@ trait HasView
      */
     public function getView()
     {
-        if (!$this->_view) {
-            $this->_view = $this->initView();
+        if (!$this->view) {
+            $this->view = $this->initView();
         }
 
-        return $this->_view;
+        return $this->view;
     }
 
+    /**
+     * @param View $view
+     */
     public function setView($view)
     {
-        $this->_view = $view;
+        $this->view = $view;
     }
 
     /**
@@ -91,17 +91,17 @@ trait HasView
     protected function initViewVars($view)
     {
         $view->setRequest($this->getRequest());
-
-        $this->controller = $this->getRequest()->getControllerName();
-        $view->set('controller', $this->controller);
-
-        $this->action = $this->getRequest()->getActionName();
-        $view->set('action', $this->action);
-
-        $view->options = $this->options;
+        $view->set('controller', $this->getController());
+        $view->set('action', $this->getRequest()->getActionName());
+        $view->set('options', $this->options);
 
         return $view;
     }
+
+    /**
+     * @return string
+     */
+    abstract public function getController();
 
     /**
      * @param View $view
