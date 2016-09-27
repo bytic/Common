@@ -35,7 +35,7 @@ trait ReadModels
         $this->doModelsListing();
     }
 
-    public function doModelsListing()
+    protected function doModelsListing()
     {
         $query = $this->newIndexQuery();
         $filters = $this->getRequestFilters();
@@ -87,6 +87,7 @@ trait ReadModels
         $this->getRecordPaginator()->count();
 
         $this->getView()->set('items', $items);
+
         return $items;
     }
 
@@ -95,6 +96,21 @@ trait ReadModels
      */
     protected function indexPrepareItems($items)
     {
+    }
+
+    public function view()
+    {
+        $item = $this->getViewItemFromRequest();
+        $this->getView()->set('item', $item);
+        $this->getView()->Meta()->prependTitle($item->getName());
+    }
+
+    /**
+     * @return Record
+     */
+    protected function getViewItemFromRequest()
+    {
+        return $this->getModelFromRequest();
     }
 
     protected function beforeAction()
