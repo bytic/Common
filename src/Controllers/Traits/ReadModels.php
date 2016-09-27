@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Database\Query\Select as SelectQuery;
 use Nip\Records\Collections\Collection;
 use Nip\Records\Record;
 use Nip\Records\RecordManager;
@@ -76,6 +77,10 @@ trait ReadModels
         return $this->getModelManager()->requestFilters($this->getRequest());
     }
 
+    /**
+     * @param SelectQuery $query
+     * @return Collection
+     */
     protected function indexFindItems($query)
     {
         $items = $this->getModelManager()->findByQuery($query);
@@ -100,10 +105,15 @@ trait ReadModels
 
     protected function afterAction()
     {
+        $this->initViewModelManager();
+        parent::afterAction();
+    }
+
+    protected function initViewModelManager()
+    {
         if (!$this->getView()->has('modelManager')) {
             $this->getView()->set('modelManager', $this->getModelManager());
         }
-        parent::afterAction();
     }
 
     protected function setBreadcrumbs($skip = 0)
