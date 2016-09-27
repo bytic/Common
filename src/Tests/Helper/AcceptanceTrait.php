@@ -36,6 +36,13 @@ trait AcceptanceTrait
     }
 
     /**
+     * @param string $name
+     * @return \Codeception\Module
+     * @throws \Codeception\Exception\ModuleException
+     */
+    abstract protected function getModule($name);
+
+    /**
      * @param $name
      * @return mixed
      */
