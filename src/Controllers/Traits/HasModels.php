@@ -31,7 +31,7 @@ trait HasModels
      */
     protected function getModelFromRequest($key = false)
     {
-        $requestKey = 'model-' . $this->getModelManager()->getTable();
+        $requestKey = 'model-'.$this->getModelManager()->getTable();
         if ($this->getRequest()->attributes->has($requestKey) === false) {
             $this->initModelFromRequest($key);
         }
@@ -80,22 +80,55 @@ trait HasModels
         return $this->model;
     }
 
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
     protected function initModel()
     {
-        $name = str_replace(["async-", "modal-"], '', $this->getName());
-
-        $this->stringToModelName($name);
+        $this->setModel($this->generateModelName());
     }
 
     /**
-     * @param $name
+     * @return string
      */
-    protected function stringToModelName($name)
+    protected function generateModelName()
     {
+        $name = str_replace(["async-", "modal-"], '', $this->getName());
         $class = inflector()->classify($name);
         $elements = explode("_", $class);
-        $this->model = implode("_", $elements);
+        if ($this->isNamespaced()) {
+            $model = $this->getModelNamespace();
+            $elements[] = end($elements);
+            $model .= implode('\\', $elements);
+        } else {
+            $model = implode("_", $elements);
+        }
+
+        return $model;
     }
+
+    /**
+     * @return bool
+     */
+    abstract public function isNamespaced();
+
+    /**
+     * @return string
+     */
+    public function getModelNamespace()
+    {
+        return $this->getRootNamespace().'Models\\';
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getRootNamespace();
 
     /**
      * @param bool $key
@@ -119,6 +152,7 @@ trait HasModels
         }
 
         $this->dispatchNotFoundResponse();
+
         return null;
     }
 
@@ -220,7 +254,7 @@ trait HasModels
     protected function dispatchNotFoundResponse()
     {
         FrontController::instance()->getTrace()->add(
-            'No valid item [manager:' . get_class($this->getModelManager()) . ']'
+            'No valid item [manager:'.get_class($this->getModelManager()).']'
         );
         $this->getDispatcher()->forward("index", "error");
     }
@@ -230,7 +264,7 @@ trait HasModels
      */
     protected function setModelFromRequest($item)
     {
-        $requestKey = 'model-' . $this->getModelManager()->getTable();
+        $requestKey = 'model-'.$this->getModelManager()->getTable();
         $this->getRequest()->attributes->set($requestKey, $item);
     }
 
@@ -241,7 +275,7 @@ trait HasModels
     protected function getForeignModelFromRequest($name)
     {
         $this->checkForeignModelFromRequest($name);
-        $requestKey = 'model-' . $name;
+        $requestKey = 'model-'.$name;
 
         return $this->getRequest()->attributes->get($requestKey);
     }
@@ -253,10 +287,11 @@ trait HasModels
      */
     protected function checkForeignModelFromRequest($name, $key = false)
     {
-        $requestKey = 'model-' . $name;
+        $requestKey = 'model-'.$name;
         if ($this->getRequest()->attributes->has($requestKey) === false) {
             $this->initForeignModelFromRequest($name, $key);
         }
+
         return $this->getRequest()->attributes->get($requestKey);
     }
 
@@ -279,7 +314,8 @@ trait HasModels
      */
     protected function hasForeignModelFromRequest($name)
     {
-        $requestKey = 'model-' . $name;
+        $requestKey = 'model-'.$name;
+
         return $this->getRequest()->attributes->has($requestKey);
     }
 
@@ -289,11 +325,13 @@ trait HasModels
      */
     protected function checkAndSetForeignModelInRequest($model)
     {
-        $requestKey = 'model-' . $model->getManager()->getTable();
+        $requestKey = 'model-'.$model->getManager()->getTable();
         if ($this->call('checkItemResult', $model->getManager()->getController(), false, [$model]) == true) {
             $this->getRequest()->attributes->set($requestKey, $model);
+
             return $model;
         }
+
         return null;
     }
 

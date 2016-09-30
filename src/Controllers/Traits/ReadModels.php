@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Database\Query\Select as SelectQuery;
 use Nip\Records\Collections\Collection;
 use Nip\Records\Record;
 use Nip\Records\RecordManager;
@@ -34,7 +35,7 @@ trait ReadModels
         $this->doModelsListing();
     }
 
-    public function doModelsListing()
+    protected function doModelsListing()
     {
         $query = $this->newIndexQuery();
         $filters = $this->getRequestFilters();
@@ -76,12 +77,17 @@ trait ReadModels
         return $this->getModelManager()->requestFilters($this->getRequest());
     }
 
+    /**
+     * @param SelectQuery $query
+     * @return Collection
+     */
     protected function indexFindItems($query)
     {
         $items = $this->getModelManager()->findByQuery($query);
         $this->getRecordPaginator()->count();
 
         $this->getView()->set('items', $items);
+
         return $items;
     }
 
@@ -92,6 +98,21 @@ trait ReadModels
     {
     }
 
+    public function view()
+    {
+        $item = $this->getViewItemFromRequest();
+        $this->getView()->set('item', $item);
+        $this->getView()->Meta()->prependTitle($item->getName());
+    }
+
+    /**
+     * @return Record
+     */
+    protected function getViewItemFromRequest()
+    {
+        return $this->getModelFromRequest();
+    }
+
     protected function beforeAction()
     {
         parent::beforeAction();
@@ -100,10 +121,15 @@ trait ReadModels
 
     protected function afterAction()
     {
+        $this->initViewModelManager();
+        parent::afterAction();
+    }
+
+    protected function initViewModelManager()
+    {
         if (!$this->getView()->has('modelManager')) {
             $this->getView()->set('modelManager', $this->getModelManager());
         }
-        parent::afterAction();
     }
 
     protected function setBreadcrumbs($skip = 0)
