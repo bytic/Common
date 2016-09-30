@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateway;
+namespace ByTIC\Common\Payments\Gateways;
 
 use Nip\Utility\Traits\SingletonTrait;
 
@@ -48,7 +48,7 @@ class Manager
     public function newItem($type = false)
     {
         $parts = explode("_", $type);
-        $parts = array_map(array(inflector(), "camelize"), $parts);
+        $parts = array_map([inflector(), "camelize"], $parts);
 
         $className = 'Payment_Gateway_' . implode("_", $parts);
         $object = new $className();
