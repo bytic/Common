@@ -4,79 +4,34 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
 
+/**
+ * Class Gateway
+ * @package ByTIC\Common\Payments\Gateways\Providers\Payu
+ *
+ * @method Payu getProviderClass
+ */
 class Gateway extends AbstractGateway
 {
 
+    /**
+     * @return bool
+     */
     public function isActive()
     {
-        if ($this->options['merchant'] && $this->options['secretKey']) {
+        if ($this->getOption('merchant') && $this->getOption('secretKey')) {
             return true;
         }
         return false;
     }
 
-    public function generatePaymentForm($donation)
-    {
-        $pClass = $this->getProviderClass();
-
-        $pClass->setOrderRef($donation->id);
-        $pClass->setOrderDate($donation->created);
-
-        $PName = [];                                        //products name array
-        $PName[] = $donation->getCCName();
-        $pClass->setOrderPName($PName);
-
-        $PCode = [];                                        //products code array
-        $PCode[] = $donation->id;
-        $pClass->setOrderPCode($PCode);
-
-        $PPrice = [];
-        $PPrice[] = $donation->amount;
-        $pClass->setOrderPrice($PPrice);
-
-        $PQTY = [];                                        //products qty array
-        $PQTY[] = 1;
-        $pClass->setOrderQTY($PQTY);
-
-        $PVAT = [];                                        //products vat array
-        $PVAT[] = 0;
-        $pClass->setOrderVAT($PVAT);
-
-        $orgDonor = $donation->getOrgDonor();
-        $billing = array(
-            "billFName" => $orgDonor->first_name,
-            "billLName" => $orgDonor->last_name,
-            "billCIIssuer" => '',
-            "billCNP" => '',
-            "billCompany" => '',
-            "billFiscalCode" => '',
-            "billRegNumber" => '',
-            "billBank" => '',
-            "billBankAccount" => '',
-            "billPhone" => '-',
-            "billEmail" => $orgDonor->email,
-            "billCountryCode" => 'RO'
-        );
-
-        $pClass->setBilling($billing);
-
-        $returnURL = $donation->getConfirmURL();
-        $pClass->setBackRef($donation->getConfirmURL());
-
-        $donation->status_notes = $pClass->hmac(strlen($returnURL) . $returnURL);
-        $donation->update();
-
-        return $pClass->generateForm();
-    }
-
     public function detectConfirmResponse()
     {
-        return $this->detectRequestFields($_GET, array('id', 'ctrl'));
+        return $this->detectRequestFields($_GET, ['id', 'ctrl']);
     }
 
     public function detectIPNResponse()
     {
-        return $this->detectRequestFields($_POST, array('HASH', 'REFNOEXT'));
+        return $this->detectRequestFields($_POST, ['HASH', 'REFNOEXT']);
     }
 
     public function parseConfirmResponse()

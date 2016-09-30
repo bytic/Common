@@ -48,6 +48,7 @@ abstract class RedirectForm
     public function generate()
     {
         $this->prepare();
+
         return $this->generateHTML();
     }
 
@@ -76,7 +77,7 @@ abstract class RedirectForm
     protected function renderFormOpenTag()
     {
         return '<form name="form-gateway" 
-        method="post" action="' . $this->getFormAction() . '" id="form-gateway" target="_self">';
+        method="post" action="'.$this->getFormAction().'" id="form-gateway" target="_self">';
     }
 
     /**
@@ -87,6 +88,7 @@ abstract class RedirectForm
         if ($this->formAction === null) {
             $this->initFormAction();
         }
+
         return $this->formAction;
     }
 
@@ -101,7 +103,15 @@ abstract class RedirectForm
     /**
      * @return void
      */
-    abstract protected function initFormAction();
+    protected function initFormAction()
+    {
+        $this->setFormAction($this->generateFormAction());
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function generateFormAction();
 
     /**
      * @return string
@@ -116,7 +126,7 @@ abstract class RedirectForm
      */
     protected function renderFormMessages()
     {
-        return '<p class="tx_red_mic">Transferring to ' . $this->getGateway()->getLabel() . ' gateway</p>';
+        return '<p class="tx_red_mic">Transferring to '.$this->getGateway()->getLabel().' gateway</p>';
     }
 
     /**
@@ -134,6 +144,7 @@ abstract class RedirectForm
     public function setGateway($gateway)
     {
         $this->gateway = $gateway;
+
         return $this;
     }
 
@@ -143,8 +154,9 @@ abstract class RedirectForm
     protected function renderFormImages()
     {
         $return = '<p>';
-        $return .= '<img src="' . $this->getImageURI() . '" ';
+        $return .= '<img src="'.$this->getImageURI().'" ';
         $return .= ' onload="document.getElementById(\'form-gateway\').submit()"></p>';
+
         return $return;
     }
 
@@ -167,5 +179,16 @@ abstract class RedirectForm
     protected function renderFormCloseTag()
     {
         return '</form>';
+    }
+
+    /**
+     * @param $image
+     * @return string
+     */
+    public function generateImageURI($image)
+    {
+        $imageData = base64_encode(file_get_contents($image));
+
+        return 'data: '.mime_content_type($image).';base64,'.$imageData;
     }
 }
