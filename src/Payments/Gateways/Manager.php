@@ -44,7 +44,7 @@ class Manager
 
     protected function checkItemsInit()
     {
-        if (!$this->items === null) {
+        if ($this->items === null) {
             $this->initItems();
         }
     }
