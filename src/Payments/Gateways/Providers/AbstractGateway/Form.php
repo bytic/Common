@@ -1,12 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\AbstractGateway;
+namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
 use Nip_Form as NipForm;
 
 /**
  * Class Form
- * @package ByTIC\Common\Payments\Gateways\AbstractGateway
+ * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway
  */
 abstract class Form
 {

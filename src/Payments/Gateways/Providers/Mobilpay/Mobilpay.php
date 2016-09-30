@@ -1,12 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Mobilpay;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay;
 
-use ByTIC\Common\Payments\Gateways\Mobilpay\Request\Request\Card;
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Request\Card;
 
 /**
  * Class Mobilpay
- * @package ByTIC\Common\Payments\Gateways\Mobilpay
+ * @package ByTIC\Common\Payments\Gateways\Providers\Mobilpay
  */
 class Mobilpay
 {

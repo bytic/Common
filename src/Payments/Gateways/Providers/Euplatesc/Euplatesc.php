@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Euplatesc;
+namespace ByTIC\Common\Payments\Gateways\Providers\Euplatesc;
 
 class Euplatesc
 {

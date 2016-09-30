@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Epaybg;
+namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
-class Form extends \ByTIC\Common\Payments\Gateways\AbstractGateway\Form
+class Form extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form
 {
 
     public function initElements()

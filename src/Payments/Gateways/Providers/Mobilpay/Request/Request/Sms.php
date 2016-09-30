@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Mobilpay\Request\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Request;
 
 use DOMDocument;
 use DOMElement;

@@ -92,8 +92,10 @@ trait HasGatewaysTrait
      * @param Gateway $gateway
      * @return Gateway
      */
-    protected function prepareGateway($gateway)
-    {
-        return $gateway;
-    }
+    abstract protected function prepareGateway($gateway);
+
+    /**
+     * @return mixed
+     */
+    abstract protected function getGatewayOptions();
 }

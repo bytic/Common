@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Mobilpay;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay;
 
-class Gateway extends \ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway
+class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway
 {
 
     public function isActive()

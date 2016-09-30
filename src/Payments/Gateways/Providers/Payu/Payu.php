@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Payu;
+namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
-use ByTIC\Common\Payments\Gateways\Payu\Request\LiveUpdate;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Request\LiveUpdate;
 
 class Payu extends LiveUpdate
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Epaybg;
+namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
-class Gateway extends \ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway
+class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway
 {
 
     protected $label = 'ePayBg';

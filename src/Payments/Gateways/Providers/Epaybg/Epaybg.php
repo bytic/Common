@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Epaybg;
+namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
 class Epaybg
 {

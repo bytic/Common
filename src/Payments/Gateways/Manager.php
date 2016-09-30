@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways;
 
-use ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
 use DirectoryIterator;
 use Nip\Utility\Traits\SingletonTrait;
 
@@ -34,7 +34,7 @@ class Manager
     }
 
     /**
-     * @return AbstractGateway\Gateway[]|null
+     * @return Gateway[]|null
      */
     public function getItems()
     {
@@ -58,7 +58,7 @@ class Manager
                 $name = $fileinfo->getFilename();
                 if (!in_array($name, ['.', '..', 'AbstractGateway'])) {
                     $gateway = $this->newItem($name);
-                    $this->addItem($gateway, $name);
+                    $this->addItem($gateway);
                 }
             }
         }
@@ -84,6 +84,7 @@ class Manager
      */
     public function addItem($gateway, $name = null)
     {
+        $name = $name ? $name : $gateway->getName();
         $this->items[$name] = $gateway;
     }
 

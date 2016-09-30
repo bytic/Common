@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Romcard;
+namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
 
 class Romcard
 {

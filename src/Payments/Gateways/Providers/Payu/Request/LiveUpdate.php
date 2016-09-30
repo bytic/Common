@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Payu\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Request;
 
 /*
     * Class Live Update v2.2

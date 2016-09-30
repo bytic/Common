@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Payu;
+namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
-use ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway as AbstractGateway;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
 
 class Gateway extends AbstractGateway
 {

@@ -1,22 +1,102 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\AbstractGateway;
+namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
+
+use Nip\Utility\Traits\NameWorksTrait;
 
 /**
  * Class Gateway
- * @package ByTIC\Common\Payments\Gateways\AbstractGateway
+ * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway
  */
 abstract class Gateway
 {
 
+    use NameWorksTrait;
+
+    /**
+     * @var null|string
+     */
     protected $name = null;
+
+    /**
+     * @var null|string
+     */
     protected $label = null;
 
+    /**
+     * @var
+     */
     protected $_form;
     protected $_pClass = null;
     protected $_options;
 
     protected $_model;
+
+
+    /**
+     * @return null|string
+     */
+    public function getName()
+    {
+        if ($this->name === null) {
+            $this->initName();
+        }
+        return $this->name;
+    }
+
+    /**
+     * @param null $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function initName()
+    {
+        $this->setName($this->generateName());
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateName()
+    {
+        return strtolower($this->getLabel());
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLabel()
+    {
+        if (!$this->label) {
+            $this->label = $this->getName();
+        }
+
+        return $this->label;
+    }
+
+    /**
+     * @param null|string $label
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    }
+
+    /**
+     * @return string
+     */
+    public function generateLabel()
+    {
+        return $this->getNamespaceParentFolder();
+    }
+
+    public function initLabel()
+    {
+
+    }
 
     public function getModel()
     {
@@ -34,26 +114,6 @@ abstract class Gateway
     public function setOptions($options)
     {
         $this->_options = $options;
-    }
-
-    public function getLabel()
-    {
-        if (!$this->label) {
-            $this->label = $this->getName();
-        }
-
-        return $this->label;
-    }
-
-    public function getName()
-    {
-        if (!$this->name) {
-            $name = get_class($this);
-            $name = str_replace('Payment_Gateway_', '', $name);
-            $name = inflector()->unclassify($name);
-            $this->name = $name;
-        }
-        return $this->name;
     }
 
     /**

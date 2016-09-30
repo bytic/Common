@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Romcard;
+namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
 
-class Gateway extends \ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway
+class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway
 {
 
     /**
