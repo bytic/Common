@@ -27,4 +27,9 @@ trait RecordTrait
      * @return Nip_Registry
      */
     abstract public function getRegistry();
+
+    /**
+     * @return mixed
+     */
+    abstract public function update();
 }

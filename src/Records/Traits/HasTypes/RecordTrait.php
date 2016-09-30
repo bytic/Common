@@ -25,32 +25,16 @@ trait RecordTrait
     /**
      * @return GenericType
      */
-    public function getTypeObject()
+    public function getType()
     {
         if ($this->typeObject === null) {
-            $this->initTypeObject();
+            $this->initType();
         }
 
         return $this->typeObject;
     }
 
-    /**
-     * @param GenericType $typeObject
-     * @return bool
-     */
-    public function setTypeObject($typeObject = null)
-    {
-        if (!empty($typeObject)) {
-            $newType = $this->getNewType($typeObject);
-            $return = $newType->update();
-
-            return $return;
-        }
-
-        return false;
-    }
-
-    public function initTypeObject()
+    public function initType()
     {
         $this->typeObject = $this->getNewType($this->getTypeValue());
     }
@@ -73,5 +57,33 @@ trait RecordTrait
     public function getTypeValue()
     {
         return $this->type;
+    }
+
+    /**
+     * @param GenericType $type
+     * @return bool
+     */
+    public function updateType($type = null)
+    {
+        if ($this->setType($type)) {
+            $this->update();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param GenericType $type
+     * @return bool|RecordTrait
+     */
+    public function setType($type = null)
+    {
+        if (!empty($type)) {
+            $this->typeObject = $this->getNewType($type);
+
+            return $this;
+        }
+
+        return false;
     }
 }
