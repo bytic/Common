@@ -45,8 +45,7 @@ class CreditCards extends AbstractType
      */
     protected function prepareGateway($gateway)
     {
-        $gateway->setOptions($this->getGatewayOptions());
-        $gateway->setModel($this->getItem());
+        $gateway->setPaymentMethodModel($this->getItem());
         return $gateway;
     }
 

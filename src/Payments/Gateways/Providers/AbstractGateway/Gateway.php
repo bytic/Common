@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
+use ByTIC\Common\Payments\Methods\Traits\RecordTrait as PaymentMethod;
 use ByTIC\Common\Payments\Traits\PaymentTrait;
 use Nip\Utility\Traits\NameWorksTrait;
 
@@ -42,7 +43,7 @@ abstract class Gateway
     protected $options;
 
     /**
-     * @var PaymentTrait
+     * @var PaymentMethod
      */
     protected $paymentMethodModel;
 
@@ -113,7 +114,7 @@ abstract class Gateway
     }
 
     /**
-     * @return PaymentTrait
+     * @return PaymentMethod
      */
     public function getPaymentMethodModel()
     {
@@ -121,13 +122,13 @@ abstract class Gateway
     }
 
     /**
-     * @param  PaymentTrait $paymentMethodModel
+     * @param  PaymentMethod $paymentMethodModel
      * @return $this
      */
     public function setPaymentMethodModel($paymentMethodModel)
     {
         $this->paymentMethodModel = $paymentMethodModel;
-        $this->setOptions($paymentMethodModel->getPaymentMethod()->getPaymentGatewayOptions());
+        $this->setOptions($paymentMethodModel->getPaymentGatewayOptions());
         return $this;
     }
 
