@@ -127,7 +127,7 @@ abstract class Gateway
     public function setPaymentMethodModel($paymentMethodModel)
     {
         $this->paymentMethodModel = $paymentMethodModel;
-        $this->setOptions($paymentMethodModel->getPaymentGatewayOptions());
+        $this->setOptions($paymentMethodModel->getPaymentMethod()->getPaymentGatewayOptions());
         return $this;
     }
 
@@ -137,6 +137,24 @@ abstract class Gateway
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasOption($name)
+    {
+        return isset($this->options[$name]);
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getOption($name)
+    {
+        return $this->options[$name];
     }
 
     /**
@@ -259,7 +277,6 @@ abstract class Gateway
     {
         if ($this->providerClass === null) {
             $this->initProviderClass();
-
         }
         return $this->providerClass;
     }

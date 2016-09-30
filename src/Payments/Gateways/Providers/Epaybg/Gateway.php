@@ -2,7 +2,9 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
-class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
+
+class Gateway extends AbstractGateway
 {
 
     protected $label = 'ePayBg';
@@ -133,13 +135,13 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         return $donation;
     }
 
-    public function initProviderClass()
+    public function generateProviderClass()
     {
         $class = new Epaybg();
-        $class->setSecretKey($this->options['secret'])
-            ->setMIN($this->options['min']);
-        $class->setSandboxMode($this->options['sandbox'] == 'yes');
-        $class->paymentpage = $this->options['paymentpage'];
+        $class->setSecretKey($this->getOption('secret'))
+            ->setMIN($this->getOption('min'));
+        $class->setSandboxMode($this->getOption('sandbox') == 'yes');
+        $class->paymentpage = $this->getOption('paymentpage');
         return $class;
     }
 }

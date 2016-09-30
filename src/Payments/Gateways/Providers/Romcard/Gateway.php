@@ -24,19 +24,19 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
     {
         $pClass = $this->getProviderClass();
 
-        $pClass->setData(array(
+        $pClass->setData([
             'AMOUNT' => $donation->amount,
             'ORDER' => str_pad($donation->id, 10, "0", STR_PAD_LEFT),
             'DESC' => substr(iconv("UTF-8", "ASCII//TRANSLIT", $donation->getFullName()), 0, 55),
             'BACKREF' => $donation->getConfirmURL(),
-        ));
+        ]);
 
         $donor = $donation->getOrgDonor();
-        $pClass->setData(array(
+        $pClass->setData([
 //            'FIRST_NAME'	   => $donor->first_name,   // nume
 //            'LAST_NAME'	   => $donor->last_name,   // prenume            
             'EMAIL' => $donor->email,   // email
-        ));
+        ]);
 
         $pClass->calculatePSIGN();
 
@@ -130,13 +130,16 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         }
     }
 
-    public function initProviderClass()
+    /**
+     * @return Romcard
+     */
+    public function generateProviderClass()
     {
         $class = new Romcard();
-        $class->setMerchName($this->options['MERCH_NAME'])
-            ->setTerminal($this->options['TERMINAL'])
-            ->setKey($this->options['KEY']);
-        $class->setSandboxMode($this->options['sandbox'] == 'yes');
+        $class->setMerchName($this->getOption('MERCH_NAME'))
+            ->setTerminal($this->getOption('TERMINAL'))
+            ->setKey($this->getOption('KEY'));
+        $class->setSandboxMode($this->getOption('sandbox') == 'yes');
         return $class;
     }
 }

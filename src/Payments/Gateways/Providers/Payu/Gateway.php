@@ -181,11 +181,14 @@ class Gateway extends AbstractGateway
         }
     }
 
-    public function initProviderClass()
+    /**
+     * @return Payu
+     */
+    public function generateProviderClass()
     {
         $class = new Payu();
-        $class->secretKey = html_entity_decode($this->options['secretKey']);
-        $class->merchant = html_entity_decode($this->options['merchant']);
+        $class->secretKey = html_entity_decode($this->getOption('secretKey'));
+        $class->merchant = html_entity_decode($this->getOption('merchant'));
 //        $class->setTestMode(true);
         return $class;
     }

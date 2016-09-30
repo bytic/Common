@@ -212,13 +212,15 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         return false;
     }
 
-    public function initProviderClass()
+    /**
+     * @return Mobilpay
+     */
+    public function generateProviderClass()
     {
         $class = new Mobilpay();
-        $class->setSignature($this->options['signature']);
+        $class->setSignature($this->getOption('signature'));
         $class->setCertificate($this->getCertificate());
-        $class->setSandboxMode($this->options['sandbox'] == 'yes');
+        $class->setSandboxMode($this->getOption('sandbox') == 'yes');
         return $class;
     }
-
 }
