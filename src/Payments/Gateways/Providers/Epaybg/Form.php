@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
-class Form extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form
+class Form extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm
 {
 
     public function initElements()

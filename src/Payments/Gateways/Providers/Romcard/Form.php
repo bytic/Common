@@ -1,6 +1,6 @@
 <?php
 
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractForm;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm as AbstractForm;
 
 class Form extends AbstractForm
 {

@@ -65,15 +65,12 @@ class Manager
     }
 
     /**
-     * @param bool|string $type
+     * @param bool|string $name
      * @return Gateway
      */
-    public function newItem($type = false)
+    public function newItem($name = false)
     {
-        $parts = explode("_", $type);
-        $parts = array_map([inflector(), "camelize"], $parts);
-
-        $className = 'Payment_Gateway_' . implode("_", $parts);
+        $className = 'ByTIC\Common\Payments\Gateways\Providers\\' . $name . '\Gateway';
         $object = new $className();
         return $object;
     }

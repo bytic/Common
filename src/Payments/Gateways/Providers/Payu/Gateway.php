@@ -9,7 +9,7 @@ class Gateway extends AbstractGateway
 
     public function isActive()
     {
-        if ($this->_options['merchant'] && $this->_options['secretKey']) {
+        if ($this->options['merchant'] && $this->options['secretKey']) {
             return true;
         }
         return false;
@@ -17,7 +17,7 @@ class Gateway extends AbstractGateway
 
     public function generatePaymentForm($donation)
     {
-        $pClass = $this->getProcesingClass();
+        $pClass = $this->getProviderClass();
 
         $pClass->setOrderRef($donation->id);
         $pClass->setOrderDate($donation->created);
@@ -109,11 +109,11 @@ class Gateway extends AbstractGateway
         if ($donation) {
             $method = $donation->getMethod();
             $this->setOptions($method->getOptions('payu'));
-            $this->setModel($method);
+            $this->setPaymentMethodModel($method);
         }
 
         /* Internet Payment Notification */
-        $gateway = $this->getProcesingClass();
+        $gateway = $this->getProviderClass();
         $result = "";                /* string for compute HASH for received data */
         $return = "";                /* string to compute HASH for return result */
         $signature = $_POST["HASH"];    /* HASH received */
@@ -181,11 +181,11 @@ class Gateway extends AbstractGateway
         }
     }
 
-    public function initProcesingClass()
+    public function initProviderClass()
     {
         $class = new Payu();
-        $class->secretKey = html_entity_decode($this->_options['secretKey']);
-        $class->merchant = html_entity_decode($this->_options['merchant']);
+        $class->secretKey = html_entity_decode($this->options['secretKey']);
+        $class->merchant = html_entity_decode($this->options['merchant']);
 //        $class->setTestMode(true);
         return $class;
     }

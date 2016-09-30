@@ -5,31 +5,26 @@ namespace ByTIC\Common\Records\Types;
 use Records;
 use ReflectionClass;
 
+/**
+ * Class Generic
+ * @package ByTIC\Common\Records\Types
+ */
 abstract class Generic
 {
     public $name;
     public $label;
 
-    protected $_item;
+    protected $item;
 
-    public function  __construct()
+    public function getItem()
     {
+        return $this->item;
     }
 
     public function setItem($Item)
     {
-        $this->_item = $Item;
+        $this->item = $Item;
         return $this;
-    }
-
-    public function getItem()
-    {
-        return $this->_item;
-    }
-
-    public function getManager()
-    {
-        return $this->_manager;
     }
 
     public function setManager(Records $manager)
@@ -57,6 +52,11 @@ abstract class Generic
             $this->label_short = $this->getManager()->getLabel('types.' . $this->getName() . '.short');
         }
         return $short ? $this->label_short : $this->label;
+    }
+
+    public function getManager()
+    {
+        return $this->_manager;
     }
     
     public function getLabelHTML($short = false)

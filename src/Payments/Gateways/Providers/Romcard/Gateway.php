@@ -10,7 +10,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
      */
     public function isActive()
     {
-        if ($this->_options['MERCH_NAME'] && $this->_options['TERMINAL'] && $this->_options['KEY']) {
+        if ($this->options['MERCH_NAME'] && $this->options['TERMINAL'] && $this->options['KEY']) {
             return true;
         }
         return false;
@@ -22,7 +22,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
      */
     public function generatePaymentForm($donation)
     {
-        $pClass = $this->getProcesingClass();
+        $pClass = $this->getProviderClass();
 
         $pClass->setData(array(
             'AMOUNT' => $donation->amount,
@@ -122,21 +122,21 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         return $donation;
     }
 
-    public function postDonationStatusUpdate($donation)
+    public function postDonationStatusUpdate($payment)
     {
-        if ($donation->getStatus()->getName() == 'canceled') {
-            $pClass = $this->initProcesingClass();
-            $pClass->sendCanceledMessage($donation);
+        if ($payment->getStatus()->getName() == 'canceled') {
+            $pClass = $this->initProviderClass();
+            $pClass->sendCanceledMessage($payment);
         }
     }
 
-    public function initProcesingClass()
+    public function initProviderClass()
     {
         $class = new Romcard();
-        $class->setMerchName($this->_options['MERCH_NAME'])
-            ->setTerminal($this->_options['TERMINAL'])
-            ->setKey($this->_options['KEY']);
-        $class->setSandboxMode($this->_options['sandbox'] == 'yes');
+        $class->setMerchName($this->options['MERCH_NAME'])
+            ->setTerminal($this->options['TERMINAL'])
+            ->setKey($this->options['KEY']);
+        $class->setSandboxMode($this->options['sandbox'] == 'yes');
         return $class;
     }
 }

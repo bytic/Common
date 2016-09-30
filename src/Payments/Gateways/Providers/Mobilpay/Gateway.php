@@ -7,7 +7,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function isActive()
     {
-        if ($this->_options['signature'] && $this->getCertificate()) {
+        if ($this->options['signature'] && $this->getCertificate()) {
             return true;
         }
         return false;
@@ -15,7 +15,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function getCertificate()
     {
-        $files = $this->getModel()->findFiles();
+        $files = $this->getPaymentMethodModel()->findFiles();
         $certificate = $files['public.cer'];
         if (is_object($certificate)) {
             return $certificate->getPath();
@@ -25,7 +25,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function generatePaymentForm($donation)
     {
-        $pClass = $this->getProcesingClass();
+        $pClass = $this->getProviderClass();
 
         $objPmReqCard = $pClass->getCardRequest();
         $pClass->getCardRequest()->orderId = $donation->id;
@@ -105,7 +105,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         if (isset($_POST['env_key']) && isset($_POST['data'])) {
             $getDonation = Donations::instance()->findOne($_GET['id']);
             if ($getDonation) {
-                $this->setModel($getDonation->getPayment_Method());
+                $this->setPaymentMethodModel($getDonation->getPayment_Method());
                 $privateKeyFilePath = $this->getPrivateKey();
 
                 try {
@@ -204,7 +204,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function getPrivateKey()
     {
-        $files = $this->getModel()->findFiles();
+        $files = $this->getPaymentMethodModel()->findFiles();
         $certificate = $files['private.key'];
         if (is_object($certificate)) {
             return $certificate->getPath();
@@ -212,12 +212,12 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         return false;
     }
 
-    public function initProcesingClass()
+    public function initProviderClass()
     {
         $class = new Mobilpay();
-        $class->setSignature($this->_options['signature']);
+        $class->setSignature($this->options['signature']);
         $class->setCertificate($this->getCertificate());
-        $class->setSandboxMode($this->_options['sandbox'] == 'yes');
+        $class->setSandboxMode($this->options['sandbox'] == 'yes');
         return $class;
     }
 

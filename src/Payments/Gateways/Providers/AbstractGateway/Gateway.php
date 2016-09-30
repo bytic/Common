@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
+use ByTIC\Common\Payments\Traits\PaymentTrait;
 use Nip\Utility\Traits\NameWorksTrait;
 
 /**
@@ -24,13 +25,26 @@ abstract class Gateway
     protected $label = null;
 
     /**
-     * @var
+     * @var Form
      */
-    protected $_form;
-    protected $_pClass = null;
-    protected $_options;
+    protected $form;
 
-    protected $_model;
+    /**
+     * @var RedirectForm
+     */
+    protected $redirectForm;
+
+    /**
+     * @var null
+     */
+    protected $providerClass = null;
+
+    protected $options;
+
+    /**
+     * @var PaymentTrait
+     */
+    protected $paymentMethodModel;
 
 
     /**
@@ -70,8 +84,8 @@ abstract class Gateway
      */
     public function getLabel()
     {
-        if (!$this->label) {
-            $this->label = $this->getName();
+        if ($this->label === null) {
+            $this->initLabel();
         }
 
         return $this->label;
@@ -85,6 +99,11 @@ abstract class Gateway
         $this->label = $label;
     }
 
+    public function initLabel()
+    {
+        $this->setLabel($this->generateLabel());
+    }
+
     /**
      * @return string
      */
@@ -93,27 +112,31 @@ abstract class Gateway
         return $this->getNamespaceParentFolder();
     }
 
-    public function initLabel()
+    /**
+     * @return PaymentTrait
+     */
+    public function getPaymentMethodModel()
     {
-
+        return $this->paymentMethodModel;
     }
 
-    public function getModel()
+    /**
+     * @param  PaymentTrait $paymentMethodModel
+     * @return $this
+     */
+    public function setPaymentMethodModel($paymentMethodModel)
     {
-        return $this->_model;
-    }
-
-    public function setModel($model)
-    {
-        $this->_model = $model;
-        $type = $model->getOption('payment_gateway');
-        $this->setOptions($model->getOption($type));
+        $this->paymentMethodModel = $paymentMethodModel;
+        $this->setOptions($paymentMethodModel->getPaymentGatewayOptions());
         return $this;
     }
 
+    /**
+     * @param $options
+     */
     public function setOptions($options)
     {
-        $this->_options = $options;
+        $this->options = $options;
     }
 
     /**
@@ -121,15 +144,15 @@ abstract class Gateway
      */
     public function getOptionsForm()
     {
-        if (!$this->_form) {
+        if (!$this->form) {
             $this->initOptionsForm();
         }
-        return $this->_form;
+        return $this->form;
     }
 
     public function initOptionsForm()
     {
-        $this->_form = $this->newOptionsForm();
+        $this->form = $this->newOptionsForm();
     }
 
     /**
@@ -137,43 +160,81 @@ abstract class Gateway
      */
     public function newOptionsForm()
     {
-        $class = get_class($this) . '_Form';
+        $class = $this->getNamespacePath() . '\Form';
         $form = new $class();
         /** @var Form $form */
         $form->setGateway($this);
         return $form;
     }
 
+    /**
+     * @param PaymentTrait $payment
+     * @return RedirectForm
+     */
+    public function getRedirectForm($payment)
+    {
+        $form = $this->newRedirectForm();
+        $form->setPayment($payment);
+        return $form;
+    }
+
+    /**
+     * @return RedirectForm
+     */
+    public function newRedirectForm()
+    {
+        $class = $this->getNamespacePath() . '\RedirectForm';
+        /** @var RedirectForm $form */
+        $form = new $class();
+        $form->setGateway($this);
+        return $form;
+    }
+
+    /**
+     * @return bool
+     */
     public function isActive()
     {
         return true;
     }
 
-    abstract public function generatePaymentForm($payment);
-
+    /**
+     * @return bool
+     */
     public function detectConfirmResponse()
     {
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function detectIPNResponse()
     {
         return false;
     }
 
     /**
-     * @return bool|\Donation
+     * @return bool|PaymentTrait
      */
     public function parseConfirmResponse()
     {
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function parseIPNResponse()
     {
         return false;
     }
 
+    /**
+     * @param $request
+     * @param array $fields
+     * @return bool
+     */
     public function detectRequestFields($request, $fields = [])
     {
         foreach ($fields as $field) {
@@ -185,23 +246,36 @@ abstract class Gateway
     }
 
     /**
-     * @param \Donation $donation
+     * @param $payment
      */
-    public function postDonationStatusUpdate($donation)
+    public function postDonationStatusUpdate($payment)
     {
     }
 
-    public function getProcesingClass()
+    /**
+     * @return null
+     */
+    public function getProviderClass()
     {
-        if ($this->_pClass === null) {
-            $this->_pClass = $this->initProcesingClass();
+        if ($this->providerClass === null) {
+            $this->initProviderClass();
 
         }
-        return $this->_pClass;
+        return $this->providerClass;
     }
 
-    public function initProcesingClass()
+    /**
+     * @param null $providerClass
+     */
+    public function setProviderClass($providerClass)
     {
-        return false;
+        $this->providerClass = $providerClass;
     }
+
+    public function initProviderClass()
+    {
+        $this->setProviderClass($this->generateProviderClass());
+    }
+
+    abstract protected function generateProviderClass();
 }

@@ -9,7 +9,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function isActive()
     {
-        if ($this->_options['min'] && $this->_options['secret']) {
+        if ($this->options['min'] && $this->options['secret']) {
             return true;
         }
         return false;
@@ -17,7 +17,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
 
     public function generatePaymentForm($donation)
     {
-        $pClass = $this->getProcesingClass();
+        $pClass = $this->getProviderClass();
 
         $pClass->setData('invoice', $donation->id);
         $pClass->setData('amount', $donation->amount);
@@ -79,7 +79,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
             }
         }
 
-        $pClass = $this->getProcesingClass();
+        $pClass = $this->getProviderClass();
         $hmac = $pClass->_hmac('sha1', $encoded); # XXX SHA-1 algorithm REQUIRED
 
         if ($hmac == $checksum) { # XXX Check if the received CHECKSUM is OK
@@ -133,13 +133,13 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
         return $donation;
     }
 
-    public function initProcesingClass()
+    public function initProviderClass()
     {
         $class = new Epaybg();
-        $class->setSecretKey($this->_options['secret'])
-            ->setMIN($this->_options['min']);
-        $class->setSandboxMode($this->_options['sandbox'] == 'yes');
-        $class->paymentpage = $this->_options['paymentpage'];
+        $class->setSecretKey($this->options['secret'])
+            ->setMIN($this->options['min']);
+        $class->setSandboxMode($this->options['sandbox'] == 'yes');
+        $class->paymentpage = $this->options['paymentpage'];
         return $class;
     }
 }
