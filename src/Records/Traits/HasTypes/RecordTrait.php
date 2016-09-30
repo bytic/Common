@@ -2,34 +2,71 @@
 
 namespace ByTIC\Common\Records\Traits\HasTypes;
 
+use ByTIC\Common\Records\Types\Generic as GenericType;
+
+/**
+ * Class RecordTrait
+ *
+ * @property $type
+ *
+ * @method RecordsTrait getManager
+ *
+ * @package ByTIC\Common\Records\Traits\HasTypes
+ */
 trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    protected $_type;
-    
-    public function getType()
+    /**
+     * @var GenericType
+     */
+    protected $typeObject;
+
+    /**
+     * @return GenericType
+     */
+    public function getTypeObject()
     {
-        if (!$this->_type) {
-            $this->_type = $this->getNewType($this->type);
+        if (!$this->typeObject) {
+            $this->typeObject = $this->getNewType($this->getTypeValue());
         }
-        return $this->_type;
+
+        return $this->typeObject;
     }
 
+    /**
+     * @param GenericType $typeObject
+     * @return bool
+     */
+    public function setTypeObject($typeObject = null)
+    {
+        if (!empty($typeObject)) {
+            $newType = $this->getNewType($typeObject);
+            $return = $newType->update();
+
+            return $return;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $type
+     * @return mixed
+     */
     public function getNewType($type)
     {
         $object = $this->getManager()->getType($type);
         $object->setItem($this);
+
         return $object;
     }
 
-    public function setType($type = null)
+    /**
+     * @return string
+     */
+    public function getTypeValue()
     {
-        if (!empty($type)) {
-            $newType = $this->getNewType($type);
-            $return = $newType->update();
-            return $return;
-        }
-        return false;
+        return $this->type;
     }
 }
