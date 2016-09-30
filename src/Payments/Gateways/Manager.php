@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Payments\Gateways;
 
+use ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway;
+use DirectoryIterator;
 use Nip\Utility\Traits\SingletonTrait;
 
 /**
@@ -12,10 +14,13 @@ class Manager
 
     use SingletonTrait;
 
-    protected $_items = [];
+    /**
+     * @var null|Gateway[]
+     */
+    protected $items = null;
 
     /**
-     * @return bool|Payment_Gateway_Abstract
+     * @return bool|Gateway
      */
     public function detectConfirmResponse()
     {
@@ -28,23 +33,41 @@ class Manager
         return false;
     }
 
+    /**
+     * @return AbstractGateway\Gateway[]|null
+     */
     public function getItems()
     {
-        if (!$this->_items) {
-            $iterator = new DirectoryIterator(dirname(__FILE__) . '/gateways');
-            foreach ($iterator as $fileinfo) {
-                if ($fileinfo->isDir()) {
-                    $name = $fileinfo->getFilename();
-                    if (!in_array($name, array('.', '..', 'abstract'))) {
-                        $object = $this->newItem($name);
-                        $this->_items[$name] = $object;
-                    }
+        $this->checkItemsInit();
+        return $this->items;
+    }
+
+    protected function checkItemsInit()
+    {
+        if (!$this->items === null) {
+            $this->initItems();
+        }
+    }
+
+    protected function initItems()
+    {
+        $this->items = [];
+        $iterator = new DirectoryIterator(dirname(__FILE__) . '/Providers');
+        foreach ($iterator as $fileinfo) {
+            if ($fileinfo->isDir()) {
+                $name = $fileinfo->getFilename();
+                if (!in_array($name, ['.', '..', 'AbstractGateway'])) {
+                    $gateway = $this->newItem($name);
+                    $this->addItem($gateway, $name);
                 }
             }
         }
-        return $this->_items;
     }
 
+    /**
+     * @param bool|string $type
+     * @return Gateway
+     */
     public function newItem($type = false)
     {
         $parts = explode("_", $type);
@@ -55,6 +78,31 @@ class Manager
         return $object;
     }
 
+    /**
+     * @param Gateway $gateway
+     * @param null $name
+     */
+    public function addItem($gateway, $name = null)
+    {
+        $this->items[$name] = $gateway;
+    }
+
+    /**
+     * @param $name
+     * @return null
+     */
+    public function get($name)
+    {
+        $this->checkItemsInit();
+        if ($this->items[$name]) {
+            return $this->items[$name];
+        }
+        return null;
+    }
+
+    /**
+     * @return bool|Gateway
+     */
     public function detectIPNResponse()
     {
         $items = $this->getItems();
@@ -67,24 +115,24 @@ class Manager
         return false;
     }
 
-    public function getItem($type = false)
-    {
-        if (!count($this->_items)) {
-            $this->getItems();
-        }
-        if ($this->_items[$type]) {
-            return $this->_items[$type];
-        }
-
-        return false;
-    }
-
-    public function getLabel($type, $params = array(), $language = false)
+    /**
+     * @param $type
+     * @param array $params
+     * @param bool $language
+     * @return string
+     */
+    public function getLabel($type, $params = [], $language = false)
     {
         return translator()->translate('payment-gateways.labels.' . $type, $params, $language);
     }
 
-    public function getMessage($name, $params = array(), $language = false)
+    /**
+     * @param $name
+     * @param array $params
+     * @param bool $language
+     * @return string
+     */
+    public function getMessage($name, $params = [], $language = false)
     {
         return translator()->translate('payment-gateways.messages.' . $name, $params, $language);
     }

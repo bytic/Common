@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Payments\Gateways\AbstractGateway;
 
+/**
+ * Class Gateway
+ * @package ByTIC\Common\Payments\Gateways\AbstractGateway
+ */
 abstract class Gateway
 {
 
