@@ -78,9 +78,17 @@ class RedirectForm extends AbstractRedirectForm
     /**
      * @return string
      */
+    protected function renderFormHidden()
+    {
+        return $this->getGateway()->getProviderClass()->getLiveUpdateHTML();
+    }
+
+    /**
+     * @return string
+     */
     protected function getImageURI()
     {
-        $path = dirname(__FILE__).'assets'.DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'logo.png';
+        $path = dirname(__FILE__).'\assets\images\logo.png';
 
         return $this->generateImageURI($path);
     }
