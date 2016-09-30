@@ -64,6 +64,11 @@ abstract class AbstractPage
         $this->getTester()->amOnPage(self::getURL());
     }
 
+    public static function getURL()
+    {
+        return static::$basePath.static::$URL;
+    }
+
     public function checkPage()
     {
         $this->checkOnURL();
@@ -84,11 +89,6 @@ abstract class AbstractPage
         }
 
         return $this;
-    }
-
-    public static function getURL()
-    {
-        return static::$basePath.static::$URL;
     }
 
     public function checkElements()

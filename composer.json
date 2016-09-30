@@ -8,7 +8,11 @@
     }
   ],
   "autoload": {
-    "psr-4": {"ByTIC\\Common\\": "src/"}
+    "psr-4": {
+      "ByTIC\\Common\\Tests\\Page\\": "tests/_support/Page",
+      "ByTIC\\Common\\Tests\\Helper\\": "tests/_support/Helper",
+      "ByTIC\\Common\\": "src/"
+    }
   },
   "repositories": [
     {

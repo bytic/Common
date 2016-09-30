@@ -28,6 +28,16 @@ trait FormTrait
         }
     }
 
+    public function initFormName($name = null)
+    {
+        return $name ? $name : $this->getFormNameDefault();
+    }
+
+    public function getFormNameDefault()
+    {
+        return $this->formNameDefault;
+    }
+
     /**
      * @return \KM42\Register\Tests\AcceptanceTester;
      */
@@ -124,16 +134,6 @@ trait FormTrait
         $name = $this->initFormName($name);
         $this->initForm($name);
         $this->forms[$name]['path'] = $path;
-    }
-
-    public function initFormName($name = null)
-    {
-        return $name ? $name : $this->getFormNameDefault();
-    }
-
-    public function getFormNameDefault()
-    {
-        return $this->formNameDefault;
     }
 
     /**

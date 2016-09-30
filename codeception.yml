@@ -1,3 +1,4 @@
+namespace: ByTIC\Common\Tests
 actor: Tester
 paths:
     tests: tests
@@ -7,7 +8,7 @@ paths:
     envs: tests/_envs
 settings:
     bootstrap: _bootstrap.php
-    colors: true
+    colors: false
     memory_limit: 1024M
 extensions:
     enabled:
