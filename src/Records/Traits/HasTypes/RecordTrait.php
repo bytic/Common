@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\HasTypes;
 
-use ByTIC\Common\Records\Types\Generic as GenericType;
+use ByTIC\Common\Records\Properties\Types\Generic as GenericType;
 
 /**
  * Class RecordTrait
@@ -20,15 +20,15 @@ trait RecordTrait
     /**
      * @var GenericType
      */
-    protected $typeObject;
+    protected $typeObject = null;
 
     /**
      * @return GenericType
      */
     public function getTypeObject()
     {
-        if (!$this->typeObject) {
-            $this->typeObject = $this->getNewType($this->getTypeValue());
+        if ($this->typeObject === null) {
+            $this->initTypeObject();
         }
 
         return $this->typeObject;
@@ -50,13 +50,18 @@ trait RecordTrait
         return false;
     }
 
+    public function initTypeObject()
+    {
+        $this->typeObject = $this->getNewType($this->getTypeValue());
+    }
+
     /**
      * @param $type
      * @return mixed
      */
     public function getNewType($type)
     {
-        $object = $this->getManager()->getType($type);
+        $object = clone $this->getManager()->getType($type);
         $object->setItem($this);
 
         return $object;

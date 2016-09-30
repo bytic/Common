@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\HasTypes;
 
-use ByTIC\Common\Records\Types\Generic as GenericType;
+use ByTIC\Common\Records\Properties\Types\Generic as GenericType;
 
 /**
  * Class RecordsTrait
@@ -38,11 +38,16 @@ trait RecordsTrait
      */
     public function getTypes()
     {
+        $this->checkInitTypes();
+
+        return $this->types;
+    }
+
+    public function checkInitTypes()
+    {
         if ($this->types === null) {
             $this->initTypes();
         }
-
-        return $this->types;
     }
 
     public function initTypes()
@@ -51,8 +56,8 @@ trait RecordsTrait
         foreach ($files as $name) {
             $name = str_replace('.php', '', $name);
             if (!in_array($name, ['Abstract', 'AbstractType', 'Generic'])) {
-                $object = $this->getType($name);
-                $this->types[$object->getName()] = $object;
+                $object = $this->getNewType($name);
+                $this->addType($object);
             }
         }
     }
@@ -61,7 +66,7 @@ trait RecordsTrait
      * @param string $type
      * @return GenericType
      */
-    public function getType($type = null)
+    public function getNewType($type = null)
     {
         $className = $this->getTypeClass($type);
         /** @var GenericType $object */
@@ -96,6 +101,25 @@ trait RecordsTrait
     public function getTypeNamespace()
     {
         return $this->getModelNamespace().'Types\\';
+    }
+
+    /**
+     * @param GenericType $object
+     */
+    public function addType($object)
+    {
+        $this->types[$object->getName()] = $object;
+    }
+
+    /**
+     * @param string $type
+     * @return GenericType
+     */
+    public function getType($type = null)
+    {
+        $this->checkInitTypes();
+
+        return $this->types[$type];
     }
 
     /**
