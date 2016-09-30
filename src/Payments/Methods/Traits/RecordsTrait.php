@@ -19,4 +19,12 @@ trait RecordsTrait
     {
         return dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'Types';
     }
+
+    /**
+     * @return string
+     */
+    public function getTypeNamespace()
+    {
+        return '\ByTIC\Common\Payments\Methods\Types\\';
+    }
 }

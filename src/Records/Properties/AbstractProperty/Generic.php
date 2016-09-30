@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Properties\AbstractProperty;
 
+use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
 use ByTIC\Common\Records\Traits\I18n\RecordsTrait as RecordsTranslated;
 use Nip\Records\Record as Record;
 use Nip\Records\RecordManager as Records;
@@ -57,7 +58,7 @@ abstract class Generic
     }
 
     /**
-     * @param Records $manager
+     * @param Records|RecordsTrait $manager
      * @return $this
      */
     public function setManager(Records $manager)
