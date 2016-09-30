@@ -50,6 +50,49 @@ abstract class Generic
     }
 
     /**
+     * @param bool $short
+     * @return string
+     */
+    public function getLabelHTML($short = false)
+    {
+        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
+        style="'.$this->getColorCSS().'">
+            '.$this->getIconHTML().'
+            '.$this->getLabel($short).'
+        </span>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabelClasses()
+    {
+        return 'label label-'.$this->getColorClass();
+    }
+
+    /**
+     * @return string
+     */
+    public function getColorClass()
+    {
+        return 'default';
+    }
+
+    /**
+     * @param bool $short
+     * @return null
+     */
+    public function getLabel($short = false)
+    {
+        if (!$this->label) {
+            $this->label = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName());
+            $this->label_short = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName().'.short');
+        }
+
+        return $short ? $this->label_short : $this->label;
+    }
+
+    /**
      * @return Records|RecordsTranslated
      */
     public function getManager()
@@ -61,14 +104,17 @@ abstract class Generic
      * @param Records|RecordsTrait $manager
      * @return $this
      */
-    public function setManager(Records $manager)
+    public function setManager($manager)
     {
         $this->manager = $manager;
-        $this->getName();
-        $this->getLabel();
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getLabelSlug();
 
     /**
      * @return string
@@ -96,55 +142,6 @@ abstract class Generic
         $name = inflector()->unclassify($name);
 
         return $name;
-    }
-
-    /**
-     * @param bool $short
-     * @return null
-     */
-    public function getLabel($short = false)
-    {
-        if (!$this->label) {
-            $this->label = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName());
-            $this->label_short = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName().'.short');
-        }
-
-        return $short ? $this->label_short : $this->label;
-    }
-
-    /**
-     * @return string
-     */
-    abstract protected function getLabelSlug();
-
-
-    /**
-     * @param bool $short
-     * @return string
-     */
-    public function getLabelHTML($short = false)
-    {
-        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
-        style="'.$this->getColorCSS().'">
-            '.$this->getIconHTML().'
-            '.$this->getLabel($short).'
-        </span>';
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabelClasses()
-    {
-        return 'label label-'.$this->getColorClass();
-    }
-
-    /**
-     * @return string
-     */
-    public function getColorClass()
-    {
-        return 'default';
     }
 
     /**
