@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Payments\Traits;
 
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm;
+use ByTIC\Common\Payments\Methods\Traits\RecordTrait as PaymentMethod;
 
 /**
  * Class MethodTrait
@@ -11,15 +11,6 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm;
  */
 trait PaymentTrait
 {
-
-    /**
-     * @return mixed
-     */
-    public function getPaymentGatewayOptions()
-    {
-        $gatewayName = $this->getOption('payment_gateway');
-        return $this->getOptions($gatewayName);
-    }
 
     /**
      * @return mixed
@@ -34,13 +25,12 @@ trait PaymentTrait
      */
     public function getGatewayRedirectForm()
     {
-        $gateway = $this->getGateway();
+        $gateway = $this->getPaymentMethod()->getGateway();
         return $gateway->getRedirectForm($this);
     }
 
     /**
-     * @return Gateway
+     * @return PaymentMethod
      */
-    abstract public function getGateway();
-
+    abstract public function getPaymentMethod();
 }

@@ -33,6 +33,5 @@ class RecordsTraitTest extends AbstractTest
     protected function _before()
     {
         $this->traitObject = $this->getMockForTrait('ByTIC\Common\Payments\Methods\Traits\RecordsTrait');
-//        $this->traitObject->method('getNew')->will(static::returnValue(true));
     }
 }

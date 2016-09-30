@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Payments\Gateways\Traits;
 
-use ByTIC\Common\Payments\Gateways\AbstractGateway\Gateway;
 use ByTIC\Common\Payments\Gateways\Manager;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
 
 /**
  * Class HasGatewaysTrait
