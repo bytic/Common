@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
 
 /**
  * Class Gateway
@@ -14,6 +15,15 @@ class Gateway extends AbstractGateway
 {
 
     /**
+     * @param array $parameters
+     * @return PurchaseResponse
+     */
+    public function purchase(array $parameters = [])
+    {
+        return $this->createNamepacedRequest('PurchaseRequest', $parameters);
+    }
+
+    /**
      * @return bool
      */
     public function isActive()
@@ -21,6 +31,7 @@ class Gateway extends AbstractGateway
         if ($this->getOption('merchant') && $this->getOption('secretKey')) {
             return true;
         }
+
         return false;
     }
 
@@ -79,7 +90,7 @@ class Gateway extends AbstractGateway
             $retval = "";
             for ($i = 0; $i < sizeof($array); $i++) {
                 $size = strlen(StripSlashes($array[$i]));
-                $retval .= $size . StripSlashes($array[$i]);
+                $retval .= $size.StripSlashes($array[$i]);
             }
 
             return $retval;
@@ -97,7 +108,7 @@ class Gateway extends AbstractGateway
                     $result .= ArrayExpand($val);
                 } else {
                     $size = strlen(StripSlashes($val));
-                    $result .= $size . StripSlashes($val);
+                    $result .= $size.StripSlashes($val);
                 }
 
             }
@@ -110,12 +121,12 @@ class Gateway extends AbstractGateway
 
         $date_return = date("YmdGis");
 
-        $return = strlen($_POST["IPN_PID"][0]) . $_POST["IPN_PID"][0] . strlen($_POST["IPN_PNAME"][0]) . $_POST["IPN_PNAME"][0];
-        $return .= strlen($_POST["IPN_DATE"]) . $_POST["IPN_DATE"] . strlen($date_return) . $date_return;
+        $return = strlen($_POST["IPN_PID"][0]).$_POST["IPN_PID"][0].strlen($_POST["IPN_PNAME"][0]).$_POST["IPN_PNAME"][0];
+        $return .= strlen($_POST["IPN_DATE"]).$_POST["IPN_DATE"].strlen($date_return).$date_return;
 
         $hash = $gateway->hmac($result); /* HASH for data received */
 
-        $body .= $result . "\r\n\r\nHash: " . $hash . "\r\n\r\nSignature: " . $signature . "\r\n\r\nReturnSTR: " . $return;
+        $body .= $result."\r\n\r\nHash: ".$hash."\r\n\r\nSignature: ".$signature."\r\n\r\nReturnSTR: ".$return;
 
         if ($hash == $signature) {
             echo "Verified OK!";
@@ -126,7 +137,7 @@ class Gateway extends AbstractGateway
 
                 /* ePayment response */
                 $result_hash = $gateway->hmac($return);
-                echo "<EPAYMENT>" . $date_return . "|" . $result_hash . "</EPAYMENT>";
+                echo "<EPAYMENT>".$date_return."|".$result_hash."</EPAYMENT>";
             } else {
                 echo 'error donation';
             }
@@ -144,6 +155,7 @@ class Gateway extends AbstractGateway
         $class = new Payu();
         $class->secretKey = html_entity_decode($this->getOption('secretKey'));
         $class->merchant = html_entity_decode($this->getOption('merchant'));
+
 //        $class->setTestMode(true);
         return $class;
     }

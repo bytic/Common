@@ -1,44 +1,42 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Api;
 
-/*
-    * Class Live Update v2.2
-    *
-    * This class generates HTML HTTP POST code for ePayment Live Update implementation
-    * 
-    * Last update: December 2007, 04	 
-    * More info: www.epayment.ro
-    *
-    * This class is distributed to ePayment partners as an example implementation only.
-    * The example is provided "AS IS" and without warranty, express or implied. In no
-    * event will GECAD ePayment be liable for any damages, including but not limited to
-    * any lost profits, lost savings or any incidental or consequential damages, whether
-    * resulting from impaired or lost data, software or computer failure or any other
-    * cause, or for any other claim by the user or for any third party claim. 
-    *
-    * You can freely modify the code to fit your needs for implementation.
-    *
-    * This class will generate the HTML CODE for the HTTP POST request. It will
-    * not generate the entire HTML CODE. The <form></form> tags are not included,
-    * allowing you to customize your form layout.
-
-    * The class can be modified to include also the form tags. Please use the 
-    * $liveUpdateURL member for the action property of the form tag.
-    *
-    * The class has the default behaviour for most situations.
-    *
-    * The class contains a number of functions to set different variables: setLiveUpdateURL,
-    * setTestMode, setLanguage, setSecretKey, setMerchant, setOrderRef, setOrderDate etc.
-    * After calling any of these functions please check the return value to see if
-    * the function succeeded. The functions will return an error if invalid data types
-    * or values are received as parameters. If any of these functions will fail, the method
-    * getLiveUpdateHTML might return an error. In case of an error, this method will 
-    * output an error as an HTML comment like the one below:
-    * <!-- EPAYMENT ERROR: [error-message] -->
-    *
-    */
-
+/**
+ * Class Live Update v2.2
+ *
+ * This class generates HTML HTTP POST code for ePayment Live Update implementation
+ *
+ * Last update: December 2007, 04
+ * More info: www.epayment.ro
+ *
+ * This class is distributed to ePayment partners as an example implementation only.
+ * The example is provided "AS IS" and without warranty, express or implied. In no
+ * event will GECAD ePayment be liable for any damages, including but not limited to
+ * any lost profits, lost savings or any incidental or consequential damages, whether
+ * resulting from impaired or lost data, software or computer failure or any other
+ * cause, or for any other claim by the user or for any third party claim.
+ *
+ * You can freely modify the code to fit your needs for implementation.
+ *
+ * This class will generate the HTML CODE for the HTTP POST request. It will
+ * not generate the entire HTML CODE. The <form></form> tags are not included,
+ * allowing you to customize your form layout.
+ * The class can be modified to include also the form tags. Please use the
+ * $liveUpdateURL member for the action property of the form tag.
+ *
+ * The class has the default behaviour for most situations.
+ *
+ * The class contains a number of functions to set different variables: setLiveUpdateURL,
+ * setTestMode, setLanguage, setSecretKey, setMerchant, setOrderRef, setOrderDate etc.
+ * After calling any of these functions please check the return value to see if
+ * the function succeeded. The functions will return an error if invalid data types
+ * or values are received as parameters. If any of these functions will fail, the method
+ * getLiveUpdateHTML might return an error. In case of an error, this method will
+ * output an error as an HTML comment like the one below:
+ * <!-- EPAYMENT ERROR: [error-message] -->
+ *
+ */
 class LiveUpdate
 {
     /*
@@ -52,155 +50,155 @@ class LiveUpdate
      * This is the URL address where HTTP POST should be sent
      * @var string
      */
-    var $liveUpdateURL = "https://secure.epayment.ro/order/lu.php";
+    public $liveUpdateURL = "https://secure.epayment.ro/order/lu.php";
 
     /**
      * Test Mode
      * Set to true or or 1 for testing mode.
      * @var boolean
      */
-    var $testMode = false;
+    public $testMode = false;
 
     /**
      * Language
      * The language of the order interface. Default: "ro".
      * @var string
      */
-    var $language = "ro";
+    public $language = "ro";
 
     /**
      * Secret Key
      * Communication secret code. Used to create the HMAC signature.
      * @var string
      */
-    var $secretKey = null;
+    public $secretKey = null;
 
     /**
      * Merchant Identifier
      * ePayment merchant code
      * @var string
      */
-    var $merchant = null;
+    public $merchant = null;
 
     /**
      * Merchant order reference
      * @var string
      */
-    var $orderRef = '';
+    public $orderRef = '';
 
     /**
      * Order date
      * @var string
      */
-    var $orderDate = null;
+    public $orderDate = null;
 
     /**
      * Product Names
      * @var array
      */
-    var $orderPName = [];
+    public $orderPName = [];
 
     /**
      * Product Groups
      * @var array
      */
-    var $orderPGroup = [];
+    public $orderPGroup = [];
 
     /**
      * Product Price Types (NET or GROSS)
      * @var array
      */
-    var $orderPType = [];
+    public $orderPType = [];
 
     /**
      * Product Codes
      * @var array
      */
-    var $orderPCode = [];
+    public $orderPCode = [];
 
     /**
      * Product additional information
      * @var array
      */
-    var $orderPInfo = [];
+    public $orderPInfo = [];
 
     /**
      * Product Prices (WITH NO VAT/TAXES if Product Price Types is not specified or NET)
      * @var array
      */
-    var $orderPrice = [];
+    public $orderPrice = [];
 
     /**
      * Product Quantities
      * @var array
      */
-    var $orderQty = [];
+    public $orderQty = [];
 
     /**
      * Product VAT/Tax
      * @var array
      */
-    var $orderVAT = [];
+    public $orderVAT = [];
 
     /**
      * Product versions
      * @var array
      */
-    var $orderVer = [];
+    public $orderVer = [];
 
     /**
      * Shipping cost
      * @var float
      */
-    var $orderShipping = 0;
+    public $orderShipping = 0;
 
     /**
      * Order currency
      * @var string
      */
-    var $pricesCurrency = '';
+    public $pricesCurrency = '';
 
     /**
      * Order discount
      * @var float
      */
-    var $discount = 0;
+    public $discount = 0;
 
     /**
      * Destination city
      * @var string.
      */
-    var $destinationCity = '';
+    public $destinationCity = '';
 
     /**
      * Destination state
      * @var string
      */
-    var $destinationState = '';
+    public $destinationState = '';
 
     /**
      * Destination country code
      * @var integer
      */
-    var $destinationCountry = '';
+    public $destinationCountry = '';
 
     /**
      * Payment method
      * @var string
      */
-    var $payMethod = '';
+    public $payMethod = '';
 
     /**
      * Order Hash
      */
-    var $orderHash = '';
+    public $orderHash = '';
 
 
     /*
      * Billing information
      * Used to autofill the ordering form
      */
-    var $billing = array(
+    public $billing = [
         "billFName" => '',
         "billLName" => '',
         "billCISerial" => '',
@@ -220,16 +218,16 @@ class LiveUpdate
         "billZipCode" => '',
         "billCity" => '',
         "billState" => '',
-        "billCountryCode" => ''
-    );
-    var $billingSet = false;
+        "billCountryCode" => '',
+    ];
+    public $billingSet = false;
 
 
     /*
      * Delivery information.
      * Used to autofill the ordering form
      */
-    var $delivery = array(
+    public $delivery = array(
         "deliveryFName" => '',
         "deliveryLName" => '',
         "deliveryCompany" => '',
@@ -239,9 +237,9 @@ class LiveUpdate
         "deliveryZipCode" => '',
         "deliveryCity" => '',
         "deliveryState" => '',
-        "deliveryCountryCode" => ''
+        "deliveryCountryCode" => '',
     );
-    var $deliverySet = false;
+    public $deliverySet = false;
 
     /**
      * LiveUpdate class constructor
@@ -306,6 +304,7 @@ class LiveUpdate
             default:
                 $this->testMode = false;
         }
+
         return true;
     }
 
@@ -329,6 +328,7 @@ class LiveUpdate
             default:
                 $this->language = 'en';
         }
+
         return true;
     }
 
@@ -345,25 +345,30 @@ class LiveUpdate
     {
         if (!is_string($secretKey)) {
             $this->secretKeyError = 'invalid type';
+
             return false;
         }
 
         if (empty($secretKey)) {
             $this->secretKeyError = 'empty string';
+
             return false;
         }
 
         if (strlen($secretKey) > 64) {
             $this->secretKeyError = 'secret key is length is too big';
+
             return false;
         }
 
         if (preg_match("/ /i", $secretKey)) {
             $this->secretKeyError = 'invalid format; white spaces not allowed';
+
             return false;
         }
 
         $this->secretKey = $secretKey;
+
         return true;
     }
 
@@ -387,6 +392,7 @@ class LiveUpdate
         }
 
         $this->merchant = $merchant;
+
         return true;
     }
 
@@ -402,12 +408,15 @@ class LiveUpdate
         if (settype($orderRef, "string")) {
             if (strlen($orderRef) <= 32) {
                 $this->orderRef = $orderRef;
+
                 return true;
             }
             $this->orderRef = null;
+
             return false;
         }
         $this->orderRef = null;
+
         return false;
     }
 
@@ -422,6 +431,7 @@ class LiveUpdate
     {
         if (strtotime($orderDate) === -1) {
             $this->orderDate = null;
+
             return false;
         }
 
@@ -429,15 +439,18 @@ class LiveUpdate
 
         if (!preg_match($dateFormatPattern, $orderDate)) {
             $this->orderDate = null;
+
             return false;
         }
 
         if (strtotime($orderDate) > strtotime(date("Y-m-d H:i:s"))) {
             $this->orderDate = null;
+
             return false;
         }
 
         $this->orderDate = $orderDate;
+
         return true;
     }
 
@@ -454,6 +467,7 @@ class LiveUpdate
     {
         if (!is_array($orderPName)) {
             $this->orderPName = null;
+
             return false;
         }
         $isValid = true;
@@ -468,9 +482,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderPName = null;
+
             return false;
         }
         $this->orderPName = $orderPName;
+
         return true;
     }
 
@@ -487,6 +503,7 @@ class LiveUpdate
     {
         if (!is_array($orderPGroup)) {
             $this->orderPGroup = null;
+
             return false;
         }
         $isValid = true;
@@ -501,9 +518,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderPGroup = null;
+
             return false;
         }
         $this->orderPGroup = $orderPGroup;
+
         return true;
     }
 
@@ -520,6 +539,7 @@ class LiveUpdate
     {
         if (!is_array($orderPType)) {
             $this->orderPType = null;
+
             return false;
         }
         $isValid = true;
@@ -534,9 +554,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderPType = null;
+
             return false;
         }
         $this->orderPType = $orderPType;
+
         return true;
     }
 
@@ -553,6 +575,7 @@ class LiveUpdate
     {
         if (!is_array($orderPCode)) {
             $this->orderPCode = null;
+
             return false;
         }
         $isValid = true;
@@ -567,9 +590,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderPCode = null;
+
             return false;
         }
         $this->orderPCode = $orderPCode;
+
         return true;
     }
 
@@ -586,9 +611,11 @@ class LiveUpdate
     {
         if (!is_array($orderPInfo)) {
             $this->orderPInfo = null;
+
             return false;
         }
         $this->orderPInfo = $orderPInfo;
+
         return true;
     }
 
@@ -605,6 +632,7 @@ class LiveUpdate
     {
         if (!is_array($orderPrice)) {
             $this->orderPrice = null;
+
             return false;
         }
         $isValid = true;
@@ -619,9 +647,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderPrice = null;
+
             return false;
         }
         $this->orderPrice = $orderPrice;
+
         return true;
     }
 
@@ -637,6 +667,7 @@ class LiveUpdate
     {
         if (!is_array($orderQty)) {
             $this->orderQty = null;
+
             return false;
         }
         $isValid = true;
@@ -651,9 +682,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderQty = null;
+
             return false;
         }
         $this->orderQty = $orderQty;
+
         return true;
     }
 
@@ -669,6 +702,7 @@ class LiveUpdate
     {
         if (!is_array($orderVAT)) {
             $this->orderVAT = null;
+
             return false;
         }
         $isValid = true;
@@ -683,9 +717,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderVAT = null;
+
             return false;
         }
         $this->orderVAT = $orderVAT;
+
         return true;
     }
 
@@ -702,6 +738,7 @@ class LiveUpdate
     {
         if (!is_array($orderVer)) {
             $this->orderVer = null;
+
             return false;
         }
         $isValid = true;
@@ -720,9 +757,11 @@ class LiveUpdate
         }
         if (!$isValid) {
             $this->orderVer = null;
+
             return false;
         }
         $this->orderVer = $orderVer;
+
         return true;
     }
 
@@ -739,13 +778,16 @@ class LiveUpdate
     {
         if (is_numeric($orderShipping) && $orderShipping >= 0) {
             $this->orderShipping = $orderShipping;
+
             return true;
         } elseif (is_numeric($orderShipping) && $orderShipping < 0) {
             $this->orderShipping = -1;
+
             return true;
         }
 
         $this->orderShipping = null;
+
         return false;
     }
 
@@ -786,6 +828,7 @@ class LiveUpdate
             default:
                 $this->currency = 'RON';
         }
+
         return true;
     }
 
@@ -826,6 +869,7 @@ class LiveUpdate
             default:
                 $this->pricesCurrency = 'RON';
         }
+
         return true;
     }
 
@@ -842,9 +886,11 @@ class LiveUpdate
     {
         if (is_numeric($discount) && $discount >= 0) {
             $this->discount = $discount;
+
             return true;
         }
         $this->discount = null;
+
         return false;
     }
 
@@ -860,9 +906,11 @@ class LiveUpdate
         $destinationCity = trim($destinationCity);
         if (is_string($destinationCity) && strlen($destinationCity) > 0) {
             $this->destinationCity = $destinationCity;
+
             return true;
         }
         $this->destinationCity = null;
+
         return false;
     }
 
@@ -878,9 +926,11 @@ class LiveUpdate
         $destinationState = trim($destinationState);
         if (is_string($destinationState) && strlen($destinationState) > 0) {
             $this->destinationState = $destinationState;
+
             return true;
         }
         $this->destinationState = null;
+
         return false;
     }
 
@@ -896,10 +946,12 @@ class LiveUpdate
         if (settype($destinationCountry, "string")) {
             if (strlen($destinationCountry) == 2) {
                 $this->destinationCountry = $destinationCountry;
+
                 return true;
             }
         }
         $this->destinationCountry = null;
+
         return false;
     }
 
@@ -948,6 +1000,7 @@ class LiveUpdate
                 $this->payMethod = null;
                 $retval = false;
         }
+
         return $retval;
     }
 
@@ -1232,7 +1285,7 @@ class LiveUpdate
                 "billZipCode" => 'BILL_ZIPCODE',
                 "billCity" => 'BILL_CITY',
                 "billState" => 'BILL_STATE',
-                "billCountryCode" => 'BILL_COUNTRYCODE'
+                "billCountryCode" => 'BILL_COUNTRYCODE',
             );
             foreach ($this->billing as $key => $val) {
                 $htmlCode .= $this->createHiddenField($billingFields[$key], $this->billing[$key], false);
@@ -1251,7 +1304,7 @@ class LiveUpdate
                 "deliveryZipCode" => 'DELIVERY_ZIPCODE',
                 "deliveryCity" => 'DELIVERY_CITY',
                 "deliveryState" => 'DELIVERY_STATE',
-                "deliveryCountryCode" => 'DELIVERY_COUNTRYCODE'
+                "deliveryCountryCode" => 'DELIVERY_COUNTRYCODE',
             );
             foreach ($this->delivery as $key => $val) {
                 $htmlCode .= $this->createHiddenField($deliveryFields[$key], $this->delivery[$key], false);
@@ -1285,7 +1338,7 @@ class LiveUpdate
         if ($isArray) {
             for ($i = 0; $i < count($fieldValue); $i++) {
                 $fieldValue[$i] = htmlspecialchars($fieldValue[$i]);
-                $retval .= "<input name=\"" . $fieldName . "[]\" type=\"hidden\" value=\"" . $fieldValue[$i] . "\" id=\"$fieldName\">\n";
+                $retval .= "<input name=\"".$fieldName."[]\" type=\"hidden\" value=\"".$fieldValue[$i]."\" id=\"$fieldName\">\n";
                 //$retval .= "<input name=\"".$fieldName."[]\" type=\"text\" value=\"".$fieldValue[$i]."\" id=\"$fieldName\">\n";
             }
         } else {
@@ -1293,6 +1346,7 @@ class LiveUpdate
             $retval = "<input name=\"$fieldName\" type=\"hidden\" value=\"$fieldValue\" id=\"$fieldName\">\n";
             //$retval = "<input name=\"$fieldName\" type=\"text\" value=\"$fieldValue\" id=\"$fieldName\">\n";
         }
+
         return $retval;
     }
 
@@ -1319,7 +1373,7 @@ class LiveUpdate
         $k_ipad = $key ^ $ipad;
         $k_opad = $key ^ $opad;
 
-        return md5($k_opad . pack("H*", md5($k_ipad . $data)));
+        return md5($k_opad.pack("H*", md5($k_ipad.$data)));
     }
 
     /**
@@ -1396,7 +1450,8 @@ class LiveUpdate
         $retval = "";
         //$string = htmlspecialchars($string);
         $size = strlen($string);
-        $retval = $size . $string;
+        $retval = $size.$string;
+
         return $retval;
     }
 
@@ -1415,6 +1470,7 @@ class LiveUpdate
         for ($i = 0; $i < count($array); $i++) {
             $retval .= $this->expandString($array[$i]);
         }
+
         return $retval;
     }
 

@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Payments\Methods\Types;
 
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
 use ByTIC\Common\Payments\Gateways\Traits\HasGatewaysTrait;
 use Nip\Helpers\View\Messages as MessagesHelper;
 
@@ -40,22 +39,13 @@ class CreditCards extends AbstractType
     }
 
     /**
-     * @param Gateway $gateway
-     * @return Gateway
-     */
-    protected function prepareGateway($gateway)
-    {
-        $gateway->setPaymentMethodModel($this->getItem());
-        return $gateway;
-    }
-
-    /**
      * @return mixed
      */
-    protected function getGatewayOptions()
+    public function getGatewayOptions()
     {
         $name = $this->getGatewayName();
-        return $this->getItem()->getOptions($name);
+
+        return $this->getItem()->getOption($name);
     }
 
     /**

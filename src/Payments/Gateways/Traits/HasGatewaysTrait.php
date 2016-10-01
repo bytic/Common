@@ -44,7 +44,6 @@ trait HasGatewaysTrait
     protected function initGateway()
     {
         $gateway = $this->newGateway($this->getGatewayName());
-        $gateway = $this->prepareGateway($gateway);
         $this->setGateway($gateway);
     }
 
@@ -87,12 +86,6 @@ trait HasGatewaysTrait
      * @return string
      */
     abstract public function getGatewayName();
-
-    /**
-     * @param Gateway $gateway
-     * @return Gateway
-     */
-    abstract protected function prepareGateway($gateway);
 
     /**
      * @return mixed

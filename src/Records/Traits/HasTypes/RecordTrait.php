@@ -78,7 +78,11 @@ trait RecordTrait
      */
     public function setType($type = null)
     {
-        if (!empty($type)) {
+        if ($type instanceof GenericType) {
+            $this->typeObject = $type;
+            $this->type = $type->getName();
+        } elseif (!empty($type)) {
+            $this->type = $type;
             $this->typeObject = $this->getNewType($type);
 
             return $this;

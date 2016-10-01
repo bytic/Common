@@ -22,7 +22,8 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "ByTIC/Framework": "dev-develop"
+    "ByTIC/Framework": "dev-develop",
+    "omnipay/common": "~2.5"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "2.*",
