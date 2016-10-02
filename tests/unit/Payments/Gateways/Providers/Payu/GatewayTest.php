@@ -20,7 +20,7 @@ class GatewayTest extends AbstractGatewayTest
         /** @var PurchaseResponse $response */
         $response = $request->send();
         self::assertInstanceOf('ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse', $response);
-        self::assertSame('PurchaseResponse', $response->getRedirectResponse()->getContent());
+        self::assertSame('PurchaseResponse', $response->getRedirectData());
     }
 
     protected function _before()
@@ -30,6 +30,8 @@ class GatewayTest extends AbstractGatewayTest
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->purchase->getPaymentMethod();
         $paymentMethod->options = trim(PayuData::getMethodOptions());
+
+        $this->purchase->created = date('Y-m-d H:i:s');
 
         $this->gateway = $paymentMethod->getType()->getGateway();
     }

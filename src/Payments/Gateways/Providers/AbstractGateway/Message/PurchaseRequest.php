@@ -32,18 +32,35 @@ abstract class PurchaseRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function getConfirmUrl()
+    public function getOrderName()
     {
-        return $this->getParameter('confirmUrl');
+        return $this->getParameter('orderName');
     }
 
     /**
      * @param  string $value
      * @return mixed
      */
-    public function setConfirmUrl($value)
+    public function setOrderDate($value)
     {
-        return $this->setParameter('confirmUrl', $value);
+        return $this->setParameter('orderDate', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderDate()
+    {
+        return $this->getParameter('orderDate');
+    }
+
+    /**
+     * @param  string $value
+     * @return mixed
+     */
+    public function setOrderName($value)
+    {
+        return $this->setParameter('orderName', $value);
     }
 
     /**

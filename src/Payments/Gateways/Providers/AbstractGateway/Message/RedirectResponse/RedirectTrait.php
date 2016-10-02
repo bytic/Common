@@ -57,11 +57,6 @@ trait RedirectTrait
         } elseif ('POST' === $this->getRedirectMethod()) {
             $hiddenFields = $this->getInputsHTML();
             $output = $this->getRedirectHTML();
-//            $output = sprintf(
-//                $output,
-//                htmlentities($this->getRedirectUrl(), ENT_QUOTES, 'UTF-8', false),
-//                $hiddenFields
-//            );
 
             return HttpResponse::create($output);
         }

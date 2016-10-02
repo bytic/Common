@@ -17,7 +17,7 @@ class PurchasableRecord extends \Nip\Records\AbstractModels\Record
      */
     public function getPurchaseAmount()
     {
-        return 10;
+        return 10.00;
     }
 
     /**

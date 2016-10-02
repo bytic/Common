@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Payments\Traits;
 
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseRequest;
 use ByTIC\Common\Payments\Methods\Traits\RecordTrait;
 
 /**
@@ -22,7 +23,7 @@ trait IsPurchasableRecordTrait
     }
 
     /**
-     * @return mixed
+     * @return PurchaseRequest
      */
     public function getPurchaseRequest()
     {
