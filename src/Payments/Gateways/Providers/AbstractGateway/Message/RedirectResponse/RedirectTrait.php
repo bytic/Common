@@ -87,33 +87,6 @@ trait RedirectTrait
     /**
      * @return string
      */
-    public function getInputsHTML()
-    {
-        $hiddenFields = '';
-        foreach ($this->getRedirectData() as $key => $value) {
-            $hiddenFields .= sprintf(
-                    '<input type="hidden" name="%1$s" value="%2$s" />',
-                    htmlentities($key, ENT_QUOTES, 'UTF-8', false),
-                    htmlentities($value, ENT_QUOTES, 'UTF-8', false)
-                )."\n";
-        }
-
-        return $hiddenFields;
-    }
-
-    /**
-     * Returns the FORM data for the redirect
-     *
-     * @return array
-     */
-    public function getRedirectData()
-    {
-        return $this->getData();
-    }
-
-    /**
-     * @return string
-     */
     public function getRedirectHTML()
     {
         return $this->getView()->load($this->getViewFile());
@@ -135,7 +108,55 @@ trait RedirectTrait
     {
         $this->view = new View();
         $this->view->set('response', $this);
+        $this->view->set('inputsHidden', $this->generateHiddenInputs());
         $this->view->setBasePath(dirname(__FILE__).DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * @return string
+     */
+    public function generateHiddenInputs()
+    {
+        $hiddenFields = '';
+        foreach ($this->getRedirectData() as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $iKey => $iValue) {
+                    $key = $key.'['.$iKey.']';
+                    $hiddenFields .= $this->generateHiddenInput($key, $iValue)."\n";
+                }
+            } else {
+                $hiddenFields .= $this->generateHiddenInput($key, $value)."\n";
+            }
+        }
+
+        return $hiddenFields;
+    }
+
+    /**
+     * Returns the FORM data for the redirect
+     *
+     * @return array
+     */
+    public function getRedirectData()
+    {
+        return $this->getData();
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return string
+     */
+    public function generateHiddenInput($key, $value)
+    {
+        $key = htmlentities($key, ENT_QUOTES, 'UTF-8', false);
+        $value = htmlentities($value, ENT_QUOTES, 'UTF-8', false);
+
+        return sprintf(
+            '<input type="hidden" name="%1$s" value="%2$s" />',
+            $key,
+            $value
+        );
     }
 
     /**

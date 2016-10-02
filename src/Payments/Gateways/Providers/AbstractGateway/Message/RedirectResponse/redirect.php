@@ -139,6 +139,8 @@ $response = $this->get('response');
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <form action="" name="form-gateway" id="form-gateway" method="post">
+                <?php echo $this->get('inputsHidden'); ?>
+
                 <?php if ($this->has('subtitle')) { ?>
                     <h4>
                         <?php echo $this->get('subtitle'); ?>
