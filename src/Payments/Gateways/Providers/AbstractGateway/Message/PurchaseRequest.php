@@ -12,9 +12,6 @@ abstract class PurchaseRequest extends AbstractRequest
 {
     use NameWorksTrait;
 
-    protected $liveEndpoint = null;
-    protected $testEndpoint = null;
-
     /**
      * @return string
      */
@@ -58,13 +55,5 @@ abstract class PurchaseRequest extends AbstractRequest
         $class = $this->getNamespacePath().'\PurchaseResponse';
 
         return $this->response = new $class($this, $data, $this->getEndpoint());
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEndpoint()
-    {
-        return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 }

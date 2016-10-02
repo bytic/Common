@@ -13,6 +13,6 @@ class PayuData
      */
     public static function getMethodOptions()
     {
-        return file_get_contents(\Codeception\Configuration::dataDir().'\PaymentGateways\PayuOptions.json');
+        return trim(file_get_contents(\Codeception\Configuration::dataDir().'\PaymentGateways\PayuOptions.json'));
     }
 }

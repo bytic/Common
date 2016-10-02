@@ -3,7 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseResponse as AbstractPurchaseResponse;
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectResponseTrait;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectTrait;
 use Omnipay\Common\Message\RedirectResponseInterface;
 
 /**
@@ -11,5 +11,5 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  */
 class PurchaseResponse extends AbstractPurchaseResponse implements RedirectResponseInterface
 {
-    use RedirectResponseTrait;
+    use RedirectTrait;
 }
