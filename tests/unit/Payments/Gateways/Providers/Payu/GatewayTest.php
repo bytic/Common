@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
+use ByTIC\Common\Tests\Data\Unit\Payments\Gateways\Providers\Payu\PayuData;
 use ByTIC\Common\Tests\Data\Unit\Payments\PaymentMethod;
 use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
 
@@ -28,11 +29,7 @@ class GatewayTest extends AbstractGatewayTest
 
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->purchase->getPaymentMethod();
-        $paymentMethod->setOption('payment_gateway', 'payu');
-        $paymentMethod->setOption('payu', [
-            'merchant' => 'GALANTOM',
-            'secretKey' => '123',
-        ]);
+        $paymentMethod->options = PayuData::getMethodOptions();
 
         $this->gateway = $paymentMethod->getType()->getGateway();
     }

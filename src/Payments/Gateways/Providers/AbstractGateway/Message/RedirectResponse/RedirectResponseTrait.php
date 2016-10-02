@@ -1,14 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
-
-use Omnipay\Common\Message\RedirectResponseInterface;
+namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse;
 
 /**
- * Class AbstractResponse
- * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Messages
+ * Class RedirectResponseTrait
+ * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Messages\RedirectResponse
  */
-abstract class AbstractRedirectResponse extends AbstractResponse implements RedirectResponseInterface
+trait RedirectResponseTrait
 {
 
     public function isSuccessful()
