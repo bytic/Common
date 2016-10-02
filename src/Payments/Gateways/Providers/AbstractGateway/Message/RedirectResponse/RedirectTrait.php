@@ -55,9 +55,7 @@ trait RedirectTrait
         if ('GET' === $this->getRedirectMethod()) {
             return HttpRedirectResponse::create($this->getRedirectUrl());
         } elseif ('POST' === $this->getRedirectMethod()) {
-            $hiddenFields = $this->getInputsHTML();
             $output = $this->getRedirectHTML();
-
             return HttpResponse::create($output);
         }
 
