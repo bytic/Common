@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractRequest;
+use Nip\View;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse as HttpRedirectResponse;
@@ -17,6 +18,11 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 trait RedirectTrait
 {
+
+    /**
+     * @var View
+     */
+    protected $view = null;
 
     /**
      * @return bool
@@ -51,11 +57,11 @@ trait RedirectTrait
         } elseif ('POST' === $this->getRedirectMethod()) {
             $hiddenFields = $this->getInputsHTML();
             $output = $this->getRedirectHTML();
-            $output = sprintf(
-                $output,
-                htmlentities($this->getRedirectUrl(), ENT_QUOTES, 'UTF-8', false),
-                $hiddenFields
-            );
+//            $output = sprintf(
+//                $output,
+//                htmlentities($this->getRedirectUrl(), ENT_QUOTES, 'UTF-8', false),
+//                $hiddenFields
+//            );
 
             return HttpResponse::create($output);
         }
@@ -115,8 +121,33 @@ trait RedirectTrait
      */
     public function getRedirectHTML()
     {
-        $output = file_get_contents(dirname(__FILE__).'\redirect.html');
+        return $this->getView()->load($this->getViewFile());
+    }
 
-        return $output;
+    /**
+     * @return View|null
+     */
+    public function getView()
+    {
+        if ($this->view === null) {
+            $this->initView();
+        }
+
+        return $this->view;
+    }
+
+    public function initView()
+    {
+        $this->view = new View();
+        $this->view->set('response', $this);
+        $this->view->setBasePath(dirname(__FILE__).DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * @return string
+     */
+    public function getViewFile()
+    {
+        return '/redirect';
     }
 }

@@ -71,7 +71,9 @@ class Manager
     public function newItem($name = false)
     {
         $className = 'ByTIC\Common\Payments\Gateways\Providers\\' . $name . '\Gateway';
+        /** @var Gateway $object */
         $object = new $className();
+        $object->setManager($this);
         return $object;
     }
 

@@ -24,9 +24,9 @@ trait IsPurchasableRecordTrait
     /**
      * @return mixed
      */
-    public function generateGatewayRedirectForm()
+    public function getPurchaseRequest()
     {
-        return $this->getGatewayRedirectForm()->generate();
+        return $this->getPaymentMethod()->getGateway()->purchaseFromRecord($this);
     }
 
     public function saveGatewayNote($note)

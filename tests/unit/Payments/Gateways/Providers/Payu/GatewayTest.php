@@ -29,7 +29,7 @@ class GatewayTest extends AbstractGatewayTest
 
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->purchase->getPaymentMethod();
-        $paymentMethod->options = PayuData::getMethodOptions();
+        $paymentMethod->options = trim(PayuData::getMethodOptions());
 
         $this->gateway = $paymentMethod->getType()->getGateway();
     }
