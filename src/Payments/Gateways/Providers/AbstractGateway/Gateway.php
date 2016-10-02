@@ -4,7 +4,7 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
 use ByTIC\Common\Payments\Gateways\Manager;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractRequest;
-use ByTIC\Common\Payments\Traits\IsPurchasableRecordTrait;
+use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableRecordTrait;
 use Nip\Utility\Traits\NameWorksTrait;
 use Omnipay\Common\AbstractGateway;
 

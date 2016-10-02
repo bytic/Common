@@ -9,6 +9,7 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseReq
  */
 class PurchaseRequest extends AbstractPurchaseRequest
 {
+
     /**
      * @param $value
      * @return mixed
@@ -42,13 +43,15 @@ class PurchaseRequest extends AbstractPurchaseRequest
     {
         $this->validate(
             'amount', 'currency', 'orderId', 'orderName', 'orderDate',
-            'notifyUrl', 'returnUrl', 'secretKey', 'merchant'
+            'notifyUrl', 'returnUrl', 'secretKey', 'merchant',
+            'card'
         );
 
         $data = [];
 
-        $this->populateOrderData($data);
-        $this->populateOrderItems($data);
+        $this->populateDataOrder($data);
+        $this->populateDataOrderItems($data);
+        $this->populateDataCard($data);
 
         return $data;
     }
@@ -56,14 +59,19 @@ class PurchaseRequest extends AbstractPurchaseRequest
     /**
      * @param $data
      */
-    protected function populateOrderData(&$data)
+    protected function populateDataOrder(&$data)
     {
-        $data['merchant'] = $this->getMerchant();
-
-        $data['order_ref'] = $this->getOrderId();
-        $data['order_date'] = $this->getOrderDate();
-
+        $data['MERCHANT'] = $this->getMerchant();
         $data['BACK_REF'] = $this->getReturnUrl();
+
+        $data['ORDER_REF'] = $this->getOrderId();
+        $data['ORDER_DATE'] = $this->getOrderDate();
+
+        $data['ORDER_SHIPPING'] = '';
+        $data['ORDER_HASH'] = '';
+        $data['PRICES_CURRENCY'] = $this->getCurrency();
+
+        $data['LANGUAGE'] = 'ro';
     }
 
     /**
@@ -77,7 +85,7 @@ class PurchaseRequest extends AbstractPurchaseRequest
     /**
      * @param $data
      */
-    protected function populateOrderItems(&$data)
+    protected function populateDataOrderItems(&$data)
     {
         $name = [];
         $code = [];
@@ -97,10 +105,39 @@ class PurchaseRequest extends AbstractPurchaseRequest
             $vat[] = 0;
         }
 
-        $data['order_pname'] = $name;
-        $data['order_pcode'] = $code;
+        $data['ORDER_PNAME'] = $name;
+        $data['ORDER_PCODE'] = $code;
         $data['ORDER_PRICE'] = $price;
-        $data['order_qty'] = $quantity;
-        $data['order_vat'] = $vat;
+        $data['ORDER_QTY'] = $quantity;
+        $data['ORDER_VAT'] = $vat;
+    }
+
+    /**
+     * @param $data
+     */
+    protected function populateDataCard(&$data)
+    {
+        $card = $this->getCard();
+
+        $data['BILL_FNAME'] = $card->getFirstName();
+        $data['BILL_LNAME'] = $card->getLastName();
+        $data['BILL_CISERIAL'] = '';
+        $data['BILL_CINUMBER'] = '';
+        $data['BILL_CIISSUER'] = '';
+        $data['BILL_CNP'] = '';
+        $data['BILL_COMPANY'] = $card->getBillingCompany();
+        $data['BILL_FISCALCODE'] = '';
+        $data['BILL_REGNUMBER'] = '';
+        $data['BILL_BANK'] = '';
+        $data['BILL_BANKACCOUNT'] = '';
+        $data['BILL_EMAIL'] = $card->getEmail();
+        $data['BILL_PHONE'] = $card->getPhone();
+        $data['BILL_FAX'] = $card->getFax();
+        $data['BILL_ADDRESS'] = $card->getAddress1();
+        $data['BILL_ADDRESS2'] = $card->getAddress2();
+        $data['BILL_ZIPCODE'] = $card->getPostcode();
+        $data['BILL_CITY'] = $card->getCity();
+        $data['BILL_STATE'] = $card->getState();
+        $data['BILL_COUNTRYCODE'] = $card->getCountry();
     }
 }

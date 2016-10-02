@@ -1,12 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Methods\Traits;
+namespace ByTIC\Common\Payments\Models\Methods\Traits;
 
 use ByTIC\Common\Records\Traits\HasTypes\RecordsTrait as HasTypesRecordsTrait;
 
 /**
  * Class RecordsTrait
- * @package ByTIC\Common\Payments\Methods\Traits
+ * @package ByTIC\Common\Payments\Models\Methods\Traits
  */
 trait RecordsTrait
 {
@@ -25,6 +25,6 @@ trait RecordsTrait
      */
     public function getTypeNamespace()
     {
-        return '\ByTIC\Common\Payments\Methods\Types\\';
+        return '\ByTIC\Common\Payments\Models\Methods\Types\\';
     }
 }

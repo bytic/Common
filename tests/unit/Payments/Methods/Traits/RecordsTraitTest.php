@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Tests\Unit\Payments\Methods\Traits;
 
-use ByTIC\Common\Payments\Methods\Traits\RecordsTrait;
-use ByTIC\Common\Payments\Methods\Types\CreditCards;
+use ByTIC\Common\Payments\Models\Methods\Traits\RecordsTrait;
+use ByTIC\Common\Payments\Models\Methods\Types\CreditCards;
 use ByTIC\Common\Tests\Unit\AbstractTest;
 
 /**
@@ -32,6 +32,6 @@ class RecordsTraitTest extends AbstractTest
 
     protected function _before()
     {
-        $this->traitObject = $this->getMockForTrait('ByTIC\Common\Payments\Methods\Traits\RecordsTrait');
+        $this->traitObject = $this->getMockForTrait('ByTIC\Common\Payments\Models\Methods\Traits\RecordsTrait');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Methods\Types;
+namespace ByTIC\Common\Payments\Models\Methods\Types;
 
 use ByTIC\Common\Records\Properties\Types\Generic;
 
 /**
  * Class AbstractType
- * @package ByTIC\Common\Payments\Methods\Types
+ * @package ByTIC\Common\Payments\Models\Methods\Types
  */
 abstract class AbstractType extends Generic
 {

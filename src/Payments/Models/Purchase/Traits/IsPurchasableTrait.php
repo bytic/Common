@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Traits;
+namespace ByTIC\Common\Payments\Models\Purchase\Traits;
 
 /**
  * Class MethodTrait
@@ -24,6 +24,8 @@ trait IsPurchasableTrait
 
         $parameters['returnUrl'] = $this->getConfirmURL();
         $parameters['notifyUrl'] = $this->getIpnURL();
+
+        $parameters['card'] = $this->getPurchaseParametersCard();
 
         return $parameters;
     }
@@ -54,6 +56,14 @@ trait IsPurchasableTrait
     public function getPurchaseDate()
     {
         return $this->created;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPurchaseParametersCard()
+    {
+        return null;
     }
 
     /**

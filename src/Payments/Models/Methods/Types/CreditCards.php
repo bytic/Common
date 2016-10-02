@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Methods\Types;
+namespace ByTIC\Common\Payments\Models\Methods\Types;
 
 use ByTIC\Common\Payments\Gateways\Traits\HasGatewaysTrait;
 use Nip\Helpers\View\Messages as MessagesHelper;

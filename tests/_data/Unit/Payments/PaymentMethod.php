@@ -2,13 +2,17 @@
 
 namespace ByTIC\Common\Tests\Data\Unit\Payments;
 
+use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait as PaymentMethodTrait;
+use ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
+use Nip\Records\AbstractModels\Record;
+
 /**
  * Class PurchasableRecord
  */
-class PaymentMethod extends \Nip\Records\AbstractModels\Record
+class PaymentMethod extends Record
 {
-    use \ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
-    use \ByTIC\Common\Payments\Methods\Traits\RecordTrait;
+    use RecordTrait;
+    use PaymentMethodTrait;
 
     public function getRegistry()
     {
