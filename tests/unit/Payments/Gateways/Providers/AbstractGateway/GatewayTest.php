@@ -22,6 +22,11 @@ class GatewayTest extends AbstractTest
     protected $gateway;
 
     /**
+     * @var \Guzzle\Http\Client
+     */
+    protected $client;
+
+    /**
      * @var PurchasableRecord
      */
     protected $purchase;
@@ -39,5 +44,7 @@ class GatewayTest extends AbstractTest
 
         $billing = new BillingRecord();
         $this->purchase->shouldReceive('getPurchaseBillingRecord')->andReturn($billing);
+
+        $this->client = new \Guzzle\Http\Client();
     }
 }

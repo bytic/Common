@@ -10,8 +10,8 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseReq
 class PurchaseRequest extends AbstractPurchaseRequest
 {
 
-    protected $liveEndpoint = 'https://secure.epayment.ro/order/lu.php';
-    protected $testEndpoint = 'https://secure.epayment.ro/order/lu.php';
+    protected $liveEndpoint = 'https://secure.payu.ro/order/lu.php';
+    protected $testEndpoint = 'https://secure.payu.ro/order/lu.php';
 
     /**
      * @param $value
