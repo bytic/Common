@@ -13,6 +13,27 @@ class CompletePurchaseResponse extends AbstractResponse
 {
 
     /**
+     * @return Record
+     */
+    public function getModel()
+    {
+        return $this->data['model'];
+    }
+
+    /**
+     * Response Message
+     *
+     * @return null|string A response message from the payment gateway
+     */
+    public function getMessage()
+    {
+        if (!$this->isSuccessful()) {
+            return 'Error authorising payment';
+        }
+        return parent::getMessage();
+    }
+
+    /**
      * Is the response successful?
      *
      * @return boolean
@@ -20,13 +41,5 @@ class CompletePurchaseResponse extends AbstractResponse
     public function isSuccessful()
     {
         return $this->data['valid'] === true;
-    }
-
-    /**
-     * @return Record
-     */
-    public function getModel()
-    {
-        return $this->data['model'];
     }
 }

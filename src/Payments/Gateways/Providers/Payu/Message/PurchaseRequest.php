@@ -146,18 +146,7 @@ class PurchaseRequest extends AbstractPurchaseRequest
     protected function generateHmac($data)
     {
         $key = $this->getSecretKey();
-
-        $b = 64; // byte length for md5
-        if (strlen($key) > $b) {
-            $key = pack("H*", md5($key));
-        }
-        $key = str_pad($key, $b, chr(0x00));
-        $ipad = str_pad('', $b, chr(0x36));
-        $opad = str_pad('', $b, chr(0x5c));
-        $k_ipad = $key ^ $ipad;
-        $k_opad = $key ^ $opad;
-
-        return md5($k_opad.pack("H*", md5($k_ipad.$data)));
+        return Helper::generateHmac($data, $key);
     }
 
     /**
@@ -175,80 +164,54 @@ class PurchaseRequest extends AbstractPurchaseRequest
     public function generateHashString(array $data)
     {
         $return = "";
-        $return .= $this->generateHashFromString($data['MERCHANT']);
-        $return .= $this->generateHashFromString($data['ORDER_REF']);
-        $return .= $this->generateHashFromString($data['ORDER_DATE']);
+        $return .= Helper::generateHashFromString($data['MERCHANT']);
+        $return .= Helper::generateHashFromString($data['ORDER_REF']);
+        $return .= Helper::generateHashFromString($data['ORDER_DATE']);
 
-        $return .= $this->generateHashFromArray($data['ORDER_PNAME']);
-        $return .= $this->generateHashFromArray($data['ORDER_PCODE']);
+        $return .= Helper::generateHashFromArray($data['ORDER_PNAME']);
+        $return .= Helper::generateHashFromArray($data['ORDER_PCODE']);
 
 //        if (is_array($this->orderPInfo) && !empty($this->orderPInfo)) {
-//            $retval .= $this->generateHashFromArray($this->orderPInfo);
+//            $retval .= Helper::generateHashFromArray($this->orderPInfo);
 //        }
 
-        $return .= $this->generateHashFromArray($data['ORDER_PRICE']);
-        $return .= $this->generateHashFromArray($data['ORDER_QTY']);
-        $return .= $this->generateHashFromArray($data['ORDER_VAT']);
+        $return .= Helper::generateHashFromArray($data['ORDER_PRICE']);
+        $return .= Helper::generateHashFromArray($data['ORDER_QTY']);
+        $return .= Helper::generateHashFromArray($data['ORDER_VAT']);
 
 //        if (is_array($this->orderVer) && !empty($this->orderVer)) {
-//            $retval .= $this->generateHashFromArray($this->orderVer);
+//            $retval .= Helper::generateHashFromArray($this->orderVer);
 //        }
 
         //if(!empty($this->orderShipping))
         if (is_numeric($data['ORDER_SHIPPING']) && $data['ORDER_SHIPPING'] >= 0) {
-            $return .= $this->generateHashFromString($data['ORDER_SHIPPING']);
+            $return .= Helper::generateHashFromString($data['ORDER_SHIPPING']);
         }
 
         if (is_string($data['PRICES_CURRENCY']) && !empty($data['PRICES_CURRENCY'])) {
-            $return .= $this->generateHashFromString($data['PRICES_CURRENCY']);
+            $return .= Helper::generateHashFromString($data['PRICES_CURRENCY']);
         }
 //        if (is_numeric($this->discount) && !empty($this->discount)) {
-//            $retval .= $this->generateHashFromString($this->discount);
+//            $retval .= Helper::generateHashFromString($this->discount);
 //        }
 //        if (is_string($this->destinationCity) && !empty($this->destinationCity)) {
-//            $retval .= $this->generateHashFromString($this->destinationCity);
+//            $retval .= Helper::generateHashFromString($this->destinationCity);
 //        }
 //        if (is_string($this->destinationState) && !empty($this->destinationState)) {
-//            $retval .= $this->generateHashFromString($this->destinationState);
+//            $retval .= Helper::generateHashFromString($this->destinationState);
 //        }
 //        if (is_string($this->destinationCountry) && !empty($this->destinationCountry)) {
-//            $retval .= $this->generateHashFromString($this->destinationCountry);
+//            $retval .= Helper::generateHashFromString($this->destinationCountry);
 //        }
 //        if (is_string($this->payMethod) && !empty($this->payMethod)) {
-//            $retval .= $this->generateHashFromString($this->payMethod);
+//            $retval .= Helper::generateHashFromString($this->payMethod);
 //        }
 //        if (is_array($this->orderPGroup) && count($this->orderPGroup)) {
-//            $retval .= $this->generateHashFromArray($this->orderPGroup);
+//            $retval .= Helper::generateHashFromArray($this->orderPGroup);
 //        }
 //        if (is_array($this->orderPType) && count($this->orderPType)) {
-//            $retval .= $this->generateHashFromArray($this->orderPType);
+//            $retval .= Helper::generateHashFromArray($this->orderPType);
 //        }
-        return $return;
-    }
-
-    /**
-     * @param $string
-     * @return string
-     */
-    public function generateHashFromString($string)
-    {
-        $size = strlen($string);
-        $return = $size.$string;
-
-        return $return;
-    }
-
-    /**
-     * @param array $array
-     * @return string
-     */
-    public function generateHashFromArray(array $array)
-    {
-        $return = "";
-        for ($i = 0; $i < count($array); $i++) {
-            $return .= $this->generateHashFromString($array[$i]);
-        }
-
         return $return;
     }
 
@@ -257,6 +220,6 @@ class PurchaseRequest extends AbstractPurchaseRequest
      */
     public function getCtrl()
     {
-        return $this->generateHmac($this->generateHashFromString($this->getReturnUrl()));
+        return $this->generateHmac(Helper::generateHashFromString($this->getReturnUrl()));
     }
 }

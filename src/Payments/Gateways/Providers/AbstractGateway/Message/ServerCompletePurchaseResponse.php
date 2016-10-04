@@ -3,9 +3,9 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
 /**
- * Class PurchaseResponse
+ * Class ServerCompletePurchaseResponse
  * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Messages
  */
-abstract class CompletePurchaseRequest extends AbstractRequest
+abstract class ServerCompletePurchaseResponse extends AbstractResponse
 {
 }

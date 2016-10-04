@@ -3,8 +3,10 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseRequest;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\ServerCompleteResponse;
 
 /**
  * Class Gateway
@@ -26,9 +28,22 @@ class Gateway extends AbstractGateway
         return $this->createNamepacedRequest('PurchaseRequest', $parameters);
     }
 
+    /**
+     * @param array $parameters
+     * @return CompletePurchaseResponse
+     */
     public function completePurchase(array $parameters = [])
     {
         return $this->createNamepacedRequest('CompletePurchaseRequest', $parameters);
+    }
+
+    /**
+     * @param array $parameters
+     * @return ServerCompleteResponse
+     */
+    public function serverCompletePurchase(array $parameters = [])
+    {
+        return $this->createNamepacedRequest('ServerCompletePurchaseRequest', $parameters);
     }
 
     /**
@@ -50,6 +65,14 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * @return mixed
+     */
+    public function getSecretKey()
+    {
+        return $this->getParameter('secretKey');
+    }
+
+    /**
      * @return bool
      */
     public function isActive()
@@ -66,38 +89,15 @@ class Gateway extends AbstractGateway
         return $this->detectRequestFields($_POST, ['HASH', 'REFNOEXT']);
     }
 
-    public function parseConfirmResponse()
-    {
-        $donation = Donations::instance()->findOne($_GET['id']);
-        if ($donation) {
-            if ($_GET['ctrl'] && $_GET['ctrl'] == $donation->status_notes) {
-//                $donation->status = 'active';
-//                $donation->received = date(DATE_DB);
-//                $donation->save();
-            } else {
-                $donation->gateway_error = 'Eroare autorizare plata';
-            }
-        } else {
-            $donation->gateway_error = 'Eroare autorizare plata';
-        }
-
-        return $donation;
-    }
-
     public function parseIPNResponse()
     {
-        ini_set("mbstring.func_overload", 0);
-        if (ini_get("mbstring.func_overload") > 2) {  /* check if mbstring.func_overload is still set to overload strings(2)*/
-            echo "WARNING: mbstring.func_overload is set to overload strings and might cause problems\n";
-        }
-
-
-        $donation = Donations::instance()->findOne($_POST["REFNOEXT"]);
-        if ($donation) {
-            $method = $donation->getMethod();
-            $this->setOptions($method->getOptions('payu'));
-            $this->setPaymentMethodModel($method);
-        }
+//
+//        $donation = Donations::instance()->findOne($_POST["REFNOEXT"]);
+//        if ($donation) {
+//            $method = $donation->getMethod();
+//            $this->setOptions($method->getOptions('payu'));
+//            $this->setPaymentMethodModel($method);
+//        }
 
         /* Internet Payment Notification */
         $gateway = $this->getProviderClass();
@@ -106,16 +106,7 @@ class Gateway extends AbstractGateway
         $signature = $_POST["HASH"];    /* HASH received */
         $body = "";
 
-        function ArrayExpand($array)
-        {
-            $retval = "";
-            for ($i = 0; $i < sizeof($array); $i++) {
-                $size = strlen(StripSlashes($array[$i]));
-                $retval .= $size.StripSlashes($array[$i]);
-            }
 
-            return $retval;
-        }
 
         /* read info received */
         ob_start();
@@ -129,7 +120,7 @@ class Gateway extends AbstractGateway
                     $result .= ArrayExpand($val);
                 } else {
                     $size = strlen(StripSlashes($val));
-                    $result .= $size.StripSlashes($val);
+                    $result .= $size . StripSlashes($val);
                 }
 
             }
@@ -142,12 +133,12 @@ class Gateway extends AbstractGateway
 
         $date_return = date("YmdGis");
 
-        $return = strlen($_POST["IPN_PID"][0]).$_POST["IPN_PID"][0].strlen($_POST["IPN_PNAME"][0]).$_POST["IPN_PNAME"][0];
-        $return .= strlen($_POST["IPN_DATE"]).$_POST["IPN_DATE"].strlen($date_return).$date_return;
+        $return = strlen($_POST["IPN_PID"][0]) . $_POST["IPN_PID"][0] . strlen($_POST["IPN_PNAME"][0]) . $_POST["IPN_PNAME"][0];
+        $return .= strlen($_POST["IPN_DATE"]) . $_POST["IPN_DATE"] . strlen($date_return) . $date_return;
 
         $hash = $gateway->hmac($result); /* HASH for data received */
 
-        $body .= $result."\r\n\r\nHash: ".$hash."\r\n\r\nSignature: ".$signature."\r\n\r\nReturnSTR: ".$return;
+        $body .= $result . "\r\n\r\nHash: " . $hash . "\r\n\r\nSignature: " . $signature . "\r\n\r\nReturnSTR: " . $return;
 
         if ($hash == $signature) {
             echo "Verified OK!";
@@ -158,7 +149,7 @@ class Gateway extends AbstractGateway
 
                 /* ePayment response */
                 $result_hash = $gateway->hmac($return);
-                echo "<EPAYMENT>".$date_return."|".$result_hash."</EPAYMENT>";
+                echo "<EPAYMENT>" . $date_return . "|" . $result_hash . "</EPAYMENT>";
             } else {
                 echo 'error donation';
             }
@@ -166,18 +157,5 @@ class Gateway extends AbstractGateway
             /* warning email */
             mail("webmaster@gecad.ro", "BAD IPN Signature", $body, "");
         }
-    }
-
-    /**
-     * @return Payu
-     */
-    public function generateProviderClass()
-    {
-        $class = new Payu();
-        $class->secretKey = html_entity_decode($this->getOption('secretKey'));
-        $class->merchant = html_entity_decode($this->getOption('merchant'));
-
-//        $class->setTestMode(true);
-        return $class;
     }
 }

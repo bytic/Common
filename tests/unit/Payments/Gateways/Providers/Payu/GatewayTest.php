@@ -4,10 +4,10 @@ namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Tests\Data\Unit\Payments\Gateways\Providers\Payu\PayuData;
 use ByTIC\Common\Tests\Data\Unit\Payments\PaymentMethod;
 use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
-use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class TraitsTest
@@ -40,9 +40,7 @@ class GatewayTest extends AbstractGatewayTest
 
     public function testCompletePurchaseResponse()
     {
-        $httpRequest = HttpRequest::createFromGlobals();
-        $httpRequest->query->set('id', '37250');
-        $httpRequest->query->set('ctrl', 'a300b00eb8622c89e3f4d47fe1ca6822');
+        $httpRequest = PayuData::getConfirmAuthorizedRequest();
 
         /** @var CompletePurchaseResponse $response */
         $response = $this->gatewayManager->detectItemFromHttpRequest(
@@ -53,7 +51,29 @@ class GatewayTest extends AbstractGatewayTest
 
         self::assertInstanceOf(CompletePurchaseResponse::class, $response);
         self::assertTrue($response->isSuccessful());
-        self::assertSame(37250, $response->getModel()->getPrimaryKey());
+        self::assertEquals($httpRequest->query->get('id'), $response->getModel()->getPrimaryKey());
+    }
+
+    public function testServerCompletePurchaseAuthorizedResponse()
+    {
+        $httpRequest = PayuData::getIpnAuthorizedRequest();
+
+        /** @var ServerCompletePurchaseResponse $response */
+        $response = $this->gatewayManager->detectItemFromHttpRequest(
+            $this->purchaseManager,
+            'serverCompletePurchase',
+            $httpRequest
+        );
+
+        self::assertInstanceOf(ServerCompletePurchaseResponse::class, $response);
+        $data = $response->getData();
+        self::assertSame($data['hash'], $data['hmac']);
+        self::assertTrue($response->isSuccessful());
+
+        $content = $response->getContent();
+        self::assertStringStartsWith('<EPAYMENT>', $content);
+        self::assertStringEndsWith('</EPAYMENT>', $content);
+        self::assertEquals(68, strlen($content));
     }
 
     protected function _before()

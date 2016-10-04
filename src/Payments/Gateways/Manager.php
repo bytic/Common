@@ -3,8 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseRequest;
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractResponse;
 use DirectoryIterator;
 use Nip\Records\AbstractModels\RecordManager;
 use Nip\Utility\Traits\SingletonTrait;
@@ -108,10 +107,10 @@ class Manager
                 $item->setHttpRequest($httpRequest);
             }
             if (method_exists($item, $callback)) {
-                /** @var CompletePurchaseRequest $request */
+                /** @var AbstractResponse $request */
                 $request = $item->$callback(['modelManager' => $modelManager]);
                 $response = $request->send();
-                if (is_subclass_of($response, CompletePurchaseResponse::class)) {
+                if (is_subclass_of($response, AbstractResponse::class)) {
                     return $response;
                 }
             }
