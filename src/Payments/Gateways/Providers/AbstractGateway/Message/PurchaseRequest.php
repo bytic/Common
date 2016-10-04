@@ -2,11 +2,14 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectTrait;
 use Nip\Utility\Traits\NameWorksTrait;
 
 /**
  * Class PurchaseRequest
  * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Messages
+ *
+ * @method PurchaseResponse|RedirectTrait send()
  */
 abstract class PurchaseRequest extends AbstractRequest
 {

@@ -30,12 +30,6 @@ class ServerCompletePurchaseResponse extends AbstractResponse
         return $this->data['model'];
     }
 
-    public function send()
-    {
-        echo $this->getContent();
-        die();
-    }
-
     /**
      * @return string
      */

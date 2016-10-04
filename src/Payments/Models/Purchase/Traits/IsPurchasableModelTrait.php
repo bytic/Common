@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Models\Purchase\Traits;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseRequest;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectTrait;
 use ByTIC\Common\Payments\Models\BillingRecord\Traits\RecordTrait as BillingRecord;
 use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
 
@@ -24,7 +25,7 @@ trait IsPurchasableModelTrait
     }
 
     /**
-     * @return PurchaseRequest
+     * @return PurchaseRequest|RedirectTrait
      */
     public function getPurchaseRequest()
     {
