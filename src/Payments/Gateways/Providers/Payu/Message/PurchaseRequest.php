@@ -251,4 +251,12 @@ class PurchaseRequest extends AbstractPurchaseRequest
 
         return $return;
     }
+
+    /**
+     * @return string
+     */
+    public function getCtrl()
+    {
+        return $this->generateHmac($this->generateHashFromString($this->getReturnUrl()));
+    }
 }

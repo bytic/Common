@@ -3,8 +3,12 @@
 namespace ByTIC\Common\Payments\Gateways;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseRequest;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
 use DirectoryIterator;
+use Nip\Records\AbstractModels\RecordManager;
 use Nip\Utility\Traits\SingletonTrait;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class Payment_Gateways
@@ -20,25 +24,12 @@ class Manager
     protected $items = null;
 
     /**
-     * @return bool|Gateway
-     */
-    public function detectConfirmResponse()
-    {
-        $items = $this->getItems();
-        foreach ($items as $item) {
-            if ($item->detectConfirmResponse()) {
-                return $item;
-            }
-        }
-        return false;
-    }
-
-    /**
      * @return Gateway[]|null
      */
     public function getItems()
     {
         $this->checkItemsInit();
+
         return $this->items;
     }
 
@@ -52,7 +43,7 @@ class Manager
     protected function initItems()
     {
         $this->items = [];
-        $iterator = new DirectoryIterator(dirname(__FILE__) . '/Providers');
+        $iterator = new DirectoryIterator(dirname(__FILE__).'/Providers');
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isDir()) {
                 $name = $fileinfo->getFilename();
@@ -70,10 +61,11 @@ class Manager
      */
     public function newItem($name = false)
     {
-        $className = 'ByTIC\Common\Payments\Gateways\Providers\\' . $name . '\Gateway';
+        $className = 'ByTIC\Common\Payments\Gateways\Providers\\'.$name.'\Gateway';
         /** @var Gateway $object */
         $object = new $className();
         $object->setManager($this);
+
         return $object;
     }
 
@@ -89,7 +81,7 @@ class Manager
 
     /**
      * @param $name
-     * @return null
+     * @return Gateway
      */
     public function get($name)
     {
@@ -97,18 +89,31 @@ class Manager
         if ($this->items[$name]) {
             return $this->items[$name];
         }
+
         return null;
     }
 
     /**
-     * @return bool|Gateway
+     * @param RecordManager $modelManager
+     * @param string $callback
+     * @param null|HttpRequest $httpRequest
+     * @return bool|\Omnipay\Common\Message\ResponseInterface
      */
-    public function detectIPNResponse()
+    public function detectItemFromHttpRequest($modelManager, $callback = null, $httpRequest = null)
     {
-        $items = $this->getItems();
-        foreach ($items as $item) {
-            if ($item->detectIPNResponse()) {
-                return $item;
+        $this->checkItemsInit();
+        $callback = $callback ? $callback : 'completePurchase';
+        foreach ($this->items as $item) {
+            if ($httpRequest) {
+                $item->setHttpRequest($httpRequest);
+            }
+            if (method_exists($item, $callback)) {
+                /** @var CompletePurchaseRequest $request */
+                $request = $item->$callback(['modelManager' => $modelManager]);
+                $response = $request->send();
+                if (is_subclass_of($response, CompletePurchaseResponse::class)) {
+                    return $response;
+                }
             }
         }
 
@@ -123,7 +128,7 @@ class Manager
      */
     public function getLabel($type, $params = [], $language = false)
     {
-        return translator()->translate('payment-gateways.labels.' . $type, $params, $language);
+        return translator()->translate('payment-gateways.labels.'.$type, $params, $language);
     }
 
     /**
@@ -134,6 +139,6 @@ class Manager
      */
     public function getMessage($name, $params = [], $language = false)
     {
-        return translator()->translate('payment-gateways.messages.' . $name, $params, $language);
+        return translator()->translate('payment-gateways.messages.'.$name, $params, $language);
     }
 }

@@ -4,9 +4,10 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
 use ByTIC\Common\Payments\Gateways\Manager;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractRequest;
-use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableRecordTrait;
+use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 use Nip\Utility\Traits\NameWorksTrait;
 use Omnipay\Common\AbstractGateway;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class Gateway
@@ -120,6 +121,14 @@ abstract class Gateway extends AbstractGateway
     }
 
     /**
+     * @param HttpRequest $httpRequest
+     */
+    public function setHttpRequest($httpRequest)
+    {
+        $this->httpRequest = $httpRequest;
+    }
+
+    /**
      * @return Form
      */
     public function getOptionsForm()
@@ -150,10 +159,10 @@ abstract class Gateway extends AbstractGateway
     }
 
     /**
-     * @param IsPurchasableRecordTrait $record
+     * @param IsPurchasableModelTrait $record
      * @return AbstractRequest
      */
-    public function purchaseFromRecord($record)
+    public function purchaseFromModel($record)
     {
         $parameters = $record->getPurchaseParameters();
 

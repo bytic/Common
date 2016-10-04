@@ -17,7 +17,7 @@ use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
  * @method string getConfirmURL
  * @method string getIpnURL
  */
-trait IsPurchasableRecordTrait
+trait IsPurchasableModelTrait
 {
     use IsPurchasableTrait {
         getPurchaseParameters as getPurchaseParametersAbstract;
@@ -28,7 +28,7 @@ trait IsPurchasableRecordTrait
      */
     public function getPurchaseRequest()
     {
-        return $this->getPaymentMethod()->getGateway()->purchaseFromRecord($this);
+        return $this->getPaymentMethod()->getGateway()->purchaseFromModel($this);
     }
 
     /**
@@ -46,19 +46,6 @@ trait IsPurchasableRecordTrait
     public function setGatewayNotes($note)
     {
         $this->status_notes = $note;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPurchaseParameters()
-    {
-        $parameters = $this->getPurchaseParametersAbstract();
-
-        $gatewayParams = $this->getPaymentMethod()->getType()->getGatewayOptions();
-        $parameters = array_merge($parameters, $gatewayParams);
-
-        return $parameters;
     }
 
     /**

@@ -19,4 +19,18 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasGet()
+    {
+        foreach (func_get_args() as $key) {
+            if (!$this->httpRequest->query->has($key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Tests\Data\Unit\Payments;
 
-use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableRecordTrait;
+use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 use Nip\Records\AbstractModels\Record;
 
 /**
@@ -13,7 +13,7 @@ class PurchasableRecord extends Record
 
     protected $id = 19;
 
-    use IsPurchasableRecordTrait;
+    use IsPurchasableModelTrait;
 
     /**
      * @return int

@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
+use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseRequest;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
 
 /**
@@ -10,6 +11,8 @@ use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
  * @package ByTIC\Common\Payments\Gateways\Providers\Payu
  *
  * @method Payu getProviderClass
+ * @method PurchaseRequest purchaseFromModel($record)
+ *
  */
 class Gateway extends AbstractGateway
 {
@@ -23,6 +26,11 @@ class Gateway extends AbstractGateway
         return $this->createNamepacedRequest('PurchaseRequest', $parameters);
     }
 
+    public function completePurchase(array $parameters = [])
+    {
+        return $this->createNamepacedRequest('CompletePurchaseRequest', $parameters);
+    }
+
     /**
      * @return bool
      */
@@ -33,11 +41,6 @@ class Gateway extends AbstractGateway
         }
 
         return false;
-    }
-
-    public function detectConfirmResponse()
-    {
-        return $this->detectRequestFields($_GET, ['id', 'ctrl']);
     }
 
     public function detectIPNResponse()

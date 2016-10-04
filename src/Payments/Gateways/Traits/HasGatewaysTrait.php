@@ -54,6 +54,8 @@ trait HasGatewaysTrait
     protected function newGateway($name)
     {
         $gateway = $this->getGatewaysManager()->get($name);
+        $gatewayParams = $this->getGatewayOptions();
+        $gateway->initialize($gatewayParams);
         return $gateway;
     }
 
