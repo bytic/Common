@@ -32,6 +32,24 @@ class Gateway extends AbstractGateway
     }
 
     /**
+     * @param $value
+     * @return mixed
+     */
+    public function setMerchant($value)
+    {
+        return $this->setParameter('merchant', $value);
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function setSecretKey($value)
+    {
+        return $this->setParameter('secretKey', $value);
+    }
+
+    /**
      * @return bool
      */
     public function isActive()

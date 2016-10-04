@@ -13,25 +13,19 @@ use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 class CompletePurchaseRequest extends AbstractRequest
 {
 
-    /**
-     * Get the raw data array for this message. The format of this varies from gateway to
-     * gateway, but will usually be either an associative array, or a SimpleXMLElement.
-     *
-     * @return mixed
-     */
-    public function getData()
+
+    public function initData()
     {
+        parent::initData();
+
         $this->validate('modelManager');
 
         if ($this->hasGet('id', 'ctrl')) {
-            $data = [];
-            $data['valid'] = false;
+            $this->pushData('valid', false);
             if ($this->validateModel() && $this->validateCtrl()) {
-                return $data;
+                $this->pushData('valid', true);
             }
         }
-
-        return false;
     }
 
     /**
@@ -39,11 +33,11 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     public function validateModel()
     {
-        $data['id'] = $this->httpRequest->query->get('id');
-        $model = $this->findModel($data['id']);
+        $idModel = $this->httpRequest->query->get('id');
+        $this->pushData('id', $idModel);
+        $model = $this->findModel($idModel);
         if ($model) {
-            $data['model'] = $model;
-
+            $this->pushData('model', $model);
             return true;
         }
 
@@ -55,21 +49,29 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     public function validateCtrl()
     {
-        $data['ctrl'] = $this->httpRequest->query->get('ctrl');
-
-        /** @var IsPurchasableModelTrait $model */
-        $model = $data['model'];
-        /** @var Gateway $gateway */
-        $gateway = $model->getPaymentMethod()->getType()->getGateway();
-        $purchaseRequest = $gateway->purchaseFromModel($model);
-        $ctrl = $purchaseRequest->getCtrl();
-        if ($ctrl == $data['ctrl']) {
-            $data['valid'] = true;
-
+        $ctrl = $this->httpRequest->query->get('ctrl');
+        $this->pushData('ctrl', $ctrl);
+        $modelCtrl = $this->getModelCtrl();
+        $this->pushData('model_ctrl', $modelCtrl);
+        if ($ctrl == $modelCtrl) {
+            $this->pushData('valid', true);
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelCtrl()
+    {
+        /** @var IsPurchasableModelTrait $model */
+        $model = $this->getDataItem('model');
+        /** @var Gateway $gateway */
+        $gateway = $model->getPaymentMethod()->getType()->getGateway();
+        $purchaseRequest = $gateway->purchaseFromModel($model);
+        return $purchaseRequest->getCtrl();
     }
 
     /**

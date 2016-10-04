@@ -10,4 +10,6 @@ use Nip\Records\AbstractModels\RecordManager;
 class PurchasableRecordManager extends RecordManager
 {
 
+    protected $primaryKey = 'id';
+
 }

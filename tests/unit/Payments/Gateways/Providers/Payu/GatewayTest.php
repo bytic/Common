@@ -18,7 +18,10 @@ class GatewayTest extends AbstractGatewayTest
 
     public function testPurchaseResponse()
     {
+//        Debug::debug($this->gateway->getParameters());
         $request = $this->gateway->purchaseFromModel($this->purchase);
+//        Debug::debug($this->gateway->getParameters());
+//        Debug::debug($request->getParameters());
 
         /** @var PurchaseResponse $response */
         $response = $request->send();
@@ -43,10 +46,14 @@ class GatewayTest extends AbstractGatewayTest
 
         /** @var CompletePurchaseResponse $response */
         $response = $this->gatewayManager->detectItemFromHttpRequest(
-            $this->purchaseManager, 'completePurchase', $httpRequest);
-        self::assertInstanceOf(CompletePurchaseResponse::class, $response);
+            $this->purchaseManager,
+            'completePurchase',
+            $httpRequest
+        );
 
+        self::assertInstanceOf(CompletePurchaseResponse::class, $response);
         self::assertTrue($response->isSuccessful());
+        self::assertSame(37250, $response->getModel()->getPrimaryKey());
     }
 
     protected function _before()

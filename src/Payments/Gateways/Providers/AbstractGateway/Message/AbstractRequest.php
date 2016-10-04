@@ -9,6 +9,8 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
 
+    protected $data = null;
+
     protected $liveEndpoint = null;
     protected $testEndpoint = null;
 
@@ -32,5 +34,42 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getData()
+    {
+        if ($this->data === null) {
+            $this->initData();
+        }
+        return $this->data;
+    }
+
+    protected function initData()
+    {
+        $this->data = false;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     * @return $this
+     */
+    protected function pushData($key, $value)
+    {
+        $this->data = is_array($this->data) ? $this->data : [];
+        $this->data[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     */
+    protected function getDataItem($key)
+    {
+        return $this->data[$key];
     }
 }

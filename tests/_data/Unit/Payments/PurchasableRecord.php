@@ -11,7 +11,7 @@ use Nip\Records\AbstractModels\Record;
 class PurchasableRecord extends Record
 {
 
-    protected $id = 19;
+    protected $id = 37250;
 
     use IsPurchasableModelTrait;
 
@@ -28,7 +28,7 @@ class PurchasableRecord extends Record
      */
     public function getConfirmURL()
     {
-        return 'http://confirm.ro';
+        return 'http://hospice.galantom.ro/donations/confirm?id=' . $this->id;
     }
 
     /**
