@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
-use ByTIC\Common\Records\Statuses\Generic as GenericStatus;
+use ByTIC\Common\Records\Properties\Statuses\Generic as GenericStatus;
 use Exception;
 
 /**
@@ -27,7 +27,7 @@ trait RecordsTrait
         $types = $this->getStatuses();
 
         foreach ($types as $type) {
-            $return[] = $type->$name;
+            $return[] = $type->{$name};
         }
 
         return $return;

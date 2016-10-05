@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
-use ByTIC\Common\Records\Statuses\Generic;
+use ByTIC\Common\Records\Properties\Statuses\Generic;
 use Nip\Records\RecordManager;
 
 /**
@@ -10,20 +10,24 @@ use Nip\Records\RecordManager;
  * @package ByTIC\Common\Records\Traits\HasStatus
  *
  * @property string $status
+ * @method RecordManager|RecordsTrait getManager()
  *
  */
 trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    protected $_status;
+    protected $statusObject;
 
+    /**
+     * @return Generic
+     */
     public function getStatus()
     {
-        if (!$this->_status) {
-            $this->_status = $this->getNewStatus($this->status);
+        if (!$this->statusObject) {
+            $this->statusObject = $this->getNewStatus($this->status);
         }
-        return $this->_status;
+        return $this->statusObject;
     }
 
     /**
@@ -37,6 +41,10 @@ trait RecordTrait
         return $object;
     }
 
+    /**
+     * @param bool $status
+     * @return bool|void
+     */
     public function setStatus($status = false)
     {
         if (!empty($status)) {
