@@ -14,21 +14,32 @@ use ReflectionClass;
  */
 abstract class Generic
 {
-    public $name = null;
+    protected $name = null;
 
-    public $label = null;
-    public $label_short = null;
-
-
+    protected $label = null;
+    protected $label_short = null;
     /**
      * @var null|Record
      */
     protected $item;
-
     /**
      * @var null|Records|RecordsTranslated
      */
     protected $manager;
+
+    /**
+     * @param $name
+     * @return null
+     */
+    public function __get($name)
+    {
+        $method = 'get'.ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+
+        return null;
+    }
 
     /**
      * @return Record|null
