@@ -27,7 +27,12 @@ trait RecordsTrait
         $types = $this->getStatuses();
 
         foreach ($types as $type) {
-            $return[] = $type->{$name};
+            $method = 'get'.ucfirst($name);
+            if (method_exists($type, $method)) {
+                $return[] = $type->$method();
+            } else {
+                $return[] = $type->{$name};
+            }
         }
 
         return $return;
@@ -41,6 +46,7 @@ trait RecordsTrait
         if ($this->statuses == null) {
             $this->initStatuses();
         }
+
         return $this->statuses;
     }
 
@@ -65,6 +71,7 @@ trait RecordsTrait
         foreach ($files as &$name) {
             $name = str_replace('.php', '', $name);
         }
+
         return $files;
     }
 
@@ -76,13 +83,14 @@ trait RecordsTrait
         if ($this->statusesPath == null) {
             $this->initStatusesDirectory();
         }
+
         return $this->statusesPath;
     }
 
     public function initStatusesDirectory()
     {
         $reflector = new \ReflectionObject($this);
-        $this->statusesPath = dirname($reflector->getFileName()) . '/Statuses';
+        $this->statusesPath = dirname($reflector->getFileName()).'/Statuses';
     }
 
     /**
@@ -112,6 +120,7 @@ trait RecordsTrait
         $object = new $className();
         /** @var GenericStatus $object */
         $object->setManager($this);
+
         return $object;
     }
 
@@ -122,7 +131,8 @@ trait RecordsTrait
     public function getStatusClass($type = null)
     {
         $type = $type ? $type : $this->getDefaultStatus();
-        return $this->getStatusRootNamespace() . inflector()->classify($type);
+
+        return $this->getStatusRootNamespace().inflector()->classify($type);
     }
 
     /**
@@ -138,7 +148,7 @@ trait RecordsTrait
      */
     public function getStatusRootNamespace()
     {
-        return $this->getModelNamespace() . 'Statuses\\';
+        return $this->getModelNamespace().'Statuses\\';
     }
 
     /**
@@ -150,8 +160,9 @@ trait RecordsTrait
     {
         $statuses = $this->getStatuses();
         if (!isset($statuses[$name])) {
-            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
+            throw new Exception('Bad status ['.$name.'] for ['.$this->getController().']');
         }
+
         return $statuses[$name];
     }
 }
