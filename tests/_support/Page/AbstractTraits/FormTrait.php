@@ -26,8 +26,8 @@ trait FormTrait
         $this->getTester()->seeElement($form['path']);
 
         $fields = $form['fields'];
-        foreach ($fields as $field => $path) {
-            $this->getTester()->seeElement($path);
+        foreach ($fields as $field => $params) {
+            $this->getTester()->seeElement($params['path']);
         }
     }
 
