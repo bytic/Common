@@ -53,7 +53,15 @@ trait TableTrait
 
     public function initTableLinks()
     {
-        $this->tableLinks = $this->getTester()->grabMultiple($this->getLinkPath(), 'href');
+        $this->tableLinks = $this->getTester()->grabMultiple($this->getFullLinkPath(), 'href');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullLinkPath()
+    {
+        return $this->getTablePath().' '.$this->getLinkPath();
     }
 
     /**
@@ -66,14 +74,6 @@ trait TableTrait
         }
 
         return $this->linkPath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFullLinkPath()
-    {
-        return $this->getTablePath().' '.$this->getLinkPath();
     }
 
     public function clickTableFirstLink()
