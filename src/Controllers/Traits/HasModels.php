@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Controller;
 use Nip\Dispatcher;
 use Nip\FrontController;
 use Nip\Records\AbstractModels\Record;
@@ -264,8 +265,26 @@ trait HasModels
      */
     protected function setModelFromRequest($item)
     {
-        $requestKey = 'model-'.$this->getModelManager()->getTable();
+        $requestKey = $this->getRequestKeyFromController($this);
         $this->getRequest()->attributes->set($requestKey, $item);
+    }
+
+    /**
+     * @param Controller|HasModels $controller
+     * @return string
+     */
+    protected function getRequestKeyFromController($controller)
+    {
+        return $this->getRequestKeyFromString($controller->getModelManager()->getTable());
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    protected function getRequestKeyFromString($name)
+    {
+        return 'model-'.$name;
     }
 
     /**
@@ -275,7 +294,7 @@ trait HasModels
     protected function getForeignModelFromRequest($name)
     {
         $this->checkForeignModelFromRequest($name);
-        $requestKey = 'model-'.$name;
+        $requestKey = $this->getRequestKeyFromString($name);
 
         return $this->getRequest()->attributes->get($requestKey);
     }
@@ -287,7 +306,7 @@ trait HasModels
      */
     protected function checkForeignModelFromRequest($name, $key = false)
     {
-        $requestKey = 'model-'.$name;
+        $requestKey = $this->getRequestKeyFromString($name);
         if ($this->getRequest()->attributes->has($requestKey) === false) {
             $this->initForeignModelFromRequest($name, $key);
         }
@@ -314,7 +333,7 @@ trait HasModels
      */
     protected function hasForeignModelFromRequest($name)
     {
-        $requestKey = 'model-'.$name;
+        $requestKey = $this->getRequestKeyFromString($name);
 
         return $this->getRequest()->attributes->has($requestKey);
     }
@@ -325,7 +344,7 @@ trait HasModels
      */
     protected function checkAndSetForeignModelInRequest($model)
     {
-        $requestKey = 'model-'.$model->getManager()->getTable();
+        $requestKey = $this->getRequestKeyFromModel($model);
         if ($this->call('checkItemResult', $model->getManager()->getController(), false, [$model]) == true) {
             $this->getRequest()->attributes->set($requestKey, $model);
 
@@ -333,6 +352,15 @@ trait HasModels
         }
 
         return null;
+    }
+
+    /**
+     * @param Record $model
+     * @return string
+     */
+    protected function getRequestKeyFromModel($model)
+    {
+        return $this->getRequestKeyFromString($model->getManager()->getTable());
     }
 
     /**
