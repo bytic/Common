@@ -9,7 +9,11 @@ namespace ByTIC\Common\Tests\Page\AbstractTraits;
 trait TableTrait
 {
 
-    protected $_tableLinks = null;
+    protected $linkPath = null;
+
+    protected $tablePath = null;
+
+    protected $tableLinks = null;
 
     public function checkTable()
     {
@@ -20,42 +24,54 @@ trait TableTrait
     }
 
     /**
-     * @return \KM42\Register\Tests\AcceptanceTester;
+     * @return \ByTIC\Common\Tests\AcceptanceTester;
      */
     abstract protected function getTester();
 
+    /**
+     * @return null
+     */
     public function getTablePath()
     {
-        if (!$this->_tablePath) {
+        if (!$this->tablePath) {
             $this->getTester()->fail('table path must be set for ['.get_class($this).']');
         }
 
-        return $this->_tablePath;
+        return $this->tablePath;
     }
 
+    /**
+     * @return null
+     */
     public function getTableLinks()
     {
-        if ($this->_tableLinks === null) {
+        if ($this->tableLinks === null) {
             $this->initTableLinks();
         }
 
-        return $this->_tableLinks;
+        return $this->tableLinks;
     }
 
     public function initTableLinks()
     {
-        $this->_tableLinks = $this->getTester()->grabMultiple($this->getLinkPath(), 'href');
+        $this->tableLinks = $this->getTester()->grabMultiple($this->getLinkPath(), 'href');
     }
 
+    /**
+     * @return null
+     */
     public function getLinkPath()
     {
-        if (!$this->_linkPath) {
+        if (!$this->linkPath) {
             $this->getTester()->fail('links path must be set for ['.get_class($this).']');
         }
 
-        return $this->_linkPath;
+        return $this->linkPath;
     }
 
+    /**
+     * @return string
+     */
     public function getFullLinkPath()
     {
         return $this->getTablePath().' '.$this->getLinkPath();
@@ -67,5 +83,4 @@ trait TableTrait
         $link = reset($links);
         $this->getTester()->amOnUrl($link);
     }
-
 }
