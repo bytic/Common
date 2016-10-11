@@ -5,13 +5,12 @@ namespace ByTIC\Common\Tests\Page\AbstractTraits;
 /**
  * Class TableTrait
  * @package ByTIC\Common\TestsPage\AbstractTraits
+ *
+ * @property $linkPath
+ * @property $tablePath
  */
 trait TableTrait
 {
-
-    protected $linkPath = null;
-
-    protected $tablePath = null;
 
     protected $tableLinks = null;
 
