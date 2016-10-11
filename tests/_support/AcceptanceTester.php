@@ -1,4 +1,5 @@
 <?php
+
 namespace ByTIC\Common\Tests;
 
 /**

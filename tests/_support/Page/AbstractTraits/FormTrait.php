@@ -15,6 +15,9 @@ trait FormTrait
 
     protected $formData = [];
 
+    /**
+     * @param null $name
+     */
     public function checkForm($name = null)
     {
         $name = $this->initFormName($name);
@@ -28,21 +31,31 @@ trait FormTrait
         }
     }
 
+    /**
+     * @param null $name
+     * @return null|string
+     */
     public function initFormName($name = null)
     {
         return $name ? $name : $this->getFormNameDefault();
     }
 
+    /**
+     * @return string
+     */
     public function getFormNameDefault()
     {
         return $this->formNameDefault;
     }
 
     /**
-     * @return \KM42\Register\Tests\AcceptanceTester;
+     * @return \ByTIC\Common\Tests\AcceptanceTester;
      */
     abstract protected function getTester();
 
+    /**
+     * @param null $name
+     */
     public function submitForm($name = null)
     {
         $name = $this->initFormName($name);
@@ -50,6 +63,10 @@ trait FormTrait
         $this->getTester()->click($form['path'].' '.$form['submit']);
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
     public function setFieldFormData($name, $value)
     {
         $this->formData[$name] = $value;
@@ -58,14 +75,18 @@ trait FormTrait
     /**
      * sets a field value from data object
      * @param $name
+     * @return mixed
      */
     public function setFieldFromData($name)
     {
         $value = $this->getFieldFormData($name);
-
         return $this->setFieldValue($name, $value);
     }
 
+    /**
+     * @param $name
+     * @return null
+     */
     public function getFieldFormData($name)
     {
         return isset($this->formData[$name]) ? $this->formData[$name] : null;
@@ -75,6 +96,7 @@ trait FormTrait
      * Sets a form field value based on field type
      * @param $field
      * @param $value
+     * @return mixed
      */
     public function setFieldValue($field, $value)
     {
@@ -88,14 +110,24 @@ trait FormTrait
             default:
                 return $this->fillFieldForm($field, $value);
         }
-
     }
 
+    /**
+     * @param $field
+     * @param null $form
+     * @return mixed
+     */
     public function getFieldFormType($field, $form = null)
     {
         return $this->getFieldFormParam($field, 'type', $form);
     }
 
+    /**
+     * @param $field
+     * @param $param
+     * @param null $form
+     * @return mixed
+     */
     public function getFieldFormParam($field, $param, $form = null)
     {
         $form = $this->initFormName($form);
@@ -103,32 +135,61 @@ trait FormTrait
         return $this->forms[$form]['fields'][$field][$param];
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @param null $form
+     * @return mixed|null
+     */
     public function selectOptionForm($field, $value, $form = null)
     {
         $form = $this->initFormName($form);
         $path = $this->getFieldFormPath($field, $form);
-        $this->getTester()->selectOption($path, $value);
+
+        return $this->getTester()->selectOption($path, $value);
     }
 
+    /**
+     * @param $field
+     * @param null $form
+     * @return mixed
+     */
     public function getFieldFormPath($field, $form = null)
     {
         return $this->getFieldFormParam($field, 'path', $form);
     }
 
+    /**
+     * @param $field
+     * @param null $form
+     * @return mixed|null
+     */
     public function checkOptionForm($field, $form = null)
     {
         $form = $this->initFormName($form);
         $path = $this->getFieldFormPath($field, $form);
-        $this->getTester()->checkOption($path);
+
+        return $this->getTester()->checkOption($path);
     }
 
+    /**
+     * @param $field
+     * @param $value
+     * @param null $form
+     * @return mixed|null
+     */
     public function fillFieldForm($field, $value, $form = null)
     {
         $form = $this->initFormName($form);
         $path = $this->getFieldFormPath($field, $form);
-        $this->getTester()->fillField($path, $value);
+
+        return $this->getTester()->fillField($path, $value);
     }
 
+    /**
+     * @param $path
+     * @param null $name
+     */
     protected function addForm($path, $name = null)
     {
         $name = $this->initFormName($name);
@@ -154,6 +215,12 @@ trait FormTrait
         return $this;
     }
 
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
     protected function addInputForm($field, $params, $name = null)
     {
         return $this->addFieldForm($field, 'input', $params, $name);
@@ -164,6 +231,7 @@ trait FormTrait
      * @param $type
      * @param $params
      * @param null $name
+     * @return $this
      */
     protected function addFieldForm($field, $type, $params, $name = null)
     {
@@ -173,25 +241,62 @@ trait FormTrait
         $params = is_string($params) ? ['path' => $params] : $params;
         $params['type'] = $type;
         $this->forms[$name]['fields'][$field] = $params;
+
+        return $this;
     }
 
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
     protected function addSelectForm($field, $params, $name = null)
     {
         return $this->addFieldForm($field, 'select', $params, $name);
     }
 
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
     protected function addRadioForm($field, $params, $name = null)
     {
         return $this->addFieldForm($field, 'radio', $params, $name);
     }
 
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
     protected function addCheckboxForm($field, $params, $name = null)
     {
         return $this->addFieldForm($field, 'checkbox', $params, $name);
     }
 
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
     protected function addCheckboxGroupForm($field, $params, $name = null)
     {
         return $this->addFieldForm($field, 'checkboxGroup', $params, $name);
+    }
+
+    /**
+     * @param $field
+     * @param $params
+     * @param null $name
+     * @return $this
+     */
+    protected function addTextareaForm($field, $params, $name = null)
+    {
+        return $this->addFieldForm($field, 'textarea', $params, $name);
     }
 }
