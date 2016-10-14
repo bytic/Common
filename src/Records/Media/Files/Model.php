@@ -6,10 +6,14 @@ use Nip\Records\Record;
 use Nip_File_System;
 use ZipArchive;
 
+/**
+ * Class Model
+ * @package ByTIC\Common\Records\Media\Files
+ */
 class Model
 {
 
-    protected $_extensions = array("swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar");
+    protected $_extensions = ["swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"];
 
     /**
      * @var Record
@@ -46,6 +50,16 @@ class Model
         return false;
     }
 
+    public function getExtensions()
+    {
+        return $this->_extensions;
+    }
+
+    public function parseName($name)
+    {
+        return str_replace(' ', '-', $name);
+    }
+
     public function unzip($dir = false)
     {
         if (!$dir) {
@@ -64,7 +78,6 @@ class Model
         return false;
     }
 
-
     /**
      * @return $this
      */
@@ -72,21 +85,6 @@ class Model
     {
         Nip_File_System::instance()->deleteFile($this->_path);
         return $this;
-    }
-
-    public function getExtensions()
-    {
-        return $this->_extensions;
-    }
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function parseName($name)
-    {
-        return str_replace(' ', '-', $name);
     }
 
     public function getEmbedURL()
@@ -99,29 +97,83 @@ class Model
         return $url . '?' . http_build_query($params);
     }
 
+    public function getUrl()
+    {
+        return $this->_url ? $this->_url : $this->getUrlPath().$this->_name;
+    }
+
+    public function getUrlPath()
+    {
+        return UPLOADS_URL.$this->getRoutePath();
+    }
+
+    public function getRoutePath()
+    {
+        return 'files/'.$this->getModel()->getManager()->getTable().'/'.$this->getModel()->id.'/';
+    }
+
+    /**
+     * @return Record
+     */
+    public function getModel()
+    {
+        return $this->_model;
+    }
+
+    /**
+     * @param Record $model
+     * @return $this
+     */
+    public function setModel(Record $model)
+    {
+        $this->_model = $model;
+        return $this;
+    }
 
     public function getExtension()
     {
         return Nip_File_System::instance()->getExtension($this->getPath());
     }
 
+    public function getPath()
+    {
+        return $this->_path ? $this->_path : $this->getDirPath().$this->getName();
+    }
+
+    public function getDirPath()
+    {
+        return UPLOADS_PATH . $this->getRoutePath();
+    }
+
+    public function getName()
+    {
+        return $this->_name;
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->_name = $name;
+        $this->_path = $this->getPath();
+        $this->_url = $this->getUrl();
+
+        return $this;
+    }
+
     public function getContentType()
     {
         $fInfo = finfo_open(FILEINFO_MIME_TYPE);
+
         return finfo_file($fInfo, $this->getPath());
     }
-
-    public function getSize()
-    {
-        return filesize($this->_path);
-    }
-
 
     public function getTime()
     {
         return filemtime($this->_path);
     }
-
 
     /**
      * Converts Bytes to human readable format
@@ -139,7 +191,12 @@ class Model
 
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
+    }
+
+    public function getSize()
+    {
+        return filesize($this->_path);
     }
 
     /**
@@ -150,64 +207,8 @@ class Model
         return $this->errors;
     }
 
-    /**
-     * @param Record $model
-     * @return $this
-     */
-    public function setModel(Record $model)
-    {
-        $this->_model = $model;
-        return $this;
-    }
-
-    /**
-     * @return Record
-     */
-    public function getModel()
-    {
-        return $this->_model;
-    }
-
-    public function getDirPath()
-    {
-        return UPLOADS_PATH . $this->getRoutePath();
-    }
-
-    public function getUrlPath()
-    {
-        return UPLOADS_URL . $this->getRoutePath();
-    }
-
-    public function getUrl()
-    {
-        return $this->_url ? $this->_url : $this->getUrlPath() . $this->_name;
-    }
-
-    public function getPath()
-    {
-        return $this->_path ? $this->_path : $this->getDirPath() . $this->getName();
-    }
-
-    public function getRoutePath()
-    {
-        return 'files/' . $this->getModel()->getManager()->getTable() . '/' . $this->getModel()->id . '/';
-    }
-
     public function getDefaultName()
     {
         return 'file';
-    }
-
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->_name = $name;
-        $this->_path = $this->getPath();
-        $this->_url = $this->getUrl();
-
-        return $this;
     }
 }

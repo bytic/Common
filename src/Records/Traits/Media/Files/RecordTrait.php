@@ -2,39 +2,36 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Files;
 
-use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as GenericMediaTrait;
+use ByTIC\Common\Records\Media\Files\Model as ModelFile;
 use Nip_File_System;
 
+/**
+ * Class RecordTrait
+ * @package ByTIC\Common\Records\Traits\Media\Files
+ */
 trait RecordTrait
 {
 
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    public $files = array();
+    /**
+     * @var ModelFile[]
+     */
+    public $files = [];
 
+    /**
+     * @param ModelFile $file
+     * @return string
+     */
     public function getFileURL($file)
     {
         return $this->getUploadURL() . $file->getName();
     }
 
     /**
-     * File factory
-     * @return Model_File
+     * @param $fileData
+     * @return bool|ModelFile
      */
-    public function getNewFile()
-    {
-        $class = $this->getFileModelName();
-        $file = new $class();
-
-        $file->setModel($this);
-        return $file;
-    }
-
-    public function getFileModelName()
-    {
-        return $this->getManager()->getModel() . "_File";
-    }
-
     public function uploadFile($fileData)
     {
         $file = $this->getNewFile();
@@ -46,6 +43,46 @@ trait RecordTrait
         return false;
     }
 
+    /**
+     * File factory
+     * @return ModelFile
+     */
+    public function getNewFile()
+    {
+        $class = $this->getFileModelName();
+        /** @var ModelFile $file */
+        $file = new $class();
+
+        $file->setModel($this);
+        return $file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileModelName()
+    {
+        return $this->getManager()->getModel() . "_File";
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
+    public function removeFile($request)
+    {
+        $this->findFiles();
+
+        if ($this->files[$request['file']]) {
+            $this->files[$request['file']]->delete();
+        }
+
+        return true;
+    }
+
+    /**
+     * @return array
+     */
     public function findFiles()
     {
         $file = $this->getNewFile();
@@ -56,7 +93,10 @@ trait RecordTrait
         return $this->files;
     }
 
-    public function setFiles($files = array())
+    /**
+     * @param array $files
+     */
+    public function setFiles($files = [])
     {
         if ($files) {
             foreach ($files as $name) {
@@ -66,16 +106,5 @@ trait RecordTrait
                 $this->files[$name] = $file;
             }
         }
-    }
-
-    public function removeFile($request)
-    {
-        $this->findFiles();
-
-        if ($this->files[$request['file']]) {
-            $this->files[$request['file']]->delete();
-        }
-
-        return true;
     }
 }
