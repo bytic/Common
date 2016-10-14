@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ByTIC/Framework.git",
-                "reference": "8747030f597fbbf6489c70b6edcf1c535ed41345"
+                "reference": "66298553a9cda27836a0fd781920cb8ff1817395"
             },
             "require": {
                 "container-interop/container-interop": "1.1.*",
@@ -47,7 +47,7 @@
                 }
             ],
             "description": "Php Framework",
-            "time": "2016-10-14 14:11:56"
+            "time": "2016-10-14 15:04:18"
         },
         {
             "name": "container-interop/container-interop",

@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Records\Emails;
 
-use ByTIC\Common\Records\Emails\Templates\Parser;
 use Nip\Records\Record;
 use Nip_Config;
 use Nip_File_System;
@@ -41,8 +40,6 @@ trait EmailTrait
      * @var array
      */
     protected $mergeTags = null;
-
-    protected $_parser;
 
     public function send()
     {
@@ -97,50 +94,7 @@ trait EmailTrait
      */
     public function getPreviewBody()
     {
-        return $this->getParser()->parse($this->getBody());
-    }
-
-    public function getParser()
-    {
-        if (!$this->_parser) {
-            $this->initParser();
-        }
-
-        return $this->_parser;
-    }
-
-    /**
-     * @param mixed $parser
-     */
-    public function setParser($parser)
-    {
-        $this->_parser = $parser;
-    }
-
-    public function initParser()
-    {
-        $this->setParser($this->newParser());
-    }
-
-    /**
-     * @return Parser
-     */
-    public function newParser()
-    {
-        $class = $this->getParserClass();
-        /** @var Parser $parser */
-        $parser = new $class();
-        $parser->setVars($this->getVars());
-
-        return $parser;
-    }
-
-    /**
-     * @return string
-     */
-    public function getParserClass()
-    {
-        return '\ByTIC\Common\Records\Emails\Templates\Parser';
+        return $this->getBody();
     }
 
     /**
@@ -177,14 +131,26 @@ trait EmailTrait
         $this->setMergeTags($mergeTags);
     }
 
+    protected function initMergeTags()
+    {
+        $mergeTags = unserialize($this->vars);
+        $this->setMergeTags($mergeTags);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
     /**
      * @return string
      */
     public function getBody()
     {
-        $return = $this->sent == 'yes' ? $this->compiled_body : $this->body;
-
-        return $return;
+        return $this->body;
     }
 
     /**
@@ -207,13 +173,6 @@ trait EmailTrait
         $this->created = date(DATE_DB);
 
         return parent::insert();
-    }
-
-    public function compileBody()
-    {
-        $header = '';
-        $footer = '';
-        $this->body = $header.$this->body.$footer;
     }
 
     /**
@@ -272,9 +231,11 @@ trait EmailTrait
         return $this->is_html == 'yes';
     }
 
-    public function parse()
+    /**
+     * @return array
+     */
+    public function getFrom()
     {
-        $this->compiled_subject = $this->getParser()->parse($this->subject);
-        $this->compiled_body = $this->getParser()->parse($this->body);
+        return [$this->from => $this->from_name];
     }
 }
