@@ -7,6 +7,7 @@ use Nip\Mail\Message;
 use Nip\Records\Record;
 use Nip_Config;
 use Nip_File_System;
+use Swift_Attachment;
 
 /**
  * Class RecordTrait
@@ -223,6 +224,17 @@ trait EmailTrait
     public function getFrom()
     {
         return [$this->from => $this->from_name];
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function buildMailMessageAttachments(&$message)
+    {
+        $emailFiles = $this->findFiles();
+        foreach ($emailFiles as $emailFile) {
+            $message->attach(Swift_Attachment::fromPath($emailFile->getPath()));
+        }
     }
 
     /**
