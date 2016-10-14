@@ -130,11 +130,10 @@ trait EmailTrait
         if (preg_match_all('/\s*"?([^><,"]+)"?\s*((?:<[^><,]+>)?)\s*/', $this->to, $matches, PREG_SET_ORDER) > 0) {
             foreach ($matches as $m) {
                 if (!empty($m[2])) {
-                    $emailsTo = [trim($m[2], '<>') => $m[1]];
+                    $emailsTos[trim($m[2], '<>')] = $m[1];
                 } else {
-                    $emailsTo = [$m[1] => ''];
+                    $emailsTo[$m[1]] = '';
                 }
-                $emailsTos[] = $emailsTo;
             }
         }
         return $emailsTos;
