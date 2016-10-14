@@ -2,7 +2,11 @@
 
 namespace ByTIC\Common\Records\Emails;
 
-use Nip\Records\Record;use Nip_Config;use Nip_File_System;
+use Nip\Mail\Mailer;
+use Nip\Mail\Message;
+use Nip\Records\Record;
+use Nip_Config;
+use Nip_File_System;
 
 /**
  * Class RecordTrait
@@ -39,34 +43,6 @@ trait EmailTrait
      */
     protected $mergeTags = null;
 
-    public function send()
-    {
-        $send = parent::send();
-
-        if ($send) {
-            $this->afterSend();
-        }
-    }
-
-    protected function afterSend()
-    {
-        $this->sent = 'yes';
-        $this->smtp_user = '';
-        $this->smtp_host = '';
-        $this->smtp_password = '';
-        $this->subject = '';
-        $this->body = '';
-//        $this->vars = '';
-        $this->date_sent = date(DATE_DB);
-        $this->update();
-
-        $attachments = $this->findFiles();
-        if (count($attachments) > 0) {
-            $attachment = reset($attachments);
-            Nip_File_System::instance()->removeDirectory($attachment->getDirPath());
-        }
-    }
-
     public function populateFromConfig()
     {
         $config = app('config');
@@ -93,6 +69,14 @@ trait EmailTrait
     public function getPreviewBody()
     {
         return $this->getBody();
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->body;
     }
 
     /**
@@ -135,14 +119,6 @@ trait EmailTrait
     public function getSubject()
     {
         return $this->subject;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBody()
-    {
-        return $this->body;
     }
 
     /**
@@ -247,5 +223,31 @@ trait EmailTrait
     public function getFrom()
     {
         return [$this->from => $this->from_name];
+    }
+
+    /**
+     * @param Mailer $mailer
+     * @param Message $message
+     * @param $response
+     */
+    protected function afterSend($mailer, $message, $response)
+    {
+        if ($response) {
+            $this->sent = 'yes';
+            $this->smtp_user = '';
+            $this->smtp_host = '';
+            $this->smtp_password = '';
+            $this->subject = '';
+            $this->body = '';
+            //        $this->vars = '';
+            $this->date_sent = date(DATE_DB);
+            $this->update();
+
+            $attachments = $this->findFiles();
+            if (count($attachments) > 0) {
+                $attachment = reset($attachments);
+                Nip_File_System::instance()->removeDirectory($attachment->getDirPath());
+            }
+        }
     }
 }
