@@ -44,6 +44,34 @@ trait EmailTrait
 
     protected $_parser;
 
+    public function send()
+    {
+        $send = parent::send();
+
+        if ($send) {
+            $this->afterSend();
+        }
+    }
+
+    protected function afterSend()
+    {
+        $this->sent = 'yes';
+        $this->smtp_user = '';
+        $this->smtp_host = '';
+        $this->smtp_password = '';
+        $this->subject = '';
+        $this->body = '';
+//        $this->vars = '';
+        $this->date_sent = date(DATE_DB);
+        $this->update();
+
+        $attachments = $this->findFiles();
+        if (count($attachments) > 0) {
+            $attachment = reset($attachments);
+            Nip_File_System::instance()->removeDirectory($attachment->getDirPath());
+        }
+    }
+
     public function populateFromConfig()
     {
         $config = app('config');
