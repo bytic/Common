@@ -35,36 +35,24 @@ trait EmailTrait
 
     use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
     use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
+    use \Nip\Mail\Models\Mailable\RecordTrait;
 
     /**
      * @var array
      */
-    protected $_vars = [];
+    protected $mergeTags = null;
 
     protected $_parser;
 
-    /**
-     * @param bool $data
-     * @return mixed
-     */
-    public function writeData($data = false)
-    {
-        if (isset($data['vars']) && is_string($data['vars'])) {
-            $data['vars'] = unserialize($data['vars']);
-            $this->_vars = $data['vars'];
-        }
-
-        return parent::writeData($data);
-    }
-
     public function populateFromConfig()
     {
-        $this->from = Nip_Config::instance()->EMAIL->from;
-        $this->from_name = Nip_Config::instance()->EMAIL->from_name;
+        $config = app('config');
+        $this->from = $config->get('EMAIL.from');
+        $this->from_name = $config->get('EMAIL.from_name');
 
-        $this->smtp_host = Nip_Config::instance()->SMTP->host;
-        $this->smtp_user = Nip_Config::instance()->SMTP->username;
-        $this->smtp_password = Nip_Config::instance()->SMTP->password;
+        $this->smtp_host = $config->get('SMTP.host');
+        $this->smtp_user = $config->get('SMTP.username');
+        $this->smtp_password = $config->get('SMTP.password');
     }
 
     /**
@@ -115,6 +103,7 @@ trait EmailTrait
         /** @var Parser $parser */
         $parser = new $class();
         $parser->setVars($this->getVars());
+
         return $parser;
     }
 
@@ -131,17 +120,33 @@ trait EmailTrait
      */
     public function getVars()
     {
-        return $this->_vars;
+        return $this->getMergeTags();
     }
 
     /**
-     * @param $vars
-     * @return $this
+     * @return array|null
      */
-    public function setVars($vars)
+    public function getMergeTags()
     {
-        $this->_vars = $vars;
-        return $this;
+        if ($this->mergeTags === null) {
+            $this->initMergeTags();
+        }
+
+        return $this->mergeTags;
+    }
+
+    /**
+     * @param array $mergeTags
+     */
+    public function setMergeTags($mergeTags)
+    {
+        $this->mergeTags = $mergeTags;
+    }
+
+    protected function initMergeTags()
+    {
+        $mergeTags = unserialize($this->vars);
+        $this->setMergeTags($mergeTags);
     }
 
     /**
@@ -150,145 +155,42 @@ trait EmailTrait
     public function getBody()
     {
         $return = $this->sent == 'yes' ? $this->compiled_body : $this->body;
+
         return $return;
     }
 
+    /**
+     * @param $vars
+     * @return $this
+     */
+    public function setVars($vars)
+    {
+        $this->mergeTags = $vars;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function insert()
     {
-        $this->vars = serialize($this->_vars);
+        $this->vars = serialize($this->mergeTags);
         $this->created = date(DATE_DB);
+
         return parent::insert();
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function send()
-    {
-        if ($this->from && $this->to) {
-            $return = $this->_sendSendGrid();
-
-            if ($return === true) {
-                $this->sent = 'yes';
-//                $this->smtp_user = '';
-//                $this->smtp_host = '';
-                $this->smtp_password = '';
-                $this->subject = '';
-                $this->body = '';
-//                $this->vars = '';
-                $this->date_sent = date(DATE_DB);
-                $this->update();
-
-                $attachments = $this->findFiles();
-                if (count($attachments) > 0) {
-                    $attachment = reset($attachments);
-                    Nip_File_System::instance()->removeDirectory($attachment->getDirPath());
-                }
-            }
-            return $return;
-        }
-        return false;
-    }
-
-    /**
-     * @return bool|string
-     */
-    private function _sendSendGrid()
-    {
-        $this->compileBody();
-        //$this->parse();
-
-        $this->compiled_subject = $this->subject;
-        $this->compiled_body = $this->body;
-
-        $mail = new \SendGrid\Mail();
-        $mail->addCategory($this->type);
-        $mail->addCustomArg("id_email", (string)$this->id);
-
-        $email = new \SendGrid\Email($this->from_name, $this->from);
-        $mail->setFrom($email);
-
-        $reply_to = new \SendGrid\ReplyTo($this->from);
-        $mail->setReplyTo($reply_to);
-
-        $emailsTos = [];
-
-        if (preg_match_all('/\s*"?([^><,"]+)"?\s*((?:<[^><,]+>)?)\s*/', $this->to, $matches, PREG_SET_ORDER) > 0) {
-            foreach ($matches as $m) {
-                if (!empty($m[2])) {
-                    $emailsTos[trim($m[2], '<>')] = $m[1];
-                } else {
-                    $emailsTos[$m[1]] = '';
-                }
-            }
-        }
-
-        $i = 0;
-        foreach ($emailsTos as $emailTo => $nameTo) {
-            $personalization = new \SendGrid\Personalization();
-
-            $email = new \SendGrid\Email($nameTo, $emailTo);
-            $personalization->addTo($email);
-
-            $personalization->setSubject($this->compiled_subject);
-
-            $vars = $this->getVars();
-            foreach ($vars as $varKey => $value) {
-                if (is_array($value)) {
-                    $value = $value[$i];
-                }
-                $value = (string)$value;
-                $personalization->addSubstitution('{{' . $varKey . '}}', $value);
-            }
-
-            $mail->addPersonalization($personalization);
-
-            $i = 1;
-        }
-
-        $html = new \Html2Text\Html2Text($this->compiled_body);
-        $content = new \SendGrid\Content("text/plain", $html->getText());
-        $mail->addContent($content);
-
-        $content = new \SendGrid\Content("text/html", $this->compiled_body);
-        $mail->addContent($content);
-
-        $emailFiles = $this->findFiles();
-        foreach ($emailFiles as $emailFile) {
-            /** @var \Email_File $emailFile */
-            $attachment = new \SendGrid\Attachment();
-            $attachment->setContent(base64_encode(file_get_contents($emailFile->getPath())));
-            $attachment->setType($emailFile->getContentType());
-            $attachment->setFilename($emailFile->getName());
-            $attachment->setDisposition("attachment");
-            $attachment->setContentId('Attachment');
-            $mail->addAttachment($attachment);
-        }
-
-        $sg = new \SendGrid("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");
-
-        $response = $sg->client->mail()->send()->post($mail);
-
-        if ($response->statusCode() == '202') {
-            return true;
-        } else {
-//            echo $response->statusCode();
-//            echo '-----------';
-//            echo $response->body();
-//            echo '-----------';
-//            echo $response->headers();
-//            die('----------');
-            return $response->body() . $response->headers();
-        }
     }
 
     public function compileBody()
     {
         $header = '';
         $footer = '';
-        $this->body = $header . $this->body . $footer;
+        $this->body = $header.$this->body.$footer;
     }
 
+    /**
+     * @return mixed
+     */
     public function getActivitiesByEmail()
     {
         if (!$this->getRegistry()->exists('activities-email')) {
@@ -299,9 +201,13 @@ trait EmailTrait
             }
             $this->getRegistry()->set('activities-email', $actEmail);
         }
+
         return $this->getRegistry()->get('activities-email');
     }
 
+    /**
+     * @return mixed
+     */
     public function getLinksByEmail()
     {
         if (!$this->getRegistry()->exists('links-email')) {
@@ -312,6 +218,7 @@ trait EmailTrait
             }
             $this->getRegistry()->set('links-email', $actEmail);
         }
+
         return $this->getRegistry()->get('links-email');
     }
 
@@ -324,49 +231,6 @@ trait EmailTrait
         return parent::delete();
     }
 
-    private function _sendSMTP()
-    {
-        $this->_mail = new Nip_Mailer();
-//			$this->_mail->debugSMTP();
-
-        $this->_mail->setFrom($this->from, $this->from_name);
-
-        $to = explode(',', $this->to);
-        foreach ($to as $email) {
-            $this->_mail->addTo($email);
-        }
-
-        if ($this->cc) {
-            $this->_mail->AddCC($this->cc);
-        }
-
-        if ($this->smtp_host) {
-            if ($this->smtp_user && $this->smtp_password) {
-                $this->_mail->authSMTP($this->smtp_host, $this->smtp_user, $this->smtp_password);
-            } else {
-                $this->_mail->setSMTP($this->smtp_host);
-            }
-        }
-
-        $this->_mail->IsHTML($this->IsHTML());
-
-        $this->compileBody();
-        $this->parse();
-
-        $this->_mail->setSubject($this->compiled_subject);
-
-        $this->_mail->setBody($this->compiled_body);
-        $this->_mail->setAltBody($this->compiled_body);
-
-        $attachments = $this->findFiles();
-
-        foreach ($attachments as $attachment) {
-            $this->_mail->addAttachment($attachment->getPath());
-        }
-
-        return $this->_mail->send();
-    }
-
     /**
      * @param null $value
      * @return bool
@@ -376,6 +240,7 @@ trait EmailTrait
         if (is_bool($value)) {
             $this->is_html = $value ? 'yes' : 'no';
         }
+
         return $this->is_html == 'yes';
     }
 
