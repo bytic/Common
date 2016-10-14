@@ -132,7 +132,7 @@ trait EmailTrait
                 if (!empty($m[2])) {
                     $emailsTos[trim($m[2], '<>')] = $m[1];
                 } else {
-                    $emailsTo[$m[1]] = '';
+                    $emailsTos[$m[1]] = '';
                 }
             }
         }
