@@ -2,9 +2,7 @@
 
 namespace ByTIC\Common\Records\Emails;
 
-use Nip\Records\Record;
-use Nip_Config;
-use Nip_File_System;
+use Nip\Records\Record;use Nip_Config;use Nip_File_System;
 
 /**
  * Class RecordTrait
@@ -129,14 +127,6 @@ trait EmailTrait
     {
         $mergeTags = unserialize($this->vars);
         $this->setMergeTags($mergeTags);
-    }
-
-    /**
-     * @return string
-     */
-    public function getSubject()
-    {
-        return $this->subject;
     }
 
     /**
