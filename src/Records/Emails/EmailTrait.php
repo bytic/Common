@@ -131,10 +131,12 @@ trait EmailTrait
         $this->setMergeTags($mergeTags);
     }
 
-    protected function initMergeTags()
+    /**
+     * @return string
+     */
+    public function getSubject()
     {
-        $mergeTags = unserialize($this->vars);
-        $this->setMergeTags($mergeTags);
+        return $this->subject;
     }
 
     /**
@@ -151,6 +153,24 @@ trait EmailTrait
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTos()
+    {
+        if (preg_match_all('/\s*"?([^><,"]+)"?\s*((?:<[^><,]+>)?)\s*/', $this->to, $matches, PREG_SET_ORDER) > 0) {
+            foreach ($matches as $m) {
+                if (!empty($m[2])) {
+                    $emailsTos[trim($m[2], '<>')] = $m[1];
+                } else {
+                    $emailsTos[$m[1]] = '';
+                }
+            }
+        }
+
+        return $emailsTos;
     }
 
     /**
