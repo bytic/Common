@@ -40,7 +40,7 @@ trait RecordTrait
      * @param $data
      * @return mixed
      */
-    abstract public function writeData($data);
+    abstract public function writeData($data = false);
 
     /**
      * @return array
