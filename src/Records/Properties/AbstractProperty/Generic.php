@@ -18,14 +18,21 @@ abstract class Generic
 
     protected $label = null;
     protected $label_short = null;
+
     /**
      * @var null|Record
      */
     protected $item;
+
     /**
      * @var null|Records|RecordsTranslated
      */
     protected $manager;
+
+    /**
+     * @var null|string
+     */
+    protected $field;
 
     /**
      * @param $name
@@ -42,34 +49,15 @@ abstract class Generic
     }
 
     /**
-     * @return Record|null
-     */
-    public function getItem()
-    {
-        return $this->item;
-    }
-
-    /**
-     * @param $i
-     * @return $this
-     */
-    public function setItem($i)
-    {
-        $this->item = $i;
-
-        return $this;
-    }
-
-    /**
      * @param bool $short
      * @return string
      */
     public function getLabelHTML($short = false)
     {
-        return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
-        style="' . $this->getColorCSS() . '">
-            ' . $this->getIconHTML() . '
-            ' . $this->getLabel($short) . '
+        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
+        style="'.$this->getColorCSS().'">
+            '.$this->getIconHTML().'
+            '.$this->getLabel($short).'
         </span>';
     }
 
@@ -78,7 +66,7 @@ abstract class Generic
      */
     public function getLabelClasses()
     {
-        return 'label label-' . $this->getColorClass();
+        return 'label label-'.$this->getColorClass();
     }
 
     /**
@@ -96,8 +84,9 @@ abstract class Generic
     public function getLabel($short = false)
     {
         if (!$this->label) {
-            $this->label = $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName());
-            $this->label_short = $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName() . '.short');
+            $this->label = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName());
+            $this->label_short = $this->getManager()->translate(
+                $this->getLabelSlug().'.'.$this->getName().'.short');
         }
 
         return $short ? $this->label_short : $this->label;
@@ -162,10 +151,10 @@ abstract class Generic
     {
         $css = [];
         if ($this->getBGColor()) {
-            $css[] = 'background-color: ' . $this->getBGColor();
+            $css[] = 'background-color: '.$this->getBGColor();
         }
         if ($this->getFGColor()) {
-            $css[] = 'color: ' . $this->getFGColor();
+            $css[] = 'color: '.$this->getFGColor();
         }
 
         return implode(';', $css);
@@ -195,7 +184,7 @@ abstract class Generic
         $icon = $this->getIcon();
         $return = '';
         if ($icon) {
-            $return .= '<span class="glyphicon glyphicon-white ' . $icon . '"></span> ';
+            $return .= '<span class="glyphicon glyphicon-white '.$icon.'"></span> ';
         }
 
         return $return;
@@ -207,5 +196,72 @@ abstract class Generic
     public function getIcon()
     {
         return false;
+    }
+
+    /**
+     * @return bool|void
+     */
+    public function update()
+    {
+        $item = $this->getItem();
+        if ($item) {
+            $this->preValueChange();
+            /** @noinspection PhpUndefinedFieldInspection */
+            $item->{$this->getField()} = $this->getName();
+            $this->preUpdate();
+            $return = $item->saveRecord();
+            $this->postUpdate();
+
+            return $return;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Record|null
+     */
+    public function getItem()
+    {
+        return $this->item;
+    }
+
+    /**
+     * @param $i
+     * @return $this
+     */
+    public function setItem($i)
+    {
+        $this->item = $i;
+
+        return $this;
+    }
+
+    public function preValueChange()
+    {
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param null|string $field
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
+
+    public function preUpdate()
+    {
+    }
+
+    public function postUpdate()
+    {
     }
 }

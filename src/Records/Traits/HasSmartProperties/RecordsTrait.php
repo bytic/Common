@@ -70,7 +70,7 @@ trait RecordsTrait
      * @param string $name
      * @return bool
      */
-    protected function hasSmartPropertyDefinition($name)
+    public function hasSmartPropertyDefinition($name)
     {
         $this->checkSmartPropertiesDefinitions();
 

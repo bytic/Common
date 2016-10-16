@@ -15,6 +15,11 @@ abstract class Generic extends GenericProperty
 {
 
     /**
+     * @var null|string
+     */
+    protected $field = 'status';
+
+    /**
      * @var array
      */
     protected $next = [];
@@ -23,38 +28,6 @@ abstract class Generic extends GenericProperty
      * @var self[]
      */
     protected $nextStatuses = null;
-
-    /**
-     * @return bool|void
-     */
-    public function update()
-    {
-        $item = $this->getItem();
-        if ($item) {
-            $this->preStatusChange();
-            /** @noinspection PhpUndefinedFieldInspection */
-            $item->status = $this->getName();
-            $this->preUpdate();
-            $return = $item->saveRecord();
-            $this->postUpdate();
-
-            return $return;
-        }
-
-        return false;
-    }
-
-    public function preStatusChange()
-    {
-    }
-
-    public function preUpdate()
-    {
-    }
-
-    public function postUpdate()
-    {
-    }
 
     /**
      * @return self[]

@@ -39,6 +39,8 @@ class Definition
 
     protected $itemsDirectory = null;
 
+    protected $defaultValue = null;
+
     /**
      * @param $name
      * @return Property
@@ -47,7 +49,7 @@ class Definition
     public function getItem($name)
     {
         $items = $this->getItems();
-        if (!isset($items[$name])) {
+        if (!$this->hasItem($name)) {
             throw new Exception(
                 'Bad Item ['.$name.'] for smart property 
                 ['.$this->getManager()->getController().']['.$this->getName().']');
@@ -266,7 +268,55 @@ class Definition
      */
     public function getDefaultValue()
     {
-        return 'in-progress';
+        if ($this->defaultValue === null) {
+            $this->initDefaultValue();
+        }
+
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param null $defaultValue
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
+    }
+
+    protected function initDefaultValue()
+    {
+        $managerDefaultValue = $this->getDefaultValueFromManager();
+        if ($managerDefaultValue && $this->hasItem($managerDefaultValue)) {
+            $defaultValue = $managerDefaultValue;
+        } else {
+            $items = $this->getItems();
+            $defaultValue = reset(array_keys($items));
+        }
+        $this->setDefaultValue($defaultValue);
+    }
+
+    /**
+     * @return bool|string
+     */
+    protected function getDefaultValueFromManager()
+    {
+        $method = 'getDefault'.$this->getName();
+        if (method_exists($this->getManager(), $method)) {
+            return $this->getManager()->{$method}();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasItem($name)
+    {
+        $items = $this->getItems();
+
+        return isset($items[$name]);
     }
 
     /**

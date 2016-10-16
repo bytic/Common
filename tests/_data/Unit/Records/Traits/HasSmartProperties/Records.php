@@ -19,7 +19,7 @@ class Records extends AbstractRecords
         $this->registerSmartProperty('registration_status');
     }
 
-    /**
+    /** @noinspection PhpMissingParentCallCommonInspection
      * @return string
      */
     public function getModelNamespace()
