@@ -2,8 +2,14 @@
 
 namespace ByTIC\Common\Records\Traits\AbstractTrait;
 
+use Nip\Database\Query\AbstractQuery;
+use Nip\Database\Query\Select;
 use Nip\Records\Record;
 
+/**
+ * Class RecordsTrait
+ * @package ByTIC\Common\Records\Traits\AbstractTrait
+ */
 trait RecordsTrait
 {
 
@@ -11,7 +17,19 @@ trait RecordsTrait
      * @param array $data [optional]
      * @return Record
      */
-    abstract public function getNew($data = array());
+    abstract public function getNew($data = []);
+
+    /**
+     * @param string $type
+     * @return AbstractQuery|Select
+     */
+    abstract public function newQuery($type = 'select');
+
+    /**
+     * @param $query
+     * @return RecordTrait
+     */
+    abstract public function findOneByQuery($query);
 
 
     /**

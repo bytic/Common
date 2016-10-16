@@ -8,6 +8,9 @@ use Nip_Registry;
 /**
  * Class RecordTrait
  * @package ByTIC\Common\Records\Traits\AbstractTrait
+ *
+ * @property int $id
+ *
  */
 trait RecordTrait
 {
@@ -32,4 +35,22 @@ trait RecordTrait
      * @return mixed
      */
     abstract public function update();
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    abstract public function writeData($data);
+
+    /**
+     * @return array
+     */
+    abstract public function toArray();
+
+    abstract public function save();
+
+    /**
+     * @return boolean
+     */
+    abstract public function exists();
 }
