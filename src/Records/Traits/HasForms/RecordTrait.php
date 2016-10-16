@@ -1,6 +1,7 @@
 <?php
 
 namespace ByTIC\Common\Records\Traits\HasForms;
+
 use Nip_Form_Model as Form;
 
 /**
@@ -13,21 +14,21 @@ trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    protected $_forms = array();
+    protected $forms = [];
 
     /**
      * @param string $type
      * @return \Nip_Form
      */
-    public function getForm($type = NULL)
+    public function getForm($type = null)
     {
-        if (!$this->_forms[$type]) {
+        if (!$this->forms[$type]) {
             $form = $this->getManager()->newForm($type);
 
-            $this->_forms[$type] = $this->initForm($form);
+            $this->forms[$type] = $this->initForm($form);
         }
 
-        return $this->_forms[$type];
+        return $this->forms[$type];
     }
 
     /**
@@ -38,7 +39,7 @@ trait RecordTrait
     {
         /** @noinspection PhpParamsInspection */
         $form->setModel($this);
+
         return $form;
     }
-
 }

@@ -27,10 +27,10 @@ trait RecordsTrait
 
     /**
      * @param $query
+     * @param array $params
      * @return RecordTrait
      */
-    abstract public function findOneByQuery($query);
-
+    abstract public function findOneByQuery($query, $params = []);
 
     /**
      * @return string
