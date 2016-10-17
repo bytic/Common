@@ -179,7 +179,7 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
                 }
 
                 $getDonation->status_notes = '#' . $errorCode . ' ' . $errorMessage;
-                $getDonation->setStatus($newStatus);
+                $getDonation->updateStatus($newStatus);
             } else {
                 $errorType = Mobilpay_Payment_Request_Abstract::CONFIRM_ERROR_TYPE_PERMANENT;
                 $errorCode = Mobilpay_Payment_Request_Abstract::ERROR_CONFIRM_INVALID_POST_PARAMETERS;

@@ -97,7 +97,7 @@ class Gateway extends AbstractGateway
 //
 //        if ($donation) {
 //            $donation->received = date(DATE_DB);
-//            $donation->setStatus('active');
+//            $donation->updateStatus('active');
 //
 //            /* ePayment response */
 //            $result_hash = $gateway->hmac($return);

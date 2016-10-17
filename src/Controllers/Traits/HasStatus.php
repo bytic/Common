@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Records\Traits\HasStatus\RecordsTrait;
 use ByTIC\Common\Records\Traits\HasStatus\RecordTrait;
 use Nip\Records\AbstractModels\Record;
 use Nip\Records\AbstractModels\RecordManager;
@@ -11,7 +12,7 @@ use Nip\Records\AbstractModels\RecordManager;
  * @package ByTIC\Common\Controllers\Traits
  *
  * @method Record|RecordTrait getModelFromRequest
- * @method RecordManager getModelManager
+ * @method RecordManager|RecordsTrait getModelManager
  */
 trait HasStatus
 {
@@ -29,7 +30,7 @@ trait HasStatus
         $redirect = $_SERVER['HTTP_REFERER'];
         $availableStatuses = $this->getModelManager()->getStatusProperty('name');
         if (in_array($status, $availableStatuses)) {
-            $item->setStatus($status);
+            $item->updateStatus($status);
             $this->changeStatusRedirect($item);
         }
         $this->flashRedirect($this->getModelManager()->getMessage('status.invalid-status'), $redirect, 'error');

@@ -108,11 +108,11 @@ class Gateway extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\
                     } else {
                         if ($_REQUEST['TRTYPE'] == '21') {
                             $donation->received = date(DATE_DB);
-                            $donation->setStatus('active');
+                            $donation->updateStatus('active');
                         }
                     }
                 } else {
-                    $donation->setStatus('error');
+                    $donation->updateStatus('error');
                     $donation->gateway_error = $_REQUEST['MESSAGE'];
                 }
             }

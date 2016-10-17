@@ -106,7 +106,7 @@ class Gateway extends AbstractGateway
                             $info_data .= "INVOICE=$invoice:STATUS=OK\n";
 
                             $donation->received = date(DATE_DB);
-                            $donation->setStatus('active');
+                            $donation->updateStatus('active');
                         } else {
                             if ($status === 'DENIED') {
                                 // log that the payment was denied
