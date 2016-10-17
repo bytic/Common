@@ -73,12 +73,12 @@ class GatewayTest extends AbstractGatewayTest
         $content = $response->getContent();
         self::assertStringStartsWith('<EPAYMENT>', $content);
         self::assertStringEndsWith('</EPAYMENT>', $content);
-        self::assertEquals(68, strlen($content));
+        self::assertEquals(67, strlen($content));
     }
 
-    protected function _before()
+    protected function setUp()
     {
-        parent::_before();
+        parent::setUp();
 
         /** @var PaymentMethod $paymentMethod */
         $paymentMethod = $this->purchase->getPaymentMethod();
