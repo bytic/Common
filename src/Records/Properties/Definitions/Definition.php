@@ -248,6 +248,7 @@ class Definition
         $object = new $className();
         /** @var Property $object */
         $object->setManager($this->getManager());
+        $object->setField($this->getField());
 
         return $object;
     }

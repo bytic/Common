@@ -24,7 +24,14 @@ trait HasSmartProperty
      */
     public function initViewProperty($name)
     {
-        $this->getView()->set($name, $this->getModelManager()->getSmartPropertyItems($name));
+        $definitionName = $this->getSmartPropertyDefinitionName($name);
+        $this->getView()->set(inflector()->pluralize($name),
+            $this->getModelManager()->getSmartPropertyItems($definitionName));
+    }
+
+    protected function getSmartPropertyDefinitionName($name)
+    {
+        return inflector()->classify($name);
     }
 
     /**
@@ -43,15 +50,16 @@ trait HasSmartProperty
     protected function doChangeSmartProperty($name)
     {
         $item = $this->getModelFromRequest();
-
+        $definitionName = $this->getSmartPropertyDefinitionName($name);
         $value = $_GET[$name];
-        $availableValues = $this->getModelManager()->getSmartPropertyValues($name, 'name');
+        $availableValues = $this->getModelManager()->getSmartPropertyValues($definitionName, 'name');
         if (in_array($value, $availableValues)) {
-            $item->updateSmartProperty($name, $value);
+            $item->updateSmartProperty($definitionName, $value);
             $this->changeSmartPropertyRedirect($name, $item);
         } else {
             $redirect = $_SERVER['HTTP_REFERER'];
-            $this->flashRedirect($this->getModelManager()->getMessage($name.'.invalid-value'), $redirect, 'error');
+            $this->flashRedirect($this->getModelManager()->getMessage(inflector()->pluralize($name).'.invalid-value'),
+                $redirect, 'error');
         }
     }
 
@@ -62,7 +70,7 @@ trait HasSmartProperty
     public function changeSmartPropertyRedirect($name, $item)
     {
         $redirect = $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $item->getURL();
-        $this->flashRedirect($this->getModelManager()->getMessage($name.'.success'), $redirect);
+        $this->flashRedirect($this->getModelManager()->getMessage(inflector()->pluralize($name).'.success'), $redirect);
     }
 
     /**
