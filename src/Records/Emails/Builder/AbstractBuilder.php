@@ -115,10 +115,7 @@ abstract class AbstractBuilder
     /**
      * @return EmailsTrait
      */
-    protected function getEmailsManager()
-    {
-        return Emails::instance();
-    }
+    abstract protected function getEmailsManager();
 
     /**
      * @param EmailTrait $email
