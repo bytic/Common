@@ -27,6 +27,14 @@ class Record extends NipRecord
     protected $registry;
 
     /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @return Nip_Registry
      */
     public function getRegistry()
