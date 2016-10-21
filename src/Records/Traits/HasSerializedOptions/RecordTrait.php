@@ -2,8 +2,6 @@
 
 namespace ByTIC\Common\Records\Traits\HasSerializedOptions;
 
-use Nip\Records\Record;
-
 /**
  * Class RecordsTrait
  * @package ByTIC\Common\Records\Traits\HasSerializedOptions
@@ -15,14 +13,10 @@ trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    protected $_options = null;
-
-    public function checkOptions()
-    {
-        if ($this->_options == null) {
-            $this->initOptions();
-        }
-    }
+    /**
+     * @var null|array
+     */
+    protected $optionsArray = null;
 
     /**
      * @return array
@@ -30,31 +24,46 @@ trait RecordTrait
     public function getOptions()
     {
         $this->checkOptions();
-        return $this->_options;
+        return $this->optionsArray;
     }
 
-    public function getOption($name)
+    public function checkOptions()
     {
-        $this->checkOptions();
-        return $this->_options[$name];
-    }
-
-    public function setOption($name, $value)
-    {
-        $this->checkOptions();
-        return $this->_options[$name] = $value;
+        if ($this->optionsArray == null) {
+            $this->initOptions();
+        }
     }
 
     public function initOptions()
     {
         $options = unserialize($this->options);
-        $options = (is_array($options)) ? $options : array();
-        $this->_options = $options;
+        $options = (is_array($options)) ? $options : [];
+        $this->optionsArray = $options;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getOption($name)
+    {
+        $this->checkOptions();
+        return $this->optionsArray[$name];
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @return mixed
+     */
+    public function setOption($name, $value)
+    {
+        $this->checkOptions();
+        return $this->optionsArray[$name] = $value;
     }
 
     public function serializeOptions()
     {
-        $this->options = serialize($this->_options);
+        $this->options = serialize($this->getOptions());
     }
-
 }
