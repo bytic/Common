@@ -3,8 +3,6 @@
 namespace ByTIC\Common\Controllers\Traits;
 
 use Nip\Controller;
-use Nip\Dispatcher;
-use Nip\FrontController;
 use Nip\Records\AbstractModels\Record;
 use Nip\Records\AbstractModels\RecordManager;
 use Nip\Request;
@@ -248,15 +246,15 @@ trait HasModels
 
     protected function dispatchAccessDeniedResponse()
     {
-        FrontController::instance()->getTrace()->add('Acces denied to item');
+//        ->getTrace()->add('Acces denied to item');
         $this->getDispatcher()->forward("index", "access");
     }
 
     protected function dispatchNotFoundResponse()
     {
-        FrontController::instance()->getTrace()->add(
-            'No valid item [manager:'.get_class($this->getModelManager()).']'
-        );
+//        ->getTrace()->add(
+//            'No valid item [manager:'.get_class($this->getModelManager()).']'
+//        );
         $this->getDispatcher()->forward("index", "error");
     }
 

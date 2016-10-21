@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Records\Traits\HasForms;
 
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
-use Nip\FrontController;
 
 /**
  * Class RecordsTrait
@@ -37,7 +36,7 @@ trait RecordsTrait
             $type = $this->getFormTypeDefault();
         }
 
-        $module = FrontController::instance()->getRequest()->getModuleName();
+        $module = $this->getRequest()->getModuleName();
         if (strpos($type, 'admin-') !== false) {
             $module = 'admin';
             $type = str_replace('admin-', '', $type);
