@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\HasForms;
 
+use ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait as AbstractTrait;
 use Nip_Form_Model as Form;
 
 /**
@@ -12,7 +13,7 @@ use Nip_Form_Model as Form;
  */
 trait RecordTrait
 {
-    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+    use AbstractTrait;
 
     protected $forms = [];
 
