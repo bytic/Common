@@ -3,8 +3,6 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse as AbstractResponse;
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasView;
-use Nip\Records\Record;
 
 /**
  * Class PurchaseResponse
@@ -12,15 +10,6 @@ use Nip\Records\Record;
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
-    use HasView;
-
-    /**
-     * @return Record
-     */
-    public function getModel()
-    {
-        return $this->data['model'];
-    }
 
     /**
      * Response Message
