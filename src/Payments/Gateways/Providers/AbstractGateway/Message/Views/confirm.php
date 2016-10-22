@@ -6,12 +6,13 @@
 $response = $this->get('response');
 $model = $response->getModel();
 $messageType = $response->getMessageType();
+$title = translator()->translate('payment-gateways.messages.confirm.'.$messageType.'.title');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Redirecting...</title>
+    <title><?php echo $title; ?></title>
     <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans:400,300'>
     <link rel="stylesheet" type='text/css' href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" type='text/css' href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -33,8 +34,9 @@ $messageType = $response->getMessageType();
 </head>
 <body>
 <div class="header">
-    <h1>
-        <?php echo translator()->translate('payment-gateways.messages.confirm.'.$messageType.'.title') ?>
+    <h1 style="font-size: 36px; color: <?php echo $response->getIconColor() ?>">
+        <i class="<?php echo $response->getIconClass() ?>" aria-hidden="true"></i>
+        <?php echo $title; ?>
     </h1>
 </div>
 <div class="container">
@@ -62,6 +64,13 @@ $messageType = $response->getMessageType();
                     );
                     ?>
                 </p>
+            <?php } ?>
+
+            <?php if ($response->hasButton()) { ?>
+                <a href="<?php echo $response->getButtonHref(); ?>" class="btn btn-success btn-md">
+                    <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+                    <?php echo $response->getButtonLabel(); ?>
+                </a>
             <?php } ?>
         </div>
     </div>

@@ -6,6 +6,7 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseReq
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectTrait;
 use ByTIC\Common\Payments\Models\BillingRecord\Traits\RecordTrait as BillingRecord;
 use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
+use ByTIC\Common\Records\Records;
 
 /**
  * Class MethodTrait
@@ -17,6 +18,7 @@ use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
  *
  * @method string getConfirmURL
  * @method string getIpnURL
+ * @method Records getManager
  */
 trait IsPurchasableModelTrait
 {
@@ -72,6 +74,14 @@ trait IsPurchasableModelTrait
     public function getPurchaseBillingRecord()
     {
         return null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getConfirmStatusTitle()
+    {
+        return $this->getManager()->getMessage('confirm.'.$this->getStatus()->getName());
     }
 
     /**
