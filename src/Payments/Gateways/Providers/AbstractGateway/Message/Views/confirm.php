@@ -69,9 +69,15 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
 
             <?php if ($response->isRedirect() || $response->hasButton()) { ?>
                 <?php $src = $response->isRedirect() ? $response->getRedirectUrl() : $response->getButtonHref() ?>
-                <?php $label = $response->hasButton() ? $response->getButtonLabel() : 'Return to merchant'; ?>
+                <?php $label = $response->hasButton() ? $response->getButtonLabel() : 'Click here to continue'; ?>
 
                 <form action="<?php echo $src ?>" name="form-confirm" id="form-confirm" method="POST">
+                    <?php if ($response->isRedirect()) { ?>
+                        <p>
+                            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                            Redirecting
+                        </p>
+                    <?php } ?>
                     <button class="btn btn-success btn-md">
                         <i class="fa fa-mouse-pointer" aria-hidden="true"></i>
                         <?php echo $response->getButtonLabel(); ?>
