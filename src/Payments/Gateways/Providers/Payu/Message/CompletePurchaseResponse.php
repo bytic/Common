@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse as AbstractResponse;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasView;
 use Nip\Records\Record;
 
 /**
@@ -11,6 +12,7 @@ use Nip\Records\Record;
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
+    use HasView;
 
     /**
      * @return Record

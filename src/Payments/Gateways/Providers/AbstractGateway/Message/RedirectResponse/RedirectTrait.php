@@ -3,7 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractRequest;
-use Nip\View;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasView;
 use Omnipay\Common\Exception\RuntimeException;
 use Omnipay\Common\Message\RedirectResponseInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse as HttpRedirectResponse;
@@ -18,11 +18,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
  */
 trait RedirectTrait
 {
-
-    /**
-     * @var View
-     */
-    protected $view = null;
+    use HasView;
 
     /**
      * @return bool
@@ -56,6 +52,7 @@ trait RedirectTrait
             return HttpRedirectResponse::create($this->getRedirectUrl());
         } elseif ('POST' === $this->getRedirectMethod()) {
             $output = $this->getRedirectHTML();
+
             return HttpResponse::create($output);
         }
 
@@ -87,27 +84,20 @@ trait RedirectTrait
      */
     public function getRedirectHTML()
     {
-        return $this->getView()->load($this->getViewFile());
+        return $this->getViewContent();
     }
 
     /**
-     * @return View|null
+     * @return string
      */
-    public function getView()
+    public function getViewFile()
     {
-        if ($this->view === null) {
-            $this->initView();
-        }
-
-        return $this->view;
+        return '/redirect';
     }
 
-    public function initView()
+    protected function initViewVars()
     {
-        $this->view = new View();
-        $this->view->set('response', $this);
-        $this->view->set('inputsHidden', $this->generateHiddenInputs());
-        $this->view->setBasePath(dirname(__FILE__).DIRECTORY_SEPARATOR);
+        $this->getView()->set('inputsHidden', $this->generateHiddenInputs());
     }
 
     /**
@@ -155,13 +145,5 @@ trait RedirectTrait
             $key,
             $value
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function getViewFile()
-    {
-        return '/redirect';
     }
 }
