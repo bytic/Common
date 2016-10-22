@@ -56,6 +56,7 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
             <?php if (!$response->isSuccessful()) { ?>
                 <p>
                     <?php
+                    /** @noinspection PhpStaticAsDynamicMethodCallInspection */
                     echo $this->Messages()->error(
                         '<strong>'
                         .translator()->translate('payment-gateways.messages.confirm.error.message')
@@ -66,11 +67,24 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
                 </p>
             <?php } ?>
 
-            <?php if ($response->hasButton()) { ?>
-                <a href="<?php echo $response->getButtonHref(); ?>" class="btn btn-success btn-md">
-                    <i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
-                    <?php echo $response->getButtonLabel(); ?>
-                </a>
+            <?php if ($response->isRedirect() || $response->hasButton()) { ?>
+                <?php $src = $response->isRedirect() ? $response->getRedirectUrl() : $response->getButtonHref() ?>
+                <?php $label = $response->hasButton() ? $response->getButtonLabel() : 'Return to merchant'; ?>
+
+                <form action="<?php echo $src ?>" name="form-confirm" id="form-confirm" method="GET">
+                    <button class="btn btn-success btn-md">
+                        <i class="fa fa-mouse-pointer" aria-hidden="true"></i>
+                        <?php echo $response->getButtonLabel(); ?>
+                    </button>
+                </form>
+
+            <?php if ($response->isRedirect()) { ?>
+                <script>
+                    var timer = setTimeout(function () {
+                        document.forms[0].submit();
+                    }, 3000);
+                </script>
+            <?php } ?>
             <?php } ?>
         </div>
     </div>

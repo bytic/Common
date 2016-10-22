@@ -17,6 +17,8 @@ abstract class CompletePurchaseResponse extends AbstractResponse
 
     protected $button = null;
 
+    protected $redirectUrl = null;
+
     /**
      * @return string
      */
@@ -39,7 +41,7 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     public function getMessageType()
     {
         $type = 'info';
-        switch ($this->getModel()->getStatus()) {
+        switch ($this->getModel()->getStatus()->getName()) {
             case 'active':
                 $type = 'success';
                 break;
@@ -99,7 +101,7 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     {
         $this->button = [
             'label' => $label,
-            'href' => $label,
+            'href' => $href,
         ];
 
         return $this;
@@ -129,6 +131,32 @@ abstract class CompletePurchaseResponse extends AbstractResponse
         return $this->hasButton() ? $this->button['href'] : null;
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection
+     * Does the response require a redirect?
+     *
+     * @return boolean
+     */
+    public function isRedirect()
+    {
+        return $this->getModel()->getStatus()->getName() === 'active';
+    }
+
+    /**
+     * @return null
+     */
+    public function getRedirectUrl()
+    {
+        return $this->redirectUrl;
+    }
+
+    /**
+     * @param null $redirectUrl
+     */
+    public function setRedirectUrl($redirectUrl)
+    {
+        $this->redirectUrl = $redirectUrl;
+    }
+
     /**
      * @return string
      */
@@ -136,4 +164,5 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     {
         return '/confirm';
     }
+
 }
