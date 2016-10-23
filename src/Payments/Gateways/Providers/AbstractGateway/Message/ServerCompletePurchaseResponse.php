@@ -9,6 +9,11 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 abstract class ServerCompletePurchaseResponse extends AbstractResponse
 {
 
+    /**
+     * @return $this
+     */
+    abstract public function processModel();
+
     public function send()
     {
         echo $this->getContent();

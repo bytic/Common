@@ -73,19 +73,4 @@ class CompletePurchaseRequest extends AbstractRequest
         $purchaseRequest = $gateway->purchaseFromModel($model);
         return $purchaseRequest->getCtrl();
     }
-
-    /**
-     * Send the request with specified data
-     *
-     * @param  mixed $data The data to send
-     * @return bool|CompletePurchaseResponse
-     */
-    public function sendData($data)
-    {
-        if (is_array($data)) {
-            return $this->response = new CompletePurchaseResponse($this, $data);
-        }
-
-        return parent::sendData($data);
-    }
 }

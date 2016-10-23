@@ -108,6 +108,11 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
+     * @return $this
+     */
+    abstract public function processModel();
+
+    /**
      * @return null|string
      */
     public function getButtonLabel()
@@ -164,5 +169,5 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     {
         return '/confirm';
     }
-
 }
+

@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseRequest as AbstractRequest;
+use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 
 /**
  * Class PurchaseResponse
@@ -122,20 +123,5 @@ class ServerCompletePurchaseRequest extends AbstractRequest
 
         $this->pushData('dateReturn', $dateReturn);
         $this->pushData('hashReturn', $this->generateHmac($return));
-    }
-
-    /**
-     * Send the request with specified data
-     *
-     * @param  mixed $data The data to send
-     * @return bool|ServerCompletePurchaseResponse
-     */
-    public function sendData($data)
-    {
-        if (is_array($data)) {
-            return $this->response = new ServerCompletePurchaseResponse($this, $data);
-        }
-
-        return parent::sendData($data);
     }
 }
