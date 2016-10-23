@@ -11,20 +11,16 @@ use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
  */
 class ServerCompletePurchaseRequest extends AbstractRequest
 {
-
     public function initData()
     {
         parent::initData();
 
-        if ($this->hasPOST('HASH', 'REFNOEXT')) {
-            $this->validate('modelManager');
-            $this->prepareServer();
+        $this->validate('modelManager');
+        $this->prepareServer();
 
-            $this->pushData('valid', false);
-            if ($this->validateModel() && $this->validateHash()) {
-                $this->pushData('valid', true);
-                $this->populateDataFromRequest();
-            }
+        $this->pushData('valid', false);
+        if ($this->validateModel() && $this->validateHash()) {
+            $this->pushData('valid', true);
         }
     }
 
@@ -39,22 +35,6 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @return bool
-     */
-    protected function validateModel()
-    {
-        $idModel = $this->httpRequest->request->get('REFNOEXT');
-        $this->pushData('id', $idModel);
-        $model = $this->findModel($idModel);
-        if ($model) {
-            $this->pushData('model', $model);
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * @return boolean
      */
     protected function validateHash()
@@ -66,8 +46,10 @@ class ServerCompletePurchaseRequest extends AbstractRequest
         $this->pushData('hmac', $hmac);
         if ($hmac == $hash) {
             $this->generateReturnHashString();
+
             return true;
         }
+
         return false;
     }
 
@@ -78,6 +60,7 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     protected function generateHmac($data)
     {
         $key = $this->getSecretKey();
+
         return Helper::generateHmac($data, $key);
     }
 
@@ -88,6 +71,7 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     {
         /** @var IsPurchasableModelTrait $model */
         $model = $this->getDataItem('model');
+
         return $model->getPaymentMethod()->getType()->getGateway()->getSecretKey();
     }
 
@@ -126,8 +110,19 @@ class ServerCompletePurchaseRequest extends AbstractRequest
         $this->pushData('hashReturn', $this->generateHmac($return));
     }
 
-    protected function populateDataFromRequest()
+    /**
+     * @return int
+     */
+    public function getModelIdFromRequest()
     {
-        $this->pushData('ipn_data', $this->httpRequest->request->all());
+        return $this->getHttpRequest()->request->get('REFNOEXT');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection
+     * @return bool
+     */
+    protected function isProviderRequest()
+    {
+        return $this->hasPOST('HASH', 'REFNOEXT');
     }
 }

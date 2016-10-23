@@ -156,4 +156,3 @@ abstract class CompletePurchaseResponse extends AbstractResponse
         return '/confirm';
     }
 }
-

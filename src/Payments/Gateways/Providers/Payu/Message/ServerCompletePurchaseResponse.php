@@ -80,6 +80,14 @@ class ServerCompletePurchaseResponse extends AbstractResponse
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection
+     * @return false|string
+     */
+    public function getTransactionDate()
+    {
+        return $this->data['ipn_data']['SALEDATE'];
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection
      * @return bool
      */
     protected function canProcessModel()

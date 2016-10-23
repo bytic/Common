@@ -58,8 +58,8 @@ class GatewayTest extends AbstractTest
         $this->purchase->shouldReceive('getPurchaseBillingRecord')->andReturn($billing);
 
         $this->purchaseManager = m::mock(PurchasableRecordManager::class)->makePartial();
-        $this->purchaseManager->shouldReceive('findOne')
-            ->withArgs([37250])->andReturn($this->purchase);
+        $this->purchaseManager->shouldReceive('findOne')->withArgs([37250])->andReturn($this->purchase);
+        $this->purchaseManager->shouldReceive('findOne')->withArgs([37250])->andReturn($this->purchase);
 
         $this->purchase->setManager($this->purchaseManager);
 

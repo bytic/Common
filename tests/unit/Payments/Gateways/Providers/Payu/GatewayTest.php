@@ -73,7 +73,6 @@ class GatewayTest extends AbstractGatewayTest
         $content = $response->getContent();
         self::assertStringStartsWith('<EPAYMENT>', $content);
         self::assertStringEndsWith('</EPAYMENT>', $content);
-        self::assertEquals(67, strlen($content));
     }
 
     protected function setUp()

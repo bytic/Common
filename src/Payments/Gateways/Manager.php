@@ -109,9 +109,11 @@ class Manager
             if (method_exists($item, $callback)) {
                 /** @var AbstractResponse $request */
                 $request = $item->$callback(['modelManager' => $modelManager]);
-                $response = $request->send();
-                if (is_subclass_of($response, AbstractResponse::class)) {
-                    return $response;
+                if ($request) {
+                    $response = $request->send();
+                    if (is_subclass_of($response, AbstractResponse::class)) {
+                        return $response;
+                    }
                 }
             }
         }

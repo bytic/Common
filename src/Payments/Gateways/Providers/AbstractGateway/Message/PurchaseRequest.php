@@ -72,8 +72,16 @@ abstract class PurchaseRequest extends AbstractRequest
      */
     public function sendData($data)
     {
-        $class = $this->getNamespacePath().'\PurchaseResponse';
+        $class = $this->getResponseClass();
 
         return $this->response = new $class($this, $data, $this->getEndpoint());
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isProviderRequest()
+    {
+        return true;
     }
 }

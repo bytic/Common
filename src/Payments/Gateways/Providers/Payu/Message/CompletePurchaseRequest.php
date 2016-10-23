@@ -13,35 +13,16 @@ use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 class CompletePurchaseRequest extends AbstractRequest
 {
 
-
     public function initData()
     {
         parent::initData();
 
         $this->validate('modelManager');
 
-        if ($this->hasGet('id', 'ctrl')) {
-            $this->pushData('valid', false);
-            if ($this->validateModel() && $this->validateCtrl()) {
-                $this->pushData('valid', true);
-            }
+        $this->pushData('valid', false);
+        if ($this->validateModel() && $this->validateCtrl()) {
+            $this->pushData('valid', true);
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function validateModel()
-    {
-        $idModel = $this->httpRequest->query->get('id');
-        $this->pushData('id', $idModel);
-        $model = $this->findModel($idModel);
-        if ($model) {
-            $this->pushData('model', $model);
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -55,6 +36,7 @@ class CompletePurchaseRequest extends AbstractRequest
         $this->pushData('model_ctrl', $modelCtrl);
         if ($ctrl == $modelCtrl) {
             $this->pushData('valid', true);
+
             return true;
         }
 
@@ -71,6 +53,15 @@ class CompletePurchaseRequest extends AbstractRequest
         /** @var Gateway $gateway */
         $gateway = $model->getPaymentMethod()->getType()->getGateway();
         $purchaseRequest = $gateway->purchaseFromModel($model);
+
         return $purchaseRequest->getCtrl();
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection
+     * @return bool
+     */
+    protected function isProviderRequest()
+    {
+        return $this->hasGet('id', 'ctrl');
     }
 }

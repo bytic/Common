@@ -3,6 +3,8 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
 use Nip\Records\RecordManager;
+use Nip\Utility\Traits\NameWorksTrait;
+use Omnipay\Common\Message\ResponseInterface;
 
 /**
  * Class AbstractRequest
@@ -10,6 +12,7 @@ use Nip\Records\RecordManager;
  */
 abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 {
+    use NameWorksTrait;
 
     protected $data = null;
 
@@ -62,14 +65,27 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
-     * Send the request with specified data
+     * Send the request
      *
-     * @param  mixed $data The data to send
+     * @return ResponseInterface|bool
+     */
+    public function send()
+    {
+        if ($this->isProviderRequest()) {
+            $data = $this->getData();
+
+            return $this->sendData($data);
+        }
+
+        return false;
+    }
+
+    /**
      * @return bool
      */
-    public function sendData($data)
+    protected function isProviderRequest()
     {
-        return $this->response = false;
+        return false;
     }
 
     /**
@@ -78,8 +94,11 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function getData()
     {
         if ($this->data === null) {
-            $this->initData();
+            if ($this->isProviderRequest()) {
+                $this->initData();
+            }
         }
+
         return $this->data;
     }
 
@@ -89,12 +108,30 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
-     * @param $id
-     * @return \Nip\Records\AbstractModels\Record
+     * Send the request with specified data
+     *
+     * @param  mixed $data The data to send
+     * @return bool
      */
-    protected function findModel($id)
+    public function sendData($data)
     {
-        return $this->getModelManager()->findOne($id);
+        if (is_array($data) && count($data)) {
+            $class = $this->getResponseClass();
+
+            return $this->response = new $class($this, $data);
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getResponseClass()
+    {
+        $class = str_replace('Request', 'Response', $this->getClassFirstName());
+
+        return '\\'.$this->getNamespacePath().'\\'.$class;
     }
 
     /**
@@ -106,6 +143,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     }
 
     /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getHttpRequest()
+    {
+        return $this->httpRequest;
+    }
+
+    /**
      * @param $key
      * @param $value
      * @return $this
@@ -114,6 +159,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     {
         $this->data = is_array($this->data) ? $this->data : [];
         $this->data[$key] = $value;
+
         return $this;
     }
 

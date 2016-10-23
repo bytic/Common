@@ -3,10 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
-use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseRequest;
-use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
-use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\ServerCompletePurchaseResponse;
 
 /**
  * Class Gateway
@@ -17,33 +14,6 @@ use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\ServerCompletePurchase
  */
 class Gateway extends AbstractGateway
 {
-
-    /**
-     * @param array $parameters
-     * @return PurchaseResponse
-     */
-    public function purchase(array $parameters = [])
-    {
-        return $this->createNamepacedRequest('PurchaseRequest', $parameters);
-    }
-
-    /**
-     * @param array $parameters
-     * @return CompletePurchaseResponse
-     */
-    public function completePurchase(array $parameters = [])
-    {
-        return $this->createNamepacedRequest('CompletePurchaseRequest', $parameters);
-    }
-
-    /**
-     * @param array $parameters
-     * @return ServerCompletePurchaseResponse
-     */
-    public function serverCompletePurchase(array $parameters = [])
-    {
-        return $this->createNamepacedRequest('ServerCompletePurchaseRequest', $parameters);
-    }
 
     /**
      * @param $value
@@ -90,20 +60,4 @@ class Gateway extends AbstractGateway
     {
         return $this->getParameter('secretKey');
     }
-
-//    public function parseIPNResponse()
-//    {
-//        echo "Verified OK!";
-//
-//        if ($donation) {
-//            $donation->received = date(DATE_DB);
-//            $donation->updateStatus('active');
-//
-//            /* ePayment response */
-//            $result_hash = $gateway->hmac($return);
-//            echo "<EPAYMENT>" . $date_return . "|" . $result_hash . "</EPAYMENT>";
-//        } else {
-//            echo 'error donation';
-//        }
-//    }
 }

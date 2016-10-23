@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
-use Nip\Utility\Traits\NameWorksTrait;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasModelRequest;
 
 /**
  * Class PurchaseResponse
@@ -10,20 +10,16 @@ use Nip\Utility\Traits\NameWorksTrait;
  */
 abstract class CompletePurchaseRequest extends AbstractRequest
 {
-    use NameWorksTrait;
+    use HasModelRequest;
 
-    /**
-     * @param  array $data
-     * @return PurchaseResponse|bool
-     */
-    public function sendData($data)
+    public function initData()
     {
-        if (is_array($data)) {
-            $class = $this->getNamespacePath().'\CompletePurchaseResponse';
+        parent::initData();
+        $this->populateDataFromRequest();
+    }
 
-            return $this->response = new $class($this, $data);
-        }
-
-        return parent::sendData($data);
+    protected function populateDataFromRequest()
+    {
+        $this->pushData('ipn_data', $this->httpRequest->request->all());
     }
 }
