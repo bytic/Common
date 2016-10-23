@@ -42,16 +42,18 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h4>
-                <?php echo $model->getPurchaseName(); ?>
-            </h4>
-            <hr/>
+            <?php if ($model) { ?>
+                <h4>
+                    <?php echo $model->getPurchaseName(); ?>
+                </h4>
+                <hr/>
 
-            <p>
-                <?php
-                echo $this->Messages()->$messageType($model->getManager()->getMessage('confirm.'.$model->status));
-                ?>
-            </p>
+                <p>
+                    <?php
+                    echo $this->Messages()->$messageType($model->getManager()->getMessage('confirm.'.$model->status));
+                    ?>
+                </p>
+            <?php } ?>
 
             <?php if (!$response->isSuccessful()) { ?>
                 <p>

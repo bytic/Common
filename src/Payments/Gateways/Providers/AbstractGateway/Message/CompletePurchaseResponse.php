@@ -40,20 +40,22 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     public function getMessageType()
     {
         $type = 'info';
-        switch ($this->getModel()->getStatus()->getName()) {
-            case 'active':
-                $type = 'success';
-                break;
-            case 'canceled':
-                $type = 'error';
-                break;
-            case 'error':
-                $type = 'error';
-                break;
+        if ($this->getModel()) {
+            switch ($this->getModel()->getStatus()->getName()) {
+                case 'active':
+                    $type = 'success';
+                    break;
+                case 'canceled':
+                    $type = 'error';
+                    break;
+                case 'error':
+                    $type = 'error';
+                    break;
 
-            case 'default':
-            case 'pending':
-                break;
+                case 'default':
+                case 'pending':
+                    break;
+            }
         }
 
         return $type;
