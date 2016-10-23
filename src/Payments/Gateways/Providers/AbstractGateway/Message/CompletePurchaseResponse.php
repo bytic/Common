@@ -2,10 +2,8 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasModelProcessedResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasView;
-use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
-use ByTIC\Common\Records\Traits\HasStatus\RecordTrait;
-use Nip\Records\Record;
 
 /**
  * Class PurchaseResponse
@@ -14,6 +12,7 @@ use Nip\Records\Record;
 abstract class CompletePurchaseResponse extends AbstractResponse
 {
     use HasView;
+    use HasModelProcessedResponse;
 
     protected $button = null;
 
@@ -61,14 +60,6 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * @return Record|RecordTrait|IsPurchasableModelTrait
-     */
-    public function getModel()
-    {
-        return $this->data['model'];
-    }
-
-    /**
      * @return string
      */
     public function getIconColor()
@@ -106,11 +97,6 @@ abstract class CompletePurchaseResponse extends AbstractResponse
 
         return $this;
     }
-
-    /**
-     * @return $this
-     */
-    abstract public function processModel();
 
     /**
      * @return null|string

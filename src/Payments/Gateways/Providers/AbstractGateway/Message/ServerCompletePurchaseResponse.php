@@ -2,17 +2,15 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\Traits\HasModelProcessedResponse;
+
 /**
  * Class ServerCompletePurchaseResponse
  * @package ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Messages
  */
 abstract class ServerCompletePurchaseResponse extends AbstractResponse
 {
-
-    /**
-     * @return $this
-     */
-    abstract public function processModel();
+    use HasModelProcessedResponse;
 
     public function send()
     {

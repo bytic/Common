@@ -14,6 +14,7 @@ use ByTIC\Common\Records\Records;
  *
  * @property int $id
  * @property string $status_notes
+ * @property string $received
  * @property string $created
  *
  * @method string getConfirmURL

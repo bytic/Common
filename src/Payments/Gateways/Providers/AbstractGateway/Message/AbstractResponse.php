@@ -9,4 +9,12 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
 
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public function getDataProperty($name)
+    {
+        return $this->data[$name];
+    }
 }

@@ -23,6 +23,7 @@ class ServerCompletePurchaseRequest extends AbstractRequest
             $this->pushData('valid', false);
             if ($this->validateModel() && $this->validateHash()) {
                 $this->pushData('valid', true);
+                $this->populateDataFromRequest();
             }
         }
     }
@@ -123,5 +124,10 @@ class ServerCompletePurchaseRequest extends AbstractRequest
 
         $this->pushData('dateReturn', $dateReturn);
         $this->pushData('hashReturn', $this->generateHmac($return));
+    }
+
+    protected function populateDataFromRequest()
+    {
+        $this->pushData('ipn_data', $this->httpRequest->request->all());
     }
 }
