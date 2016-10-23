@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ByTIC/Framework.git",
-                "reference": "98a60a174a81df44f0899d7e70495e11923cf1e8"
+                "reference": "3e58f0b05ad5d15cf2b6c2182c10b231bd241d10"
             },
             "require": {
                 "container-interop/container-interop": "1.1.*",
@@ -23,7 +23,8 @@
                 "nesbot/carbon": "^1.21",
                 "php": ">=5.5.0",
                 "sendgrid/sendgrid": "~5.0.7",
-                "swiftmailer/swiftmailer": "5.4.*"
+                "swiftmailer/swiftmailer": "5.4.*",
+                "symfony/http-foundation": "3.1.*"
             },
             "require-dev": {
                 "codeception/codeception": "2.2.*",
@@ -47,7 +48,7 @@
                 }
             ],
             "description": "Php Framework",
-            "time": "2016-10-21 16:19:32"
+            "time": "2016-10-23 08:16:17"
         },
         {
             "name": "container-interop/container-interop",
