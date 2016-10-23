@@ -33,4 +33,12 @@ class CompletePurchaseResponse extends AbstractResponse
     {
         return $this->data['valid'] === true;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function processModel()
+    {
+        return $this;
+    }
 }
