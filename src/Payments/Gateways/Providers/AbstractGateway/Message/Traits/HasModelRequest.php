@@ -58,6 +58,6 @@ trait HasModelRequest
      */
     protected function getModel()
     {
-        return $this->data['model'];
+        return $this->getDataItem('model');
     }
 }

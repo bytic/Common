@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
-use Nip\Records\RecordManager;
+use ByTIC\Common\Records\Records as RecordManager;
 use Nip\Utility\Traits\NameWorksTrait;
 use Omnipay\Common\Message\ResponseInterface;
 
@@ -72,9 +72,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     public function send()
     {
         if ($this->isProviderRequest()) {
-            $data = $this->getData();
-
-            return $this->sendData($data);
+            return parent::send();
         }
 
         return false;
@@ -155,7 +153,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      * @param $value
      * @return $this
      */
-    protected function pushData($key, $value)
+    public function pushData($key, $value)
     {
         $this->data = is_array($this->data) ? $this->data : [];
         $this->data[$key] = $value;
@@ -167,7 +165,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
      * @param $key
      * @return mixed
      */
-    protected function getDataItem($key)
+    public function getDataItem($key)
     {
         return $this->data[$key];
     }

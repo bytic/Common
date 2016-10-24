@@ -58,7 +58,7 @@ $messageType = $response->getMessageType();
                 </p>
             <?php } ?>
 
-            <?php if (!$response->isSuccessful()) { ?>
+            <?php if (!$response->isSuccessful() && !$response->isPending()) { ?>
                 <p>
                     <?php
                     /** @noinspection PhpStaticAsDynamicMethodCallInspection */
