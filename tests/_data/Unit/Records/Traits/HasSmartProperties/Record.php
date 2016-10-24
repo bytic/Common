@@ -19,4 +19,8 @@ class Record extends AbstractRecord
     public function getRegistry()
     {
     }
+
+    public function saveRecord()
+    {
+    }
 }

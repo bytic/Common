@@ -6,6 +6,7 @@ use ByTIC\Common\Records\Properties\AbstractProperty\Generic;
 use ByTIC\Common\Tests\Data\Unit\Records\Traits\HasSmartProperties\Record;
 use ByTIC\Common\Tests\Data\Unit\Records\Traits\HasSmartProperties\Records;
 use ByTIC\Common\Tests\Unit\AbstractTest;
+use Mockery as m;
 
 /**
  * Class TraitsTest
@@ -41,6 +42,16 @@ class RecordTraitTest extends AbstractTest
         $registrationStatus = $this->object->getSmartProperty('RegistrationStatus');
         self::assertInstanceOf(Generic::class, $registrationStatus);
         self::assertSame('unpaid', $registrationStatus->getName());
+    }
+
+    public function testUpdateSmartProperty()
+    {
+        $this->object->status = 'applicant';
+
+        self::assertSame('applicant', $this->object->getSmartProperty('Status')->getName());
+        $this->object->updateSmartProperty('Status', 'allocated');
+        self::assertSame('allocated', $this->object->status);
+        self::assertSame('allocated', $this->object->getSmartProperty('Status')->getName());
     }
 
     protected function setUp()

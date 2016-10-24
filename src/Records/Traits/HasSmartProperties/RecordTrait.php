@@ -115,7 +115,7 @@ trait RecordTrait
         if (!empty($value)) {
             $newStatus = $this->getNewSmartPropertyFromValue($name, $value);
             $return = $newStatus->update();
-
+            $this->setSmartProperty($name, $newStatus);
             return $return;
         }
 
