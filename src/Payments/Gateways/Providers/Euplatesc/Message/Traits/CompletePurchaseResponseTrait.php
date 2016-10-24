@@ -28,7 +28,7 @@ trait CompletePurchaseResponseTrait
      */
     public function getCode()
     {
-        return $this->data['ipn_data']['action'];
+        return $this->getIpnDataItem('action');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection
@@ -38,7 +38,7 @@ trait CompletePurchaseResponseTrait
      */
     public function getTransactionReference()
     {
-        return $this->data['ipn_data']['ep_id'];
+        return $this->getIpnDataItem('ep_id');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection
@@ -48,7 +48,7 @@ trait CompletePurchaseResponseTrait
      */
     public function getTransactionId()
     {
-        return $this->data['ipn_data']['invoice_id'];
+        return $this->getIpnDataItem('invoice_id');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection
@@ -56,7 +56,7 @@ trait CompletePurchaseResponseTrait
      */
     public function getTransactionDate()
     {
-        $timestamp = $this->data['ipn_data']['timestamp'];
+        $timestamp = $this->getIpnDataItem('timestamp');
         $dateTime = DateTime::createFromFormat('YmdHis', $timestamp);
 
         return $dateTime->format('Y-m-d H:i:s');
