@@ -94,4 +94,12 @@ trait HasModelProcessedResponse
     public function processModelData()
     {
     }
+
+    /**
+     * @return bool
+     */
+    public function hasModel()
+    {
+        return is_object($this->getModel());
+    }
 }

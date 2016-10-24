@@ -6,7 +6,6 @@
 $response = $this->get('response');
 $model = $response->getModel();
 $messageType = $response->getMessageType();
-$title = translator()->translate('payment-gateways.messages.confirm.'.$messageType.'.title');
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +35,7 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
 <div class="header">
     <h1 style="font-size: 36px; color: <?php echo $response->getIconColor() ?>">
         <i class="<?php echo $response->getIconClass() ?>" aria-hidden="true"></i>
-        <?php echo $title; ?>
+        <?php echo $response->getTitle(); ?>
     </h1>
 </div>
 <div class="container">
@@ -52,6 +51,10 @@ $title = translator()->translate('payment-gateways.messages.confirm.'.$messageTy
                     <?php
                     echo $this->Messages()->$messageType($model->getManager()->getMessage('confirm.'.$model->status));
                     ?>
+                </p>
+            <?php } else { ?>
+                <p>
+                    <?php echo $this->Messages()->error('Payment not found'); ?>
                 </p>
             <?php } ?>
 

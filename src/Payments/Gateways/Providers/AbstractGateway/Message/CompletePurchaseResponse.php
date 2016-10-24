@@ -39,7 +39,7 @@ abstract class CompletePurchaseResponse extends AbstractResponse
      */
     public function getMessageType()
     {
-        $type = 'info';
+        $type = 'error';
         if ($this->getModel()) {
             switch ($this->getModel()->getStatus()->getName()) {
                 case 'active':
@@ -54,11 +54,25 @@ abstract class CompletePurchaseResponse extends AbstractResponse
 
                 case 'default':
                 case 'pending':
+                    $type = 'info';
                     break;
             }
         }
 
         return $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        if ($this->hasModel()) {
+//            return $this->getModel()->getConfirmStatusTitle();
+            return translator()->translate('payment-gateways.messages.confirm.'.$this->getMessageType().'.title');
+        } else {
+            return 'Error confirming payment';
+        }
     }
 
     /**
@@ -75,14 +89,6 @@ abstract class CompletePurchaseResponse extends AbstractResponse
         }
 
         return '#5aa5e4';
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTitle()
-    {
-        return $this->getModel()->getConfirmStatusTitle();
     }
 
     /**
@@ -131,7 +137,7 @@ abstract class CompletePurchaseResponse extends AbstractResponse
      */
     public function isRedirect()
     {
-        return $this->getModel()->getStatus()->getName() === 'active';
+        return $this->hasModel() ? $this->getModel()->getStatus()->getName() === 'active' : false;
     }
 
     /**
