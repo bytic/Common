@@ -85,12 +85,21 @@ trait RecordTrait
      */
     public function findFiles()
     {
-        $file = $this->getNewFile();
-        $files = Nip_File_System::instance()->scanDirectory($file->getDirPath());
+        $files = Nip_File_System::instance()->scanDirectory($this->getFilesDirectory());
         natsort($files);
         $this->setFiles($files);
 
         return $this->files;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilesDirectory()
+    {
+        $file = $this->getNewFile();
+
+        return $file->getDirPath();
     }
 
     /**

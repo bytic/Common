@@ -44,26 +44,53 @@ class GatewayTest extends AbstractTest
     protected $purchaseManager;
 
 
-    protected function _before()
+    protected function setUp()
     {
-        $this->purchase = m::mock(PurchasableRecord::class)->makePartial();
+        parent::setUp();
+
+        $this->purchase = $this->generatePurchaseMock();
+        $this->setUpPurchaseManagerMock();
 
         $paymentMethod = new PaymentMethod();
+
         $type = new CreditCards();
         $type->setItem($paymentMethod);
         $paymentMethod->setType($type);
+
         $this->purchase->shouldReceive('getPaymentMethod')->andReturn($paymentMethod);
 
         $billing = new BillingRecord();
         $this->purchase->shouldReceive('getPurchaseBillingRecord')->andReturn($billing);
 
-        $this->purchaseManager = m::mock(PurchasableRecordManager::class)->makePartial();
-        $this->purchaseManager->shouldReceive('findOne')->withArgs([37250])->andReturn($this->purchase);
-        $this->purchaseManager->shouldReceive('findOne')->withArgs([37250])->andReturn($this->purchase);
-
-        $this->purchase->setManager($this->purchaseManager);
-
         $this->client = new \Guzzle\Http\Client();
         $this->gatewayManager = GatewaysManager::instance();
+    }
+
+    /**
+     * @return m\Mock
+     */
+    protected function generatePurchaseMock()
+    {
+        $purchase = m::mock(PurchasableRecord::class)->makePartial();
+
+        return $purchase;
+    }
+
+    protected function setUpPurchaseManagerMock()
+    {
+        $this->purchaseManager = $this->generatePurchaseManagerMock($this->purchase);
+        $this->purchase->setManager($this->purchaseManager);
+    }
+
+    /**
+     * @param $purchase
+     * @return m\Mock
+     */
+    protected function generatePurchaseManagerMock($purchase)
+    {
+        $purchaseManager = m::mock(PurchasableRecordManager::class)->makePartial();
+        $purchaseManager->shouldReceive('findOne')->withArgs([37250])->andReturn($purchase);
+
+        return $purchaseManager;
     }
 }

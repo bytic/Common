@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api;
 
 /**
  * Class Request

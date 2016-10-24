@@ -1,6 +1,10 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api;
+
+use DOMDocument;
+use DOMNode;
+use Exception;
 
 /**
  * Class Address
@@ -33,6 +37,10 @@ class Address
     public $bank = null;
     public $iban = null;
 
+    /**
+     * Address constructor.
+     * @param DOMNode|null $elem
+     */
     public function __construct(DOMNode $elem = null)
     {
 
@@ -41,6 +49,9 @@ class Address
         }
     }
 
+    /**
+     * @param DOMNode $elem
+     */
     protected function loadFromXml(DOMNode $elem)
     {
 
@@ -204,10 +215,12 @@ class Address
         return $addrElem;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
-
-        return array(
+        return [
             'ppiFirstName' => $this->firstName,
             'ppiLastName' => $this->lastName,
             'ppiCountry' => $this->country,
@@ -221,6 +234,6 @@ class Address
             'ppiIban' => $this->iban,
             'ppiFiscalNumber' => $this->fiscalNumber,
             'ppiIdentityNumber' => $this->identityNumber
-        );
+        ];
     }
 }

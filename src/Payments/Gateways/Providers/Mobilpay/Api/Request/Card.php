@@ -1,8 +1,8 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request;
 
-use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Invoice;
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Invoice;
 use DOMDocument;
 use DOMElement;
 use Exception;
@@ -24,6 +24,9 @@ class Card extends AbstractRequest
      */
     public $invoice = null;
 
+    /**
+     * AbstractRequest constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -53,6 +56,10 @@ class Card extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return mixed
+     * @throws Exception
+     */
     protected function prepare()
     {
         if (is_null($this->signature) || is_null($this->orderId) || !($this->invoice instanceof Invoice)) {
@@ -126,5 +133,4 @@ class Card extends AbstractRequest
 
         return $this;
     }
-
 }

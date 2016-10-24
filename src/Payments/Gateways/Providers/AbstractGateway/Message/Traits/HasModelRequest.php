@@ -16,15 +16,8 @@ trait HasModelRequest
     protected function validateModel()
     {
         $idModel = $this->getModelIdFromRequest();
-        $this->pushData('id', $idModel);
-        $model = $this->findModel($idModel);
-        if ($model) {
-            $this->pushData('model', $model);
 
-            return true;
-        }
-
-        return false;
+        return $this->setModelFromId($idModel);
     }
 
     /**
@@ -36,11 +29,35 @@ trait HasModelRequest
     }
 
     /**
+     * @param $idModel
+     * @return bool
+     */
+    protected function setModelFromId($idModel)
+    {
+        $this->pushData('id', $idModel);
+        $model = $this->findModel($idModel);
+        if ($model) {
+            $this->pushData('model', $model);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param $id
      * @return \Nip\Records\AbstractModels\Record
      */
     protected function findModel($id)
     {
         return $this->getModelManager()->findOne($id);
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getModel()
+    {
+        return $this->data['model'];
     }
 }

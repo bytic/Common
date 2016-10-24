@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Tests\Data\Unit\Payments;
 
 use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait as PaymentMethodTrait;
-use ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
 use Nip\Records\AbstractModels\Record;
 
 /**
@@ -11,10 +10,17 @@ use Nip\Records\AbstractModels\Record;
  */
 class PaymentMethod extends Record
 {
-    use RecordTrait;
     use PaymentMethodTrait;
 
     public function getRegistry()
     {
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilesDirectory()
+    {
+        return codecept_data_dir('PaymentGateways'.DIRECTORY_SEPARATOR);
     }
 }

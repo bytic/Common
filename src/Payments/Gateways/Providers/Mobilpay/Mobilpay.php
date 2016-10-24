@@ -33,11 +33,6 @@ class Mobilpay
     protected $certificate;
 
     /**
-     * @var Card
-     */
-    protected $cardRequest;
-
-    /**
      * @param $signature
      */
     public function setSignature($signature)

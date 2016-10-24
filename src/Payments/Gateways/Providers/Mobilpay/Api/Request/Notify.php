@@ -1,10 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request;
 
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Address;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use stdClass;
 
 /**
  * Class Mobilpay_Payment_Request_Notify
@@ -42,9 +44,11 @@ class Notify
 
     private $_crc = null;
 
-    function __construct()
+    /**
+     * Notify constructor.
+     */
+    public function __construct()
     {
-
     }
 
     public function loadFromXml(DOMElement $elem)
@@ -64,14 +68,16 @@ class Notify
 
         $elems = $elem->getElementsByTagName('action');
         if ($elems->length != 1) {
-            throw new Exception('Mobilpay_Payment_Request_Notify::loadFromXml failed; mandatory action attribute missing',
-                self::ERROR_LOAD_FROM_XML_ACTION_ELEM_MISSING);
+            throw new Exception(
+                'Mobilpay_Payment_Request_Notify::loadFromXml failed; mandatory action attribute missing',
+                self::ERROR_LOAD_FROM_XML_ACTION_ELEM_MISSING
+            );
         }
         $this->action = $elems->item(0)->nodeValue;
 
         $elems = $elem->getElementsByTagName('customer');
         if ($elems->length == 1) {
-            $this->customer = new Mobilpay_Payment_Address($elems->item(0));
+            $this->customer = new Address($elems->item(0));
         }
 
         $elems = $elem->getElementsByTagName('issuer');
@@ -206,7 +212,7 @@ class Notify
         $attr->nodeValue = date('YmdHis');
         $xmlNotifyElem->appendChild($attr);
 
-        $this->_crc = md5(rand() . time());
+        $this->_crc = md5(rand().time());
         $attr = $xmlDoc->createAttribute('crc');
         $attr->nodeValue = $this->_crc;
         $xmlNotifyElem->appendChild($attr);
@@ -215,7 +221,7 @@ class Notify
         $elem->nodeValue = $this->action;
         $xmlNotifyElem->appendChild($elem);
 
-        if ($this->customer instanceof Mobilpay_Payment_Address) {
+        if ($this->customer instanceof Address) {
 
             $xmlNotifyElem->appendChild($this->customer->createXmlElement($xmlDoc, 'customer'));
         }
@@ -309,7 +315,7 @@ class Notify
             foreach ($this->discounts as $d) {
                 $discount = $xmlDoc->createElement('discount');
                 //$discount
-                $attributes = Array('id', 'amount', 'currency', 'third_party');
+                $attributes = ['id', 'amount', 'currency', 'third_party'];
                 foreach ($attributes as $attr_name) {
                     $attr = $xmlDoc->createAttribute($attr_name);
                     $attr->nodeValue = $d->$attr_name;
@@ -330,9 +336,11 @@ class Notify
         return $xmlNotifyElem;
     }
 
+    /**
+     * @return null
+     */
     public function getCrc()
     {
-
         return $this->_crc;
     }
 }

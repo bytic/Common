@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Tests\Data\Unit\Payments;
 
+use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
 use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 use Nip\Records\AbstractModels\Record;
 
@@ -39,6 +40,9 @@ class PurchasableRecord extends Record
         return 'http://ipn.ro';
     }
 
+    /**
+     * @return RecordTrait
+     */
     public function getPaymentMethod()
     {
     }

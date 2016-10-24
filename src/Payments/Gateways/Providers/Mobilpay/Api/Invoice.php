@@ -1,7 +1,10 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api;
 
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Invoice\Item as InvoiceItem;
+use DOMDocument;
+use DOMNode;
 use Exception;
 
 /**
@@ -32,6 +35,10 @@ class Invoice
     protected $items = [];
     protected $exchangeRates = [];
 
+    /**
+     * Invoice constructor.
+     * @param DOMNode|null $elem
+     */
     public function __construct(DOMNode $elem = null)
     {
         if ($elem != null) {
@@ -39,6 +46,10 @@ class Invoice
         }
     }
 
+    /**
+     * @param DOMNode $elem
+     * @throws Exception
+     */
     protected function loadFromXml(DOMNode $elem)
     {
         $attr = $elem->attributes->getNamedItem('currency');
@@ -75,12 +86,12 @@ class Invoice
 
             $elems = $addrElem->getElementsByTagName('billing');
             if ($elems->length == 1) {
-                $this->billingAddress = new Mobilpay_Payment_Address($elems->item(0));
+                $this->billingAddress = new Address($elems->item(0));
             }
 
             $elems = $addrElem->getElementsByTagName('shipping');
             if ($elems->length == 1) {
-                $this->shippingAddress = new Mobilpay_Payment_Address($elems->item(0));
+                $this->shippingAddress = new Address($elems->item(0));
             }
         }
 
@@ -93,7 +104,7 @@ class Invoice
                 $amount = 0;
                 foreach ($elems as $itemElem) {
                     try {
-                        $objItem = new Mobilpay_Payment_Invoice_Item($itemElem);
+                        $objItem = new InvoiceItem($itemElem);
                         $this->items[] = $objItem;
                         $amount += $objItem->getTotalAmount();
                     } catch (Exception $e) {
@@ -122,6 +133,11 @@ class Invoice
         }
     }
 
+    /**
+     * @param DOMDocument $xmlDoc
+     * @return \DOMElement
+     * @throws Exception
+     */
     public function createXmlElement(DOMDocument $xmlDoc)
     {
         if (!($xmlDoc instanceof DOMDocument)) {
@@ -162,9 +178,9 @@ class Invoice
             $xmlInvElem->appendChild($xmlElem);
         }
 
-        if (($this->billingAddress instanceof Mobilpay_Payment_Address) || ($this->shippingAddress instanceof Mobilpay_Payment_Address)) {
+        if (($this->billingAddress instanceof Address) || ($this->shippingAddress instanceof Address)) {
             $xmlAddr = null;
-            if ($this->billingAddress instanceof Mobilpay_Payment_Address) {
+            if ($this->billingAddress instanceof Address) {
                 try {
                     $xmlElem = $this->billingAddress->createXmlElement($xmlDoc, 'billing');
                     if ($xmlAddr == null) {
@@ -175,7 +191,7 @@ class Invoice
                     $e = $e;
                 }
             }
-            if ($this->shippingAddress instanceof Mobilpay_Payment_Address) {
+            if ($this->shippingAddress instanceof Address) {
                 try {
                     $xmlElem = $this->shippingAddress->createXmlElement($xmlDoc, 'shipping');
                     if ($xmlAddr == null) {
@@ -194,7 +210,7 @@ class Invoice
         if (is_array($this->items) && sizeof($this->items) > 0) {
             $xmlItems = null;
             foreach ($this->items as $item) {
-                if (!($item instanceof Mobilpay_Payment_Invoice_Item)) {
+                if (!($item instanceof InvoiceItem)) {
                     continue;
                 }
                 try {
@@ -236,54 +252,86 @@ class Invoice
         return $xmlInvElem;
     }
 
+    /**
+     * @return Address
+     */
     public function getBillingAddress()
     {
         return $this->billingAddress;
     }
 
-    public function setBillingAddress(Mobilpay_Payment_Address $address)
+    /**
+     * @param Address $address
+     * @return $this
+     */
+    public function setBillingAddress(Address $address)
     {
         $this->billingAddress = $address;
 
         return $this;
     }
 
+    /**
+     * @return Address
+     */
     public function getShippingAddress()
     {
         return $this->shippingAddress;
     }
 
-    public function setShippingAddress(Mobilpay_Payment_Address $address)
+    /**
+     * @param Address $address
+     * @return $this
+     */
+    public function setShippingAddress(Address $address)
     {
         $this->shippingAddress = $address;
 
         return $this;
     }
 
-    public function addHeadItem(Mobilpay_Payment_Invoice_Item $item)
+    /**
+     * @param InvoiceItem $item
+     * @return $this
+     */
+    public function addHeadItem(Invoice\Item $item)
     {
         array_unshift($this->items, $item);
 
         return $this;
     }
 
-    public function addTailItem(Mobilpay_Payment_Invoice_Item $item)
+    /**
+     * @param InvoiceItem $item
+     * @return $this
+     */
+    public function addTailItem(InvoiceItem $item)
     {
         array_push($this->items, $item);
 
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function removeHeadItem()
     {
         return array_shift($this->items);
     }
 
+    /**
+     * @return mixed
+     */
     public function removeTailItem()
     {
         return array_pop($this->items);
     }
 
+    /**
+     * @param Mobilpay_Payment_Exchange_Rate $rate
+     * @return $this
+     */
     public function addHeadExchangeRate(Mobilpay_Payment_Exchange_Rate $rate)
     {
         array_unshift($this->exchangeRates, $rate);
@@ -291,6 +339,10 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @param Mobilpay_Payment_Exchange_Rate $rate
+     * @return $this
+     */
     public function addTailExchangeRate(Mobilpay_Payment_Exchange_Rate $rate)
     {
         array_push($this->exchangeRates, $rate);
@@ -298,11 +350,17 @@ class Invoice
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function removeHeadExchangeRate()
     {
         return array_shift($this->exchangeRates);
     }
 
+    /**
+     * @return mixed
+     */
     public function removeTailExchangeRate()
     {
         return array_pop($this->exchangeRates);

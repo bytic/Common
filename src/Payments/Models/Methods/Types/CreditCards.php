@@ -3,10 +3,12 @@
 namespace ByTIC\Common\Payments\Models\Methods\Types;
 
 use ByTIC\Common\Payments\Gateways\Traits\HasGatewaysTrait;
+use ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait as HasOptionsRecord;
 use Nip\Helpers\View\Messages as MessagesHelper;
 
 /**
  * Class Payment_Method_Type_Credit_Cards
+ * @method HasOptionsRecord getItem()
  */
 class CreditCards extends AbstractType
 {
@@ -26,7 +28,6 @@ class CreditCards extends AbstractType
         return false;
     }
 
-
     /**
      * @return bool
      */
@@ -44,8 +45,10 @@ class CreditCards extends AbstractType
     public function getGatewayOptions()
     {
         $name = $this->getGatewayName();
+        $options = $this->getItem()->getOption($name);
+        $options['PaymentMethod'] = $this->getItem();
 
-        return $this->getItem()->getOption($name);
+        return $options;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Request;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request;
 
 use DOMDocument;
 use DOMElement;
@@ -38,6 +38,7 @@ class Sms extends AbstractRequest
     /**
      * @param DOMElement $elem
      * @return $this
+     * @throws Exception
      */
     protected function loadFromXml(DOMElement $elem)
     {
@@ -58,9 +59,15 @@ class Sms extends AbstractRequest
         }
 
         $elem = $elem;
+
         return $this;
     }
 
+    /**
+     * @param $queryString
+     * @return $this
+     * @throws Exception
+     */
     protected function loadFromQueryString($queryString)
     {
         $parameters = explode('&', $queryString);
@@ -113,6 +120,9 @@ class Sms extends AbstractRequest
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     protected function prepare()
     {
         if (is_null($this->signature) || is_null($this->service) || is_null($this->orderId)) {

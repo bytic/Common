@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Request\Invoice;
+namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Invoice;
 
 use DOMDocument;
 use Exception;

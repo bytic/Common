@@ -17,6 +17,11 @@ trait RecordTrait
 {
     use HasTypesRecordTrait;
 
+    use \ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
+
+    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
+    use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
+
     /**
      * @return bool|Gateway|null
      */
@@ -38,15 +43,4 @@ trait RecordTrait
 
         return $this->getOption($gatewayName);
     }
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public abstract function getOption($name);
-
-    /**
-     * @return mixed
-     */
-    public abstract function getOptions();
 }

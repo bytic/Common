@@ -7,7 +7,10 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractReq
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseResponse;
+use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait as PaymentMethodRecord;
 use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
+use ByTIC\Common\Records\Record;
+use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecord;
 use Nip\Utility\Traits\NameWorksTrait;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Common\Message\ResponseInterface as MessageResponseInterface;
@@ -45,6 +48,11 @@ abstract class Gateway extends AbstractGateway
      * @var Manager
      */
     protected $manager;
+
+    /**
+     * @var PaymentMethodRecord
+     */
+    protected $paymentMethod;
 
     /**
      * @var Form
@@ -165,6 +173,22 @@ abstract class Gateway extends AbstractGateway
     public function setManager($manager)
     {
         $this->manager = $manager;
+    }
+
+    /**
+     * @return PaymentMethodRecord|Record|HasFilesRecord
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * @param PaymentMethodRecord $paymentMethod
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
     }
 
     /**
