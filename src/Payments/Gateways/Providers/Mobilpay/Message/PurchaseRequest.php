@@ -56,8 +56,8 @@ class PurchaseRequest extends AbstractPurchaseRequest
     {
         $card = $this->getMobilpayCardRequest();
         $card->orderId = $this->getOrderId();
-        $card->confirmUrl = $this->getReturnUrl();
-        $card->returnUrl = $this->getNotifyUrl();
+        $card->returnUrl = $this->getReturnUrl();
+        $card->confirmUrl = $this->getNotifyUrl();
         $card->invoice = $this->generateMobilpayPaymentInvoice();
 
         $card->encrypt($this->getCertificate());
