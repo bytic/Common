@@ -87,6 +87,87 @@ class Definition
      */
     public function getItemsNames()
     {
+        $names = $this->getItemsNamesFromManager();
+
+        return $names ? $names : $this->getItemsNamesFromFiles();
+    }
+
+    /**
+     * @return array|boolean
+     */
+    protected function getItemsNamesFromManager()
+    {
+        $methodName = 'get'.$this->getName().'Names';
+        if (method_exists($this->getManager(), $methodName)) {
+            return $this->getManager()->$methodName();
+        }
+
+        return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        if ($this->name === null) {
+            $this->initName();
+        }
+
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    protected function initName()
+    {
+        $name = inflector()->classify($this->getField());
+        $this->setName($name);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getField()
+    {
+        return $this->field;
+    }
+
+    /**
+     * @param mixed $field
+     */
+    public function setField($field)
+    {
+        $this->field = $field;
+    }
+
+    /**
+     * @return RecordManager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * @param RecordManager|RecordsTrait $manager
+     */
+    public function setManager($manager)
+    {
+        $this->manager = $manager;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getItemsNamesFromFiles()
+    {
         $files = FileSystem::instance()->scanDirectory($this->getItemsDirectory());
         foreach ($files as &$name) {
             $name = str_replace('.php', '', $name);
@@ -131,22 +212,6 @@ class Definition
     }
 
     /**
-     * @return RecordManager
-     */
-    public function getManager()
-    {
-        return $this->manager;
-    }
-
-    /**
-     * @param RecordManager|RecordsTrait $manager
-     */
-    public function setManager($manager)
-    {
-        $this->manager = $manager;
-    }
-
-    /**
      * @return string
      */
     protected function generatePropertyDirectory()
@@ -178,48 +243,6 @@ class Definition
     {
         $name = inflector()->pluralize($this->getName());
         $this->setLabel($name);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getName()
-    {
-        if ($this->name === null) {
-            $this->initName();
-        }
-
-        return $this->name;
-    }
-
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    protected function initName()
-    {
-        $name = inflector()->classify($this->getField());
-        $this->setName($name);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getField()
-    {
-        return $this->field;
-    }
-
-    /**
-     * @param mixed $field
-     */
-    public function setField($field)
-    {
-        $this->field = $field;
     }
 
     /**
