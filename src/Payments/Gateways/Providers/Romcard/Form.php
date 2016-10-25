@@ -1,7 +1,12 @@
 <?php
 
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm as AbstractForm;
+namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
 
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractForm;
+
+/**
+ * Class Form
+ */
 class Form extends AbstractForm
 {
 
