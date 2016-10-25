@@ -10,11 +10,11 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
 {
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getIpnData()
+    public function isValid()
     {
-        return $this->getDataProperty('ipn_data');
+        return $this->getDataProperty('valid') === true;
     }
 
     /**
@@ -24,6 +24,14 @@ abstract class AbstractResponse extends \Omnipay\Common\Message\AbstractResponse
     public function getDataProperty($name)
     {
         return $this->data[$name];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIpnData()
+    {
+        return $this->getDataProperty('ipn_data');
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseRequest as AbstractRequest;
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request\AbstractRequest as ApiAbstractRequest;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request\Notify;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\Traits\ParamSettersRequestTrait;
@@ -97,11 +98,7 @@ class ServerCompletePurchaseRequest extends AbstractRequest
             $this->setModelFromId($requestData->orderId);
             $model = $this->getModel();
             if ($model && $model->id == $getModel->id) {
-                $this->pushData('code', $requestData->errorCode);
-                $this->pushData('message', $requestData->errorMessage);
-                $this->pushData('requestData', $requestData);
-
-                $this->decodeRequestAction($requestData);
+                $this->decodeDataFromMobilpayRequest($requestData);
 
                 $_POST['data_decripted'] = print_r($requestData, true);
                 $this->httpRequest->request->set('data_decripted', print_r($requestData, true));
@@ -118,18 +115,29 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @param $requestData
+     * @param Request $requestData
      */
-    protected function decodeRequestAction($requestData)
+    protected function decodeDataFromMobilpayRequest($requestData)
     {
         /** @var Notify $notification */
         $notification = $requestData->objPmNotify;
-        $action = $notification->action;
-        $this->pushData('action', $action);
 
+        $this->pushData('requestData', $requestData);
+        $this->pushData('code', $notification->errorCode);
+        $this->pushData('message', $notification->errorMessage);
+        $this->pushData('action', $notification->action);
+        $this->pushData('notificationCrc', $notification->getCrc());
+        $this->decodeRequestAction($notification->action);
+    }
+
+    /**
+     * @param $action
+     */
+    protected function decodeRequestAction($action)
+    {
         $errorType = $this->data['codeType'];
         $errorCode = $this->data['code'];
-
+        $errorMessage = $this->data['message'];
 
         switch ($action) {
             case 'confirmed':
@@ -138,7 +146,6 @@ class ServerCompletePurchaseRequest extends AbstractRequest
             case 'paid':
             case 'canceled':
             case 'credit':
-                $errorMessage = $notification->getCrc();
                 break;
 
             default:

@@ -2,12 +2,16 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api;
 
+use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request\Notify;
+
 /**
  * Class Request
  * This class can be used for accessing mobilpay.ro payment interface for your configured online services
  * @copyright NETOPIA System
  * @author Claudiu Tudose
  * @version 1.0
+ *
+ * @property Notify objPmNotify
  *
  * This class uses  OpenSSL
  * In order to use the OpenSSL functions you need to install the OpenSSL package.

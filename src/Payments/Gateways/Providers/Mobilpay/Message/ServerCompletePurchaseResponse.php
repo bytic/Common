@@ -94,8 +94,8 @@ class ServerCompletePurchaseResponse extends AbstractResponse
         header('Content-type: application/xml');
         $content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
-        if ($this->getCode() == 0) {
-            $content .= "<crc>{$this->getMessage()}</crc>";
+        if ($this->getCodeType() == 0) {
+            $content .= "<crc>{$this->getDataProperty('notificationCrc')}</crc>";
         } else {
             $content .= "<crc error_type=\"{$this->getCodeType()}\" error_code=\"{$this->getCode()}\">";
             $content .= $this->getMessage();
@@ -106,16 +106,6 @@ class ServerCompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Response Message
-     *
-     * @return null|string A response message from the payment gateway
-     */
-    public function getMessage()
-    {
-        return $this->getDataProperty('message');
-    }
-
-    /**
      * Response code
      *
      * @return null|string A response code from the payment gateway
@@ -123,6 +113,16 @@ class ServerCompletePurchaseResponse extends AbstractResponse
     public function getCodeType()
     {
         return $this->getDataProperty('codeType');
+    }
+
+    /**
+     * Response Message
+     *
+     * @return null|string A response message from the payment gateway
+     */
+    public function getMessage()
+    {
+        return $this->getDataProperty('message');
     }
 
     /**
