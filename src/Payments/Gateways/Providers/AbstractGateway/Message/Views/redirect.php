@@ -129,7 +129,7 @@ $response = $this->get('response');
         }
     </style>
 </head>
-<body onload="document.forms1[0].submit();">
+<body onload="document.forms[0].submit();">
 <div class="header">
     <h1>
         <?php echo translator()->translate('payment-gateways.messages.redirect.header') ?>
