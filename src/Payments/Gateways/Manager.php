@@ -23,6 +23,11 @@ class Manager
     protected $items = null;
 
     /**
+     * @var null|array
+     */
+    protected $itemsName = null;
+
+    /**
      * @return Gateway[]|null
      */
     public function getItems()
@@ -76,6 +81,14 @@ class Manager
     {
         $name = $name ? $name : $gateway->getName();
         $this->items[$name] = $gateway;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getItemsName()
+    {
+        return $this->itemsName;
     }
 
     /**
