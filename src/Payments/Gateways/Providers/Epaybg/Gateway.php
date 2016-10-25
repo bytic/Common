@@ -4,11 +4,17 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as AbstractGateway;
 
+/**
+ * Class Gateway
+ * @package ByTIC\Common\Payments\Gateways\Providers\Epaybg
+ */
 class Gateway extends AbstractGateway
 {
-
     protected $label = 'ePayBg';
 
+    /**
+     * @return bool
+     */
     public function isActive()
     {
         if ($this->options['min'] && $this->options['secret']) {

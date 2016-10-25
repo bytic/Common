@@ -2,8 +2,12 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Euplatesc;
 
-use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm as AbstractForm;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractForm;
 
+/**
+ * Class Form
+ * @package ByTIC\Common\Payments\Gateways\Providers\Euplatesc
+ */
 class Form extends AbstractForm
 {
 
@@ -12,5 +16,4 @@ class Form extends AbstractForm
         $this->addInput('mid', 'MID');
         $this->addInput('key', 'Key');
     }
-
 }

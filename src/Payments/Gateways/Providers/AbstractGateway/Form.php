@@ -149,9 +149,11 @@ abstract class Form
         }
     }
 
+    /**
+     * @return bool
+     */
     public function process()
     {
         return true;
     }
 }
-

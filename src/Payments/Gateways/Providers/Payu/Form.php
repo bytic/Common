@@ -2,7 +2,13 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Payu;
 
-class Form extends \ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractForm;
+
+/**
+ * Class Form
+ * @package ByTIC\Common\Payments\Gateways\Providers\Payu
+ */
+class Form extends AbstractForm
 {
 
     public function initElements()
