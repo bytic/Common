@@ -322,7 +322,9 @@ trait HasModels
         if ($key == false) {
             throw new \Exception('initForeignModelFromRequest needs a key parameter');
         }
-        $this->call('getModelFromRequest', $name, false, [$key]);
+        $model = $this->call('getModelFromRequest', $name, false, [$key]);
+        $requestKey = $this->getRequestKeyFromString($name);
+        $this->getRequest()->attributes->set($requestKey, $model);
     }
 
     /**
