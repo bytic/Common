@@ -2,7 +2,8 @@
 
 namespace ByTIC\Common\Tests\Data\Unit\Payments;
 
-use ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
+use ByTIC\Common\Payments\Models\BillingRecord\Traits\RecordTrait as BillingRecordTrait;
+use ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait as HasSerializedOptions;
 use Nip\Records\AbstractModels\Record;
 
 /**
@@ -10,7 +11,10 @@ use Nip\Records\AbstractModels\Record;
  */
 class BillingRecord extends Record
 {
-    use RecordTrait;
+    use HasSerializedOptions;
+    use BillingRecordTrait;
+
+    public $phone = '99';
 
     /**
      * @return string

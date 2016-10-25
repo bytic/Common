@@ -7,6 +7,7 @@ use ByTIC\Common\Payments\Gateways\Providers\Euplatesc\Message\PurchaseResponse;
 use ByTIC\Common\Tests\Data\Unit\Payments\Gateways\Providers\Euplatesc\EuplatescData;
 use ByTIC\Common\Tests\Data\Unit\Payments\PaymentMethod;
 use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
+use Codeception\Util\Debug;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -36,15 +37,26 @@ class GatewayTest extends AbstractGatewayTest
 
         //Validate first Response
         $body = $gatewayResponse->getBody(true);
-        $crawler = new Crawler('<body>'.$body.'</body>', $gatewayResponse->getEffectiveUrl());
-        $form = $crawler->filter('form')->form();
+        Debug::debug($body);
 
-        self::assertSame('https://secure2.euplatesc.ro/tdsprocess/tranzactd.php', $form->getUri());
-        self::assertCount(12, $form->getValues());
+        if (strpos($body, '<META HTTP-EQUIV=') === false) {
+            $crawler = new Crawler('<body>'.$body.'</body>', $gatewayResponse->getEffectiveUrl());
+            $form = $crawler->filter('form')->form();
+
+            self::assertSame('https://secure2.euplatesc.ro/tdsprocess/tranzactd.php', $form->getUri());
+            self::assertCount(14, $form->getValues());
+
+            $gatewaySecondResponse = $this->client->post($form->getUri(), null, $form->getValues())->send();
+        } else {
+            $uri = str_replace("<META HTTP-EQUIV='Refresh' CONTENT='0;URL=", '', $body);
+            $uri = str_replace("'>", '', $uri);
+
+            $gatewaySecondResponse = $this->client->get($uri)->send();
+        }
 
         //Validate first Response
-        $gatewaySecondResponse = $this->client->post($form->getUri(), null, $form->getValues())->send();
         $body = $gatewaySecondResponse->getBody(true);
+
         self::assertContains('checkout_plus.php', $body);
         self::assertContains('cart_id=', $body);
     }
