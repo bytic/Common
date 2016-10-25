@@ -64,6 +64,9 @@ trait IsPurchasableModelTrait
             $params['firstName'] = $billing->getFirstName();
             $params['lastName'] = $billing->getLastName();
             $params['email'] = $billing->getEmail();
+            $params['phone'] = $billing->getPurchasePhone();
+            $params['city'] = $billing->getPurchaseCity();
+            $params['country'] = $billing->getPurchaseCountry();
         }
 
         return $params;
