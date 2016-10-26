@@ -198,6 +198,11 @@ class Definition
      */
     public function generateItemsDirectory()
     {
+        $methodName = 'get'.$this->getName().'ItemsDirectory';
+        if (method_exists($this->getManager(), $methodName)) {
+            return $this->getManager()->$methodName();
+        }
+
         return $this->generateManagerDirectory().DIRECTORY_SEPARATOR.$this->generatePropertyDirectory();
     }
 
