@@ -289,7 +289,7 @@ class Definition
     {
         $type = $type ? $type : $this->getDefaultValue();
 
-        return $this->getItemsRootNamespace().inflector()->classify($type);
+        return $this->getPropertyItemsRootNamespace().inflector()->classify($type);
     }
 
     /**
@@ -351,8 +351,12 @@ class Definition
     /**
      * @return string
      */
-    public function getItemsRootNamespace()
+    protected function getPropertyItemsRootNamespace()
     {
+        $method = 'get'.$this->getName().'ItemsRootNamespace';
+        if (method_exists($this->getManager(), $method)) {
+            return $this->getManager()->{$method}();
+        }
         return $this->getManager()->getModelNamespace().$this->getLabel().'\\';
     }
 
