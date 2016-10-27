@@ -3,14 +3,22 @@
 namespace ByTIC\Common\Controllers\Traits\Async;
 
 use ImgPicker;
+use Nip\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * Class Gallery
+ * @package ByTIC\Common\Controllers\Traits\Async
+ *
+ * @method Request getRequest()
+ */
 trait Gallery
 {
     public function uploadGallery()
     {
         $item = $this->checkItem();
 
-        $options = array(
+        $options = [
 
             // Upload directory path
             'upload_dir' => TMP_PATH,
@@ -25,7 +33,7 @@ trait Gallery
             'mkdir_mode' => 0777,
 
             // File size restrictions (in bytes):
-            'max_file_size' => $this->getRequest()->server->getMaxFileSize(),
+            'max_file_size' => UploadedFile::getMaxFilesize(),
             'min_file_size' => 1,
 
             // Image resolution restrictions (in px):
@@ -63,7 +71,7 @@ trait Gallery
              * @return void
              */
             'upload_start' => function ($image, $instance) {
-                $image->name = '~toCropFP' . $item->ID . '-' . rand(1000, 4000) . '.' . $image->type;
+                $image->name = '~toCropFP'.$item->ID.'-'.rand(1000, 4000).'.'.$image->type;
             },
 
             /**
@@ -84,7 +92,7 @@ trait Gallery
              * @return void
              */
             'crop_start' => function ($image, $instance) {
-                $image->name = sha1(microtime()) . '.' . $image->type;
+                $image->name = sha1(microtime()).'.'.$image->type;
             },
 
             /**
@@ -95,13 +103,13 @@ trait Gallery
              * @return void
              */
             'crop_complete' => function ($image, $instance) {
-                foreach (array('full', 'default') as $version) {
+                foreach (['full', 'default'] as $version) {
                     $filename = $instance->getVersionFilename($image->name, $version);
                     $filepath = $instance->getUploadPath($filename, $version);
-                    rename($filepath, str_replace('-' . $version . '.', '.', $filepath));
+                    rename($filepath, str_replace('-'.$version.'.', '.', $filepath));
                 }
-            }
-        );
+            },
+        ];
         if (@$_POST['action'] == 'crop') {
             // Image versions:
             $options['versions'] = array(
@@ -109,20 +117,21 @@ trait Gallery
                     'upload_dir' => $item->getImageBasePath('full'),
                     'upload_url' => $item->getImageBaseURL('full'),
                     'max_width' => 1600,
-                    'max_height' => 1600
+                    'max_height' => 1600,
                 ),
                 'default' => array(
                     'upload_dir' => $item->getImageBasePath('default'),
                     'upload_url' => $item->getImageBaseURL('default'),
                     'max_width' => $item->getImageWidth(),
-                    'crop' => $item->getImageHeight()
+                    'crop' => $item->getImageHeight(),
                 ),
             );
         }
 
-        if(intval($_SERVER['CONTENT_LENGTH'])>0 && count($_POST)===0){
-            $maxSize = round(($this->getRequest()->server->getMaxFileSize() / 1048576), 2) . 'MB';
+        if (intval($_SERVER['CONTENT_LENGTH']) > 0 && count($_POST) === 0) {
+            $maxSize = round(($this->getRequest()->server->getMaxFileSize() / 1048576), 2).'MB';
             $this->_response['error'] = 'File to big. Max size ['.$maxSize.']';
+
             return $this->_output();
         }
 
