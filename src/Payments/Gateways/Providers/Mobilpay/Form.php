@@ -35,7 +35,7 @@ class Form extends AbstractForm
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('public.cer');
 
-            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(array('file' => 'public.cer')).'">[Delete]</a>';
+            $text = '<a href="' . $this->getForm()->getModel()->getDeteleFileURL(array('file' => 'public.cer')) . '">[Delete]</a>';
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {
@@ -48,7 +48,7 @@ class Form extends AbstractForm
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('private.key');
 
-            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(array('file' => 'private.key')).'">[Delete]</a>';
+            $text = '<a href="' . $this->getForm()->getModel()->getDeteleFileURL(array('file' => 'private.key')) . '">[Delete]</a>';
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {

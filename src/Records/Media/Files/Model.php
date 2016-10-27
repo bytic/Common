@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Media\Files;
 
+use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
 use Nip\Records\Record;
 use Nip_File_System;
 use ZipArchive;
@@ -50,11 +51,18 @@ class Model
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getExtensions()
     {
         return $this->_extensions;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public function parseName($name)
     {
         return str_replace(' ', '-', $name);
@@ -99,17 +107,17 @@ class Model
 
     public function getUrl()
     {
-        return $this->_url ? $this->_url : $this->getUrlPath().$this->_name;
+        return $this->_url ? $this->_url : $this->getUrlPath() . $this->_name;
     }
 
     public function getUrlPath()
     {
-        return UPLOADS_URL.$this->getRoutePath();
+        return UPLOADS_URL . $this->getRoutePath();
     }
 
     public function getRoutePath()
     {
-        return 'files/'.$this->getModel()->getManager()->getTable().'/'.$this->getModel()->id.'/';
+        return 'files/' . $this->getModel()->getManager()->getTable() . '/' . $this->getModel()->id . '/';
     }
 
     /**
@@ -121,7 +129,7 @@ class Model
     }
 
     /**
-     * @param Record $model
+     * @param Record|RecordTrait $model
      * @return $this
      */
     public function setModel(Record $model)
@@ -130,16 +138,25 @@ class Model
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getExtension()
     {
         return Nip_File_System::instance()->getExtension($this->getPath());
     }
 
+    /**
+     * @return string
+     */
     public function getPath()
     {
-        return $this->_path ? $this->_path : $this->getDirPath().$this->getName();
+        return $this->_path ? $this->_path : $this->getDirPath() . $this->getName();
     }
 
+    /**
+     * @return string
+     */
     public function getDirPath()
     {
         return UPLOADS_PATH . $this->getRoutePath();
@@ -163,6 +180,9 @@ class Model
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getContentType()
     {
         $fInfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -170,6 +190,9 @@ class Model
         return finfo_file($fInfo, $this->getPath());
     }
 
+    /**
+     * @return int
+     */
     public function getTime()
     {
         return filemtime($this->_path);
@@ -183,7 +206,7 @@ class Model
      */
     public function formatSize($precision = 2)
     {
-        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
 
         $bytes = max($this->getSize(), 0);
         $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
@@ -191,9 +214,12 @@ class Model
 
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision).' '.$units[$pow];
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
+    /**
+     * @return int
+     */
     public function getSize()
     {
         return filesize($this->_path);
@@ -207,6 +233,9 @@ class Model
         return $this->errors;
     }
 
+    /**
+     * @return string
+     */
     public function getDefaultName()
     {
         return 'file';

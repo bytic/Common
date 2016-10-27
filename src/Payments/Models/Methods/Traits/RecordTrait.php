@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Models\Methods\Traits;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
+use ByTIC\Common\Payments\Models\Methods\Files\MobilpayFile;
 use ByTIC\Common\Payments\Models\Methods\Types\AbstractType;
 use ByTIC\Common\Payments\Models\Methods\Types\CreditCards;
 use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypesRecordTrait;
@@ -20,7 +21,9 @@ trait RecordTrait
     use \ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
 
     use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
-    use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
+    use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait {
+        RecordTrait::getFileModelName as getFileModelNameAbstract;
+    }
 
     /**
      * @return bool|Gateway|null
@@ -42,5 +45,18 @@ trait RecordTrait
         $gatewayName = $this->getOption('payment_gateway');
 
         return $this->getOption($gatewayName);
+    }
+
+
+    /**
+     * @param null $type
+     * @return string
+     */
+    public function getFileModelName($type = null)
+    {
+        if ($type == 'Mobilpay') {
+            return MobilpayFile::class;
+        }
+        return $this->getFileModelNameAbstract($type);
     }
 }

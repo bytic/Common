@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
+use ByTIC\Common\Payments\Forms\Traits\PaymentMethodFormTrait;
 use Nip_Form as NipForm;
 
 /**
@@ -63,7 +64,7 @@ abstract class Form
     }
 
     /**
-     * @return NipForm
+     * @return NipForm|PaymentMethodFormTrait
      */
     public function getForm()
     {

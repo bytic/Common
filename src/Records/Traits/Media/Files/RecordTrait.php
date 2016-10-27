@@ -45,11 +45,12 @@ trait RecordTrait
 
     /**
      * File factory
+     * @param null $type
      * @return ModelFile
      */
-    public function getNewFile()
+    public function getNewFile($type = null)
     {
-        $class = $this->getFileModelName();
+        $class = $this->getFileModelName($type);
         /** @var ModelFile $file */
         $file = new $class();
 
@@ -58,10 +59,14 @@ trait RecordTrait
     }
 
     /**
+     * @param null $type
      * @return string
      */
-    public function getFileModelName()
+    public function getFileModelName($type = null)
     {
+        if ($type) {
+            return $this->getManager()->getModel() . "_File_" . ucfirst($type);
+        }
         return $this->getManager()->getModel() . "_File";
     }
 
