@@ -56,4 +56,11 @@ trait RecordsTrait
      * @return string
      */
     abstract public function getModelNamespace();
+
+    /**
+     * @param $name
+     * @param array $params
+     * @return mixed
+     */
+    abstract public function hasMany($name, $params = []);
 }
