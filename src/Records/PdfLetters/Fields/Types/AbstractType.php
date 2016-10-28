@@ -12,14 +12,12 @@ abstract class AbstractType extends Generic
 {
 
     /**
-     * @param $tags
+     * @param $model
+     * @return null
      */
-    public function populateTags(&$tags)
+    public function getValue($model)
     {
-        $typeTags = (array)$this->providesTags();
-        $categoryTags = isset($tags[$this->getCategory()]) ? $tags[$this->getCategory()] : [];
-        $categoryTags = array_merge($categoryTags, $typeTags);
-        $tags[$this->getCategory()] = $categoryTags;
+        return null;
     }
 
     /**

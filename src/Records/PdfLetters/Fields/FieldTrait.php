@@ -2,7 +2,9 @@
 
 namespace ByTIC\Common\Records\PdfLetters\Fields;
 
+use ByTIC\Common\Records\PdfLetters\Fields\Types\AbstractType;
 use ByTIC\Common\Records\Record;
+use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypeRecordTrait;
 use FPDI;
 
 /**
@@ -15,9 +17,13 @@ use FPDI;
  * @property string $align
  * @property string $x
  * @property string $y
+ *
+ * @method FieldsTrait getManager()
+ * @method AbstractType getType()
  */
 trait FieldTrait
 {
+    use HasTypeRecordTrait;
 
     /**
      * @return string
@@ -25,6 +31,14 @@ trait FieldTrait
     public function getName()
     {
         return translator()->translate($this->field);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTypeValue()
+    {
+        return $this->getManager()->getFieldTypeFromMergeTag($this->field);
     }
 
     /**
@@ -59,9 +73,19 @@ trait FieldTrait
     }
 
     /**
-     * @param Record $result
+     * @param Record $model
+     * @return string
      */
-    abstract public function getValue($result);
+    public function getValue($model)
+    {
+        if ($model->id > 0) {
+            $valueType = $this->getType()->getValue($model);
+
+            return $valueType;
+        }
+
+        return '<<'.$this->field.'>>';
+    }
 
     /**
      * @param FPDI $pdf

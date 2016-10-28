@@ -19,6 +19,10 @@ trait FieldsTrait
      * @var null|array
      */
     protected $mergeFields = null;
+    /**
+     * @var null
+     */
+    protected $mergeFieldsType = null;
 
     /**
      * @return array
@@ -34,22 +38,40 @@ trait FieldsTrait
 
     protected function initMergeFields()
     {
-        $this->mergeFields = $this->generateMergeFields();
+        /** @var AbstractType[] $types */
+        $types = $this->getTypes();
+        $this->mergeFields = [];
+        foreach ($types as $type) {
+            $this->populateTagsFromType($type);
+        }
     }
 
     /**
-     * @return array
+     * @param AbstractType $type
      */
-    protected function generateMergeFields()
+    public function populateTagsFromType($type)
     {
-        /** @var AbstractType[] $types */
-        $types = $this->getTypes();
-        $tags = [];
-        foreach ($types as $type) {
-            $type->populateTags($tags);
+        $typeTags = (array)$type->providesTags();
+        foreach ($typeTags as $tag) {
+            $this->mergeFields[$type->getCategory()][] = $tag;
+            $this->mergeFieldsType[$tag] = $type->getName();
+        }
+    }
+
+    /**
+     * @param $tag
+     * @return null|string
+     */
+    public function getFieldTypeFromMergeTag($tag)
+    {
+        if ($this->mergeFieldsType === null) {
+            $this->initMergeFields();
+        }
+        if (isset($this->mergeFieldsType[$tag])) {
+            return $this->mergeFieldsType[$tag];
         }
 
-        return $tags;
+        return null;
     }
 
     /**
