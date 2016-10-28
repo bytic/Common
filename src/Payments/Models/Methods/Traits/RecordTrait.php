@@ -13,6 +13,7 @@ use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypesRecordTrait;
  * @package ByTIC\Common\Payments\Models\Methods\Traits
  *
  * @method AbstractType|CreditCards getType
+ * @method RecordsTrait getManager()
  */
 trait RecordTrait
 {
