@@ -22,7 +22,7 @@ trait RecordTrait
 
     use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
     use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait {
-        RecordTrait::getFileModelName as getFileModelNameAbstract;
+        getFileModelName as getFileModelNameAbstract;
     }
 
     /**

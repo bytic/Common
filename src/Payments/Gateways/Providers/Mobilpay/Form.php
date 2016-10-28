@@ -3,7 +3,9 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\Mobilpay;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractForm;
+use ByTIC\Common\Payments\Models\Methods\Files\MobilpayFile;
 use Nip_File_System;
+use Nip_Form_Element_Select as SelectElement;
 
 /**
  * Class Form
@@ -12,17 +14,22 @@ use Nip_File_System;
 class Form extends AbstractForm
 {
 
-    protected $_files = [];
+    protected $files = [];
 
     public function initElements()
     {
-        $this->addRadioGroup('sandbox', 'sandbox', true);
+        $this->initElementSandbox();
+        $this->getForm()->addInput('signature', 'Signature', false);
+    }
+
+    protected function initElementSandbox()
+    {
+        $this->getForm()->addRadioGroup('sandbox', 'sandbox', true);
+        /** @var SelectElement $element */
         $element = $this->getForm()->getElement('mobilpay[sandbox]');
         $element->getRenderer()->setSeparator('');
         $element->addOption('yes', 'Yes');
         $element->addOption('no', 'No');
-
-        $this->addInput('signature', 'Signature', false);
     }
 
     public function getDataFromModel()
@@ -30,37 +37,43 @@ class Form extends AbstractForm
         parent::getDataFromModel();
         $files = $this->getForm()->getModel()->findFiles();
         if (is_object($files['public.cer'])) {
-            $this->addInput('file', 'Certificate', true);
+            $this->getForm()->addInput('file', 'Certificate', true);
             $element = $this->getForm()->getElement('mobilpay[file]');
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('public.cer');
 
-            $text = '<a href="' . $this->getForm()->getModel()->getDeteleFileURL(array('file' => 'public.cer')) . '">[Delete]</a>';
+            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(['file' => 'public.cer']).'">
+                [Delete]</a>
+            ';
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {
-            $this->addFile('file', 'Certificate', false);
+            $this->getForm()->addFile('file', 'Certificate', false);
         }
 
         if (is_object($files['private.key'])) {
-            $this->addInput('private-key', 'Private key', true);
+            $this->getForm()->addInput('private-key', 'Private key', true);
             $element = $this->getForm()->getElement('mobilpay[private-key]');
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('private.key');
 
-            $text = '<a href="' . $this->getForm()->getModel()->getDeteleFileURL(array('file' => 'private.key')) . '">[Delete]</a>';
+            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(['file' => 'private.key']).'">
+                        [Delete]
+                    </a>';
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {
-            $this->addFile('private-key', 'Private key', false);
+            $this->getForm()->addFile('private-key', 'Private key', false);
         }
         $this->getForm()->getDisplayGroup($this->getGateway()->getLabel())
             ->addElement($this->getForm()->getElement('mobilpay[file]'));
         $this->getForm()->getDisplayGroup($this->getGateway()->getLabel())
             ->addElement($this->getForm()->getElement('mobilpay[private-key]'));
-
     }
 
+    /**
+     * @return bool
+     */
     public function processValidation()
     {
         if ($_FILES['mobilpay']) {
@@ -70,7 +83,7 @@ class Form extends AbstractForm
                     $publicData,
                     $this->getFileModel('public.cer')->getExtensions());
                 if ($errorPublic) {
-                    $this->getForm()->getElement('mobilpay[file]')->addError($error);
+                    $this->getForm()->getElement('mobilpay[file]')->addError($errorPublic);
                 }
             }
 
@@ -81,7 +94,7 @@ class Form extends AbstractForm
                     $this->getFileModel('private.key')->getExtensions());
 
                 if ($errorPrivate) {
-                    $this->getForm()->getElement('mobilpay[private-key]')->addError($error);
+                    $this->getForm()->getElement('mobilpay[private-key]')->addError($errorPrivate);
                 }
             }
         }
@@ -89,18 +102,24 @@ class Form extends AbstractForm
         return true;
     }
 
+    /**
+     * @param $type
+     * @return MobilpayFile
+     */
     public function getFileModel($type)
     {
-        if (!$this->_files[$type]) {
+        if (!$this->files[$type]) {
             $model = $this->getForm()->getModel();
 
-            $this->_files[$type] = new Payment_Method_File_Mobilpay();
-            $this->_files[$type]->setModel($model);
+            return $model->getNewFile('Mobilpay');
         }
 
-        return $this->_files[$type];
+        return $this->files[$type];
     }
 
+    /**
+     * @return bool
+     */
     public function process()
     {
         $fileData = $this->getForm()->getElement('mobilpay[file]')->getValue();

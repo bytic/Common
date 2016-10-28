@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Records\Media\Files;
 
+use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
-use Nip\Records\Record;
 use Nip_File_System;
 use ZipArchive;
 
@@ -14,34 +14,58 @@ use ZipArchive;
 class Model
 {
 
-    protected $_extensions = ["swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"];
+    /**
+     * @var array
+     */
+    protected $extensions = ["swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"];
 
     /**
      * @var Record
      */
-    protected $_model;
+    protected $model;
 
-    protected $_name;
-    protected $_path;
-    protected $_url;
+    /**
+     * @var
+     */
+    protected $name;
 
-    protected $_size;
+    /**
+     * @var
+     */
+    protected $path;
 
+    /**
+     * @var
+     */
+    protected $url;
+
+    /**
+     * @var
+     */
+    protected $size;
+
+    /**
+     * @var
+     */
     protected $errors;
 
+    /**
+     * @param $upload
+     * @return bool
+     */
     public function upload($upload)
     {
         $error = Nip_File_System::instance()->getUploadError($upload, $this->getExtensions());
         if (!$error) {
             $this->setName($this->parseName($upload['name']));
 
-            Nip_File_System::instance()->createDirectory(dirname($this->_path));
+            Nip_File_System::instance()->createDirectory(dirname($this->path));
 
-            if (!move_uploaded_file($upload["tmp_name"], $this->_path)) {
+            if (!move_uploaded_file($upload["tmp_name"], $this->path)) {
                 return false;
             }
 
-            chmod($this->_path, 0777);
+            chmod($this->path, 0777);
 
             return true;
         } else {
@@ -56,7 +80,7 @@ class Model
      */
     public function getExtensions()
     {
-        return $this->_extensions;
+        return $this->extensions;
     }
 
     /**
@@ -68,15 +92,19 @@ class Model
         return str_replace(' ', '-', $name);
     }
 
+    /**
+     * @param bool $dir
+     * @return bool
+     */
     public function unzip($dir = false)
     {
         if (!$dir) {
-            $dir = dirname($this->_path);
+            $dir = dirname($this->path);
         }
 
         $zip = new ZipArchive();
 
-        if ($zip->open($this->_path) === true) {
+        if ($zip->open($this->path) === true) {
             $zip->extractTo($dir);
             $zip->close();
 
@@ -91,10 +119,14 @@ class Model
      */
     public function delete()
     {
-        Nip_File_System::instance()->deleteFile($this->_path);
+        Nip_File_System::instance()->deleteFile($this->path);
+
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getEmbedURL()
     {
         $url = 'http://docs.google.com/gview';
@@ -102,22 +134,31 @@ class Model
         $params['url'] = $this->getUrl();
         $params['embedded'] = 'true';
 
-        return $url . '?' . http_build_query($params);
+        return $url.'?'.http_build_query($params);
     }
 
+    /**
+     * @return string
+     */
     public function getUrl()
     {
-        return $this->_url ? $this->_url : $this->getUrlPath() . $this->_name;
+        return $this->url ? $this->url : $this->getUrlPath().$this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getUrlPath()
     {
-        return UPLOADS_URL . $this->getRoutePath();
+        return UPLOADS_URL.$this->getRoutePath();
     }
 
+    /**
+     * @return string
+     */
     public function getRoutePath()
     {
-        return 'files/' . $this->getModel()->getManager()->getTable() . '/' . $this->getModel()->id . '/';
+        return 'files/'.$this->getModel()->getManager()->getTable().'/'.$this->getModel()->id.'/';
     }
 
     /**
@@ -125,7 +166,7 @@ class Model
      */
     public function getModel()
     {
-        return $this->_model;
+        return $this->model;
     }
 
     /**
@@ -134,7 +175,8 @@ class Model
      */
     public function setModel(Record $model)
     {
-        $this->_model = $model;
+        $this->model = $model;
+
         return $this;
     }
 
@@ -151,7 +193,7 @@ class Model
      */
     public function getPath()
     {
-        return $this->_path ? $this->_path : $this->getDirPath() . $this->getName();
+        return $this->path ? $this->path : $this->getDirPath().$this->getName();
     }
 
     /**
@@ -159,12 +201,12 @@ class Model
      */
     public function getDirPath()
     {
-        return UPLOADS_PATH . $this->getRoutePath();
+        return UPLOADS_PATH.$this->getRoutePath();
     }
 
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -173,9 +215,9 @@ class Model
      */
     public function setName($name)
     {
-        $this->_name = $name;
-        $this->_path = $this->getPath();
-        $this->_url = $this->getUrl();
+        $this->name = $name;
+        $this->path = $this->getPath();
+        $this->url = $this->getUrl();
 
         return $this;
     }
@@ -195,7 +237,7 @@ class Model
      */
     public function getTime()
     {
-        return filemtime($this->_path);
+        return filemtime($this->path);
     }
 
     /**
@@ -214,7 +256,7 @@ class Model
 
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision) . ' ' . $units[$pow];
+        return round($bytes, $precision).' '.$units[$pow];
     }
 
     /**
@@ -222,7 +264,7 @@ class Model
      */
     public function getSize()
     {
-        return filesize($this->_path);
+        return filesize($this->path);
     }
 
     /**

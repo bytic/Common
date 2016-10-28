@@ -8,5 +8,5 @@ namespace ByTIC\Common\Payments\Models\Methods\Files;
  */
 class MobilpayFile extends AbstractFile
 {
-    protected $_extensions = ["cer", "key"];
+    protected $extensions = ["cer", "key"];
 }

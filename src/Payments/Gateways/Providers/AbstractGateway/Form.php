@@ -93,11 +93,10 @@ abstract class Form
     }
 
     /**
-     * @return bool
+     * @return void
      */
     public function initElements()
     {
-        return false;
     }
 
     /**
@@ -109,7 +108,7 @@ abstract class Form
             $gName = $this->getGateway()->getName();
             $options = $this->getForm()->getModel()->getOption($gName);
             foreach ($this->elements as $name => $inputName) {
-                $element = $this->getForm()->$inputName;
+                $element = $this->getForm()->{$inputName};
                 $element->setValue($options[$name]);
             }
         }
@@ -118,11 +117,10 @@ abstract class Form
 
     /**
      * @param $request
-     * @return bool
+     * @return void
      */
     public function getDataFromRequest($request)
     {
-        return true;
     }
 
     /**
@@ -141,7 +139,7 @@ abstract class Form
             if ($this->getForm()->getModel()->getOption('payment_gateway') == $gName) {
                 $options = [];
                 foreach ($this->elements as $name => $inputName) {
-                    $element = $this->getForm()->$inputName;
+                    $element = $this->getForm()->{$inputName};
                     $options[$name] = $element->getValue();
                 }
 
