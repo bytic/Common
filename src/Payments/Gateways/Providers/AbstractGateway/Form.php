@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
 use ByTIC\Common\Payments\Forms\Traits\PaymentMethodFormTrait;
+use Nip\Form\Traits\MagicMethodElementsFormTrait;
 use Nip_Form as NipForm;
 
 /**
@@ -11,6 +12,7 @@ use Nip_Form as NipForm;
  */
 abstract class Form
 {
+    use MagicMethodElementsFormTrait;
 
     /**
      * @var Gateway
@@ -24,43 +26,22 @@ abstract class Form
 
     protected $elements;
 
-    /**
-     * @param $name
-     * @param $arguments
-     * @return mixed
-     */
-    public function __call($name, $arguments)
+    public function init()
     {
-        if (strpos($name, 'add') === 0) {
-            $type = str_replace('add', '', $name);
-            $type[0] = strtolower($type[0]);
-            $name = '' . $this->getGateway()->getName() . '[' . $arguments[0] . ']';
-            $this->elements[$arguments[0]] = $name;
-            $label = $arguments[1];
-            $isRequired = $arguments[2];
-            return $this->getForm()->add($name, $label, $type, $isRequired);
+        $this->initElements();
+        if (is_array($this->elements) && count($this->elements) > 0) {
+            $this->getForm()->addDisplayGroup($this->elements, $this->getGateway()->getLabel());
+            $this->getForm()->getDisplayGroup($this->getGateway()->getLabel())
+                ->setAttrib('class', 'payment_gateway_fieldset')
+                ->setAttrib('id', 'payment_gateway_'.$this->getGateway()->getName());
         }
-
-        trigger_error('Call to undefined method: [' . $name . ']', E_USER_ERROR);
-        return false;
     }
 
     /**
-     * @return Gateway
+     * @return void
      */
-    public function getGateway()
+    public function initElements()
     {
-        return $this->gateway;
-    }
-
-    /**
-     * @param Gateway $gateway
-     * @return $this
-     */
-    public function setGateway($gateway)
-    {
-        $this->gateway = $gateway;
-        return $this;
     }
 
     /**
@@ -78,25 +59,8 @@ abstract class Form
     public function setForm($form)
     {
         $this->form = $form;
+
         return $this;
-    }
-
-    public function init()
-    {
-        $this->initElements();
-        if (is_array($this->elements) && count($this->elements) > 0) {
-            $this->getForm()->addDisplayGroup($this->elements, $this->getGateway()->getLabel());
-            $this->getForm()->getDisplayGroup($this->getGateway()->getLabel())
-                ->setAttrib('class', 'payment_gateway_fieldset')
-                ->setAttrib('id', 'payment_gateway_' . $this->getGateway()->getName());
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function initElements()
-    {
     }
 
     /**
@@ -114,7 +78,6 @@ abstract class Form
         }
     }
 
-
     /**
      * @param $request
      * @return void
@@ -130,7 +93,6 @@ abstract class Form
     {
         return true;
     }
-
 
     public function saveToModel()
     {
@@ -154,5 +116,36 @@ abstract class Form
     public function process()
     {
         return true;
+    }
+
+    /**
+     * @param $arguments
+     * @return mixed
+     */
+    protected function getElementNameFromMagicMethodArguments($arguments)
+    {
+        $name = ''.$this->getGateway()->getName().'['.$arguments[0].']';
+        $this->elements[$arguments[0]] = $name;
+
+        return $name;
+    }
+
+    /**
+     * @return Gateway
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
+    }
+
+    /**
+     * @param Gateway $gateway
+     * @return $this
+     */
+    public function setGateway($gateway)
+    {
+        $this->gateway = $gateway;
+
+        return $this;
     }
 }

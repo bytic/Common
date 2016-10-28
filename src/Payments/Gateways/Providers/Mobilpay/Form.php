@@ -19,12 +19,12 @@ class Form extends AbstractForm
     public function initElements()
     {
         $this->initElementSandbox();
-        $this->getForm()->addInput('signature', 'Signature', false);
+        $this->addInput('signature', 'Signature', false);
     }
 
     protected function initElementSandbox()
     {
-        $this->getForm()->addRadioGroup('sandbox', 'sandbox', true);
+        $this->addRadioGroup('sandbox', 'sandbox', true);
         /** @var SelectElement $element */
         $element = $this->getForm()->getElement('mobilpay[sandbox]');
         $element->getRenderer()->setSeparator('');
@@ -37,7 +37,7 @@ class Form extends AbstractForm
         parent::getDataFromModel();
         $files = $this->getForm()->getModel()->findFiles();
         if (is_object($files['public.cer'])) {
-            $this->getForm()->addInput('file', 'Certificate', true);
+            $this->addInput('file', 'Certificate', true);
             $element = $this->getForm()->getElement('mobilpay[file]');
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('public.cer');
@@ -48,11 +48,11 @@ class Form extends AbstractForm
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {
-            $this->getForm()->addFile('file', 'Certificate', false);
+            $this->addFile('file', 'Certificate', false);
         }
 
         if (is_object($files['private.key'])) {
-            $this->getForm()->addInput('private-key', 'Private key', true);
+            $this->addInput('private-key', 'Private key', true);
             $element = $this->getForm()->getElement('mobilpay[private-key]');
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('private.key');
@@ -63,7 +63,7 @@ class Form extends AbstractForm
             $decorator = $element->newDecorator('text')->setText($text);
             $element->attachDecorator($decorator);
         } else {
-            $this->getForm()->addFile('private-key', 'Private key', false);
+            $this->addFile('private-key', 'Private key', false);
         }
         $this->getForm()->getDisplayGroup($this->getGateway()->getLabel())
             ->addElement($this->getForm()->getElement('mobilpay[file]'));

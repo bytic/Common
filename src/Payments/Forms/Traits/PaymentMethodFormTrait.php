@@ -12,6 +12,11 @@ use Nip_Form_Element_Select as FormSelect;
 /**
  * Class PaymentMethodFormTrait
  * @package ByTIC\Common\Payments\Forms\Traits
+ *
+ * @method addInput($name, $label = false, $type = 'input', $isRequired = false)
+ * @method addHidden($name, $label = false, $type = 'input', $isRequired = false)
+ * @method addSelect($name, $label = false, $type = 'input', $isRequired = false)
+ * @method addDisplayGroup(array $elements, $name)
  */
 trait PaymentMethodFormTrait
 {
@@ -203,21 +208,6 @@ trait PaymentMethodFormTrait
         $this->addDisplayGroup(['internal_name', 'name'], 'Details');
     }
 
-    /**
-     * @param $name
-     * @param $label
-     * @param $mandatory
-     * @return mixed
-     */
-    abstract public function addInput($name, $label, $mandatory);
-
-    /**
-     * @param $elements
-     * @param $label
-     * @return mixed
-     */
-    abstract public function addDisplayGroup($elements, $label);
-
     protected function initTypeElement()
     {
         if ($this->getModel()->getPurchasesCount() > 0) {
@@ -228,16 +218,8 @@ trait PaymentMethodFormTrait
             $this->initTypeSelect();
         }
 
-        $this->getElement('type')->setID('payment_type');
+        $this->getElement('type')->setId('payment_type');
     }
-
-    /**
-     * @param $name
-     * @param $label
-     * @param $mandatory
-     * @return mixed
-     */
-    abstract public function addHidden($name, $label, $mandatory);
 
     protected function initTypeSelect()
     {
@@ -248,14 +230,6 @@ trait PaymentMethodFormTrait
         }
         $this->appendPaymentGatewaysOptgroupOption();
     }
-
-    /**
-     * @param $name
-     * @param $label
-     * @param $mandatory
-     * @return mixed
-     */
-    abstract public function addSelect($name, $label, $mandatory);
 
     protected function appendPaymentGatewaysOptgroupOption()
     {
