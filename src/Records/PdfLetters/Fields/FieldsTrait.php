@@ -2,8 +2,9 @@
 
 namespace ByTIC\Common\Records\PdfLetters\Fields;
 
+use ByTIC\Common\Records\PdfLetters\Fields\Types\AbstractType;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
-
+use ByTIC\Common\Records\Traits\HasTypes\RecordsTrait as HasTypeRecordsTrait;
 
 /**
  * Class FieldsTrait
@@ -12,8 +13,44 @@ use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTra
 trait FieldsTrait
 {
     use AbstractRecordsTrait;
+    use HasTypeRecordsTrait;
 
-    abstract public function getMergeFields();
+    /**
+     * @var null|array
+     */
+    protected $mergeFields = null;
+
+    /**
+     * @return array
+     */
+    public function getMergeFields()
+    {
+        if ($this->mergeFields === null) {
+            $this->initMergeFields();
+        }
+
+        return $this->mergeFields;
+    }
+
+    protected function initMergeFields()
+    {
+        $this->mergeFields = $this->generateMergeFields();
+    }
+
+    /**
+     * @return array
+     */
+    protected function generateMergeFields()
+    {
+        /** @var AbstractType[] $types */
+        $types = $this->getTypes();
+        $tags = [];
+        foreach ($types as $type) {
+            $tags[$type->getCategory()] = $type->getName();
+        }
+
+        return $tags;
+    }
 
     /**
      * @param array $params
