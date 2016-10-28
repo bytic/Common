@@ -46,7 +46,7 @@ trait FieldsTrait
         $types = $this->getTypes();
         $tags = [];
         foreach ($types as $type) {
-            $tags[$type->getCategory()] = $type->getName();
+            $type->populateTags($tags);
         }
 
         return $tags;
