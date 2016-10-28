@@ -12,4 +12,17 @@ use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTra
 trait FieldsTrait
 {
     use AbstractRecordsTrait;
+
+    abstract public function getMergeFields();
+
+    /**
+     * @param array $params
+     */
+    public function injectParams(&$params = [])
+    {
+        /** @noinspection PhpUndefinedClassInspection */
+        parent::injectParams($params);
+        $params['order'][] = ['Y', 'ASC'];
+        $params['order'][] = ['X', 'ASC', false];
+    }
 }

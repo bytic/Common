@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\PdfLetters;
 
+use ByTIC\Common\Records\PdfLetters\Fields\FieldTrait;
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Records;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as MediaFileRecordTrait;
@@ -13,6 +14,8 @@ use Nip_File_System;
  * Class PdfLetterTrait
  * @package ByTIC\Common\Records\PdfLetters
  *
+ * @method FieldTrait[] getCustomFields()
+ *
  * @property $id_item
  * @property $orientation
  * @property $format
@@ -21,21 +24,6 @@ trait PdfLetterTrait
 {
     use MediaGenericRecordTrait;
     use MediaFileRecordTrait;
-
-    /**
-     * @return Record
-     */
-    public function getItem()
-    {
-        $manager = $this->getItemsManager();
-
-        return $manager->findOne($this->id_item);
-    }
-
-    /**
-     * @return Records
-     */
-    abstract public function getItemsManager();
 
     /**
      * @return bool
@@ -73,10 +61,55 @@ trait PdfLetterTrait
         return parent::delete();
     }
 
+    public function downloadExample()
+    {
+        $result = $this->getModelExample();
+        $result->demo = true;
+
+        return $this->download($result);
+    }
+
+    /**
+     * @return Record
+     */
+    abstract public function getModelExample();
+
+    /**
+     * @param $model
+     */
+    public function download($model)
+    {
+        $pdf = $this->generatePdfObj($model);
+        $item = $this->getItem();
+
+        if ($model->demo === true) {
+            $this->pdfDrawGuidelines();
+        }
+
+        $pdf->Output($this->getFileNameFromModel($model).'.pdf', 'D');
+        die();
+    }
+
+    /**
+     * @param Record $model
+     * @return FPDI
+     */
+    public function generatePdfObj($model)
+    {
+        $pdf = $this->generateNewPdfObj();
+
+        $fields = $this->getCustomFields();
+        foreach ($fields as $field) {
+            $field->addToPdf($pdf, $model);
+        }
+
+        return $pdf;
+    }
+
     /**
      * @return FPDI
      */
-    public function generatePdfObj()
+    public function generateNewPdfObj()
     {
         $pdf = new FPDI('L');
         $pdf->SetCreator(PDF_CREATOR);
@@ -89,6 +122,54 @@ trait PdfLetterTrait
         $pdf->useTemplate($tplidx);
 
         return $pdf;
+    }
+
+    /**
+     * @return Record
+     */
+    public function getItem()
+    {
+        $manager = $this->getItemsManager();
+
+        return $manager->findOne($this->id_item);
+    }
+
+    /**
+     * @return Records
+     */
+    abstract public function getItemsManager();
+
+    /**
+     * @param FPDI $pdf
+     */
+    protected function pdfDrawGuidelines($pdf)
+    {
+        for ($pos = 5; $pos < 791; $pos = $pos + 5) {
+            if (($pos % 100) == 0) {
+                $pdf->SetDrawColor(0, 0, 200);
+                $pdf->SetLineWidth(.7);
+            } elseif (($pos % 50) == 0) {
+                $pdf->SetDrawColor(200, 0, 0);
+                $pdf->SetLineWidth(.4);
+            } else {
+                $pdf->SetDrawColor(128, 128, 128);
+                $pdf->SetLineWidth(.05);
+            }
+
+            $pdf->Line(0, $pos, 611, $pos);
+            if ($pos < 611) {
+                $pdf->Line($pos, 0, $pos, 791);
+            }
+        }
+    }
+
+    /**
+     * @param $model
+     * @return string
+     */
+    protected function getFileNameFromModel($model)
+    {
+        return 'letter';
     }
 
     /**
