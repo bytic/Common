@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractRequest;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\AbstractResponse;
 use DirectoryIterator;
 use Nip\Records\AbstractModels\RecordManager;
@@ -80,6 +81,7 @@ class Manager
     public function addItem($gateway, $name = null)
     {
         $name = $name ? $name : $gateway->getName();
+        $this->itemsName[] = $name;
         $this->items[$name] = $gateway;
     }
 
@@ -120,7 +122,7 @@ class Manager
                 $item->setHttpRequest($httpRequest);
             }
             if (method_exists($item, $callback)) {
-                /** @var AbstractResponse $request */
+                /** @var AbstractRequest $request */
                 $request = $item->$callback(['modelManager' => $modelManager]);
                 if ($request) {
                     $response = $request->send();

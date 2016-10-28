@@ -59,4 +59,9 @@ trait RecordTrait
         }
         return $this->getFileModelNameAbstract($type);
     }
+
+    /**
+     * @return int
+     */
+    abstract public function getPurchasesCount();
 }
