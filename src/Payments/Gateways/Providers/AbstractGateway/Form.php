@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway;
 
 use ByTIC\Common\Payments\Forms\Traits\PaymentMethodFormTrait;
+use Nip\Form\AbstractForm;
 use Nip\Form\Traits\MagicMethodElementsFormTrait;
 use Nip_Form as NipForm;
 
@@ -64,6 +65,25 @@ abstract class Form
     }
 
     /**
+     * @return Gateway
+     */
+    public function getGateway()
+    {
+        return $this->gateway;
+    }
+
+    /**
+     * @param Gateway $gateway
+     * @return $this
+     */
+    public function setGateway($gateway)
+    {
+        $this->gateway = $gateway;
+
+        return $this;
+    }
+
+    /**
      *
      */
     public function getDataFromModel()
@@ -119,6 +139,18 @@ abstract class Form
     }
 
     /**
+     * @param $name
+     * @param $label
+     * @param $type
+     * @param $isRequired
+     * @return AbstractForm
+     */
+    protected function add($name, $label, $type, $isRequired)
+    {
+        return $this->getForm()->add($name, $label, $type, $isRequired);
+    }
+
+    /**
      * @param $arguments
      * @return mixed
      */
@@ -128,24 +160,5 @@ abstract class Form
         $this->elements[$arguments[0]] = $name;
 
         return $name;
-    }
-
-    /**
-     * @return Gateway
-     */
-    public function getGateway()
-    {
-        return $this->gateway;
-    }
-
-    /**
-     * @param Gateway $gateway
-     * @return $this
-     */
-    public function setGateway($gateway)
-    {
-        $this->gateway = $gateway;
-
-        return $this;
     }
 }
