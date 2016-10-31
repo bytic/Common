@@ -159,6 +159,22 @@ trait PdfLetterTrait
         return 'letter';
     }
 
+    public function downloadBlank()
+    {
+        $file = $this->getFile()->getPath();
+
+        header('Content-Type: application/pdf');
+        header('Content-Description: File Transfer');
+        header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
+        header('Pragma: public');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Content-Disposition: attachment; filename="'.basename($file).'";');
+        header("Content-Transfer-Encoding: Binary");
+        readfile($file);
+        die();
+    }
+
     /**
      * @param $model
      * @param $directory
