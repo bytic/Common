@@ -9,6 +9,7 @@ use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as MediaFileRecordTrait;
 use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as MediaGenericRecordTrait;
 use FPDI;
 use Nip_File_System;
+use TCPDF;
 
 /**
  * Class PdfLetterTrait
@@ -80,10 +81,9 @@ trait PdfLetterTrait
     public function download($model)
     {
         $pdf = $this->generatePdfObj($model);
-        $item = $this->getItem();
 
         if ($model->demo === true) {
-            $this->pdfDrawGuidelines();
+            $this->pdfDrawGuidelines($pdf);
         }
 
         $pdf->Output($this->getFileNameFromModel($model).'.pdf', 'D');
@@ -92,7 +92,7 @@ trait PdfLetterTrait
 
     /**
      * @param Record $model
-     * @return FPDI
+     * @return FPDI|TCPDF
      */
     public function generatePdfObj($model)
     {
@@ -107,11 +107,13 @@ trait PdfLetterTrait
     }
 
     /**
-     * @return FPDI
+     * @return FPDI|TCPDF
      */
     public function generateNewPdfObj()
     {
+        /** @var FPDI|TCPDF $pdf */
         $pdf = new FPDI('L');
+        $pdf->setPrintHeader(false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(app('config')->get('SITE.name'));
 
@@ -125,22 +127,7 @@ trait PdfLetterTrait
     }
 
     /**
-     * @return Record
-     */
-    public function getItem()
-    {
-        $manager = $this->getItemsManager();
-
-        return $manager->findOne($this->id_item);
-    }
-
-    /**
-     * @return Records
-     */
-    abstract public function getItemsManager();
-
-    /**
-     * @param FPDI $pdf
+     * @param FPDI|TCPDF $pdf
      */
     protected function pdfDrawGuidelines($pdf)
     {
@@ -171,6 +158,41 @@ trait PdfLetterTrait
     {
         return 'letter';
     }
+
+    /**
+     * @param $model
+     * @param $directory
+     * @return bool
+     */
+    public function generateFile($model, $directory)
+    {
+        $pdf = $this->generatePdfObj($model);
+
+        if ($model->demo === true) {
+            $this->pdfDrawGuidelines($pdf);
+        }
+        $fileName = $this->getFileNameFromModel($model).'.pdf';
+        if (is_dir($directory)) {
+            return $pdf->Output($directory.$fileName, 'F');
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Record
+     */
+    public function getItem()
+    {
+        $manager = $this->getItemsManager();
+
+        return $manager->findOne($this->id_item);
+    }
+
+    /**
+     * @return Records
+     */
+    abstract public function getItemsManager();
 
     /**
      * @return string
