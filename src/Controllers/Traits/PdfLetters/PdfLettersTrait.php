@@ -190,6 +190,9 @@ trait PdfLettersTrait
         $this->letterType = $this->getRequest()->get('type');
         $this->parentManager = $this->getModelManager()->getParentManagerFromType($this->getRequest()->get('type'));
         $this->parent = $this->parentManager->findOne($this->getRequest()->get('id_item'));
+        if ($this->parent) {
+            $this->setModelFromRequest($this->getModelManager()->getByItem($this->letterType, $this->parent));
+        }
     }
 
     protected function checkRequestForItem()
