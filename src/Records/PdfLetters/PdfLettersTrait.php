@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\PdfLetters;
 
+use ByTIC\Common\Records\Records;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
 
 /**
@@ -60,4 +61,9 @@ trait PdfLettersTrait
 
     abstract protected function getCustomFieldsManagerClass();
 
+    /**
+     * @param $type
+     * @return Records
+     */
+    abstract protected function getParentManagerFromType($type);
 }
