@@ -27,6 +27,25 @@ trait FieldsTrait
     protected $parent;
 
     /**
+     * @return PdfLetterTrait
+     */
+    public function addNewModel()
+    {
+        /** @var PdfLetterTrait $item */
+        $item = $this->getModelManager()->getNew();
+        if ($this->pdfLetter) {
+            $item->populateFromLetter($this->pdfLetter);
+            $this->getView()->Breadcrumbs()->addItem(
+                $this->getModelManager()->getLetterManager()->getLabel('add'),
+                '#'
+            );
+            return $item;
+        }
+
+        return $this->forward('index', 'error');
+    }
+
+    /**
      * Called before action
      */
     protected function parseRequestPdfLetterField()

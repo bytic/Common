@@ -12,6 +12,7 @@ use FPDI;
  * Class FieldTrait
  * @package ByTIC\Common\Records\PdfLetters\Fields
  *
+ * @property string $id_letter
  * @property string $field
  * @property string $size
  * @property string $color
@@ -40,6 +41,14 @@ trait FieldTrait
     public function getTypeValue()
     {
         return $this->getManager()->getFieldTypeFromMergeTag($this->field);
+    }
+
+    /**
+     * @param PdfLetterTrait $letter
+     */
+    public function populateFromLetter($letter)
+    {
+        $this->id_letter = $letter;
     }
 
     /**
