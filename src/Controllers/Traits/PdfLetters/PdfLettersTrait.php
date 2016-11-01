@@ -198,6 +198,14 @@ trait PdfLettersTrait
     protected function checkRequestForItem()
     {
         $letter = $this->getModelFromRequest();
+        $this->checkRequestSetFromLetter($letter);
+    }
+
+    /**
+     * @param PdfLetterTrait $letter
+     */
+    protected function checkRequestSetFromLetter($letter)
+    {
         $this->letterType = $letter->type;
         $this->parent = $letter->getItem();
         $this->parentManager = $letter->getItemsManager();
