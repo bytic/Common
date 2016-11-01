@@ -30,6 +30,33 @@ trait PdfLettersTrait
      */
     protected $parent;
 
+
+    public function upload()
+    {
+        if ($_FILES['letter']) {
+            $parent = $this->getParent();
+            if ($parent) {
+                $letter = $this->getModelFromRequest();
+
+                if (!$letter) {
+                    $letter = $this->newPdfLetterRecordFromItemType($parent, $this->getLetterType());
+                }
+
+                $file = $letter->getNewFile();
+                if ($file->upload($_FILES['letter'])) {
+                    $this->flashRedirectLetter($parent, $this->getModelManager()->getMessage('add'));
+                } else {
+                    $letter->delete();
+                    $this->flashRedirectLetter($parent, implode('. ', $file->getErrors()), 'error');
+                }
+
+                die('end');
+            }
+
+            die('no valid item');
+        }
+    }
+
     public function downloadExample()
     {
         $letter = $this->getModelFromRequest();
@@ -39,41 +66,52 @@ trait PdfLettersTrait
             $letter->downloadExample();
         }
 
-        $this->flashRedirectLetterError($item, 'no-file');
+        $this->flashRedirectLetter($item, $this->getModelManager()->getMessage('no-file'), 'error');
     }
 
     public function downloadBlank()
     {
         $letter = $this->getModelFromRequest();
-        $item = $letter->getItem();
+        $parent = $letter->getItem();
         if ($letter->hasFile()) {
             $letter->downloadBlank();
             die('');
         }
 
-        $this->flashRedirectLetterError($item, 'no-file');
+        $this->flashRedirectLetter($parent, $this->getModelManager()->getMessage('no-file'), 'error');
     }
 
     /**
-     * @return Records
+     * @param Record $parent
+     * @param $message
+     * @param string $type
      */
-    public function getParentManager()
-    {
-        return $this->parentManager;
-    }
-
-    /**
-     * @param Record $item
-     * @param $error
-     */
-    protected function flashRedirectLetterError($item, $error)
+    protected function flashRedirectLetter($parent, $message, $type = 'success')
     {
         $this->flashRedirect(
-            $this->getModelManager()->getMessage($error),
-            $item->getURL(),
-            'error',
-            $item->getManager()->getController()
+            $message,
+            $this->getPdfLettersPageUrl($parent),
+            $type,
+            $this->getPdfLettersPageController($parent)
         );
+    }
+
+    /**
+     * @param Record $parent
+     * @return mixed
+     */
+    protected function getPdfLettersPageUrl($parent)
+    {
+        return $parent->getURL();
+    }
+
+    /**
+     * @param Record $parent
+     * @return mixed
+     */
+    protected function getPdfLettersPageController($parent)
+    {
+        return $parent->getManager()->getController();
     }
 
     /**
@@ -109,6 +147,30 @@ trait PdfLettersTrait
     protected function newPdfLetterRecord()
     {
         return $this->getModelManager()->getNew();
+    }
+
+    /**
+     * @return Records
+     */
+    protected function getParentManager()
+    {
+        return $this->parentManager;
+    }
+
+    /**
+     * @return Record
+     */
+    protected function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getLetterType()
+    {
+        return $this->letterType;
     }
 
     /**
