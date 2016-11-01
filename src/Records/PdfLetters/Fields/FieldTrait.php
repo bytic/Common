@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\PdfLetters\Fields;
 
 use ByTIC\Common\Records\PdfLetters\Fields\Types\AbstractType;
+use ByTIC\Common\Records\PdfLetters\PdfLetterTrait;
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypeRecordTrait;
 use FPDI;
@@ -56,6 +57,26 @@ trait FieldTrait
     }
 
     /**
+     * @param Record $model
+     * @return string
+     */
+    public function getValue($model)
+    {
+        if ($model->id > 0) {
+            $valueType = $this->getType()->getValue($model);
+
+            return $valueType;
+        }
+
+        return '<<' . $this->field . '>>';
+    }
+
+    /**
+     * @return PdfLetterTrait
+     */
+    abstract public function getPdfLetter();
+
+    /**
      * @param FPDI $pdf
      */
     protected function pdfPrepareFont($pdf)
@@ -70,21 +91,6 @@ trait FieldTrait
     {
         list ($red, $green, $blue) = explode(',', $this->color);
         $pdf->SetTextColor(intval($red), intval($green), intval($blue));
-    }
-
-    /**
-     * @param Record $model
-     * @return string
-     */
-    public function getValue($model)
-    {
-        if ($model->id > 0) {
-            $valueType = $this->getType()->getValue($model);
-
-            return $valueType;
-        }
-
-        return '<<'.$this->field.'>>';
     }
 
     /**

@@ -16,12 +16,13 @@ trait PdfLettersTrait
     use AbstractRecordsTrait;
 
     /**
-     * @param $type
-     * @param $idItem
+     * @param string $type
+     * @param int $idItem
      * @return bool|PdfLetterTrait
      */
     public function getByItem($type, $idItem)
     {
+        /** @var PdfLetterTrait[] $letters */
         $letter = $this->findByParams(
             [
                 'where' => [
