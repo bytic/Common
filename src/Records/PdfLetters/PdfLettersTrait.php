@@ -72,7 +72,7 @@ trait PdfLettersTrait
     {
         return [
             'class' => $this->getCustomFieldsManagerClass(),
-            'fk' => 'id_letter'
+            'fk' => $this->getPrimaryFK(),
         ];
     }
 
@@ -80,4 +80,9 @@ trait PdfLettersTrait
      * @return string
      */
     abstract protected function getCustomFieldsManagerClass();
+
+    /**
+     * @return string
+     */
+    abstract public function getPrimaryFK();
 }
