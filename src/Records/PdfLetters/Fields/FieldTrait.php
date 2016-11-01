@@ -48,7 +48,7 @@ trait FieldTrait
      */
     public function populateFromLetter($letter)
     {
-        $this->id_letter = $letter;
+        $this->id_letter = $letter->id;
     }
 
     /**
