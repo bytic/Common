@@ -86,6 +86,28 @@ trait FieldTrait
     abstract public function getPdfLetter();
 
     /**
+     * @return bool
+     */
+    public function hasColor()
+    {
+        return substr_count($this->color, ',') == 2;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getColorArray()
+    {
+        if ($this->hasColor()) {
+            list ($red, $green, $blue) = explode(',', $this->color);
+            if ($red && $green && $blue) {
+                return [intval($red), intval($green), intval($blue)];
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param FPDI $pdf
      */
     protected function pdfPrepareFont($pdf)
@@ -98,8 +120,11 @@ trait FieldTrait
      */
     protected function pdfPrepareColor($pdf)
     {
-        list ($red, $green, $blue) = explode(',', $this->color);
-        $pdf->SetTextColor(intval($red), intval($green), intval($blue));
+        $pdf->SetTextColor(0, 0, 0);
+        $colors = $this->getColorArray();
+        if (is_array($colors)) {
+            $pdf->SetTextColor($colors);
+        }
     }
 
     /**
