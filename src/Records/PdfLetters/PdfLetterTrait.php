@@ -28,6 +28,14 @@ trait PdfLetterTrait
     use MediaFileRecordTrait;
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getManager()->getLabel('title.singular').' #'.$this->id;
+    }
+
+    /**
      * @return bool
      */
     public function hasFile()
@@ -43,10 +51,18 @@ trait PdfLetterTrait
     public function getFile()
     {
         $file = $this->getNewFile();
-        $fileName = $this->getFileNameDefault() . '.pdf';
+        $fileName = $this->getFileNameDefault().'.pdf';
         $file->setName($fileName);
 
         return $file;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFileNameDefault()
+    {
+        return 'letter';
     }
 
     /**
@@ -89,7 +105,7 @@ trait PdfLetterTrait
             $this->pdfDrawGuidelines($pdf);
         }
 
-        $pdf->Output($this->getFileNameFromModel($model) . '.pdf', 'D');
+        $pdf->Output($this->getFileNameFromModel($model).'.pdf', 'D');
         die();
     }
 
@@ -130,57 +146,6 @@ trait PdfLetterTrait
         return $pdf;
     }
 
-    public function downloadBlank()
-    {
-        $file = $this->getFile()->getPath();
-
-        header('Content-Type: application/pdf');
-        header('Content-Description: File Transfer');
-        header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
-        header('Pragma: public');
-        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-        header('Content-Disposition: attachment; filename="' . basename($file) . '";');
-        header("Content-Transfer-Encoding: Binary");
-        readfile($file);
-        die();
-    }
-
-    /**
-     * @param $model
-     * @param $directory
-     * @return bool
-     */
-    public function generateFile($model, $directory)
-    {
-        $pdf = $this->generatePdfObj($model);
-
-        if ($model->demo === true) {
-            $this->pdfDrawGuidelines($pdf);
-        }
-        $fileName = $this->getFileNameFromModel($model) . '.pdf';
-        if (is_dir($directory)) {
-            return $pdf->Output($directory . $fileName, 'F');
-        }
-
-        return false;
-    }
-
-    /**
-     * @return Record
-     */
-    public function getItem()
-    {
-        $manager = $this->getItemsManager();
-
-        return $manager->findOne($this->id_item);
-    }
-
-    /**
-     * @return Records
-     */
-    abstract public function getItemsManager();
-
     /**
      * @param FPDI|TCPDF $pdf
      */
@@ -205,14 +170,6 @@ trait PdfLetterTrait
         }
     }
 
-    /**
-     * @return string
-     */
-    protected function getFileNameDefault()
-    {
-        return 'letter';
-    }
-
     /** @noinspection PhpUnusedParameterInspection
      * @param $model
      * @return string
@@ -221,4 +178,55 @@ trait PdfLetterTrait
     {
         return $this->getFileNameDefault();
     }
+
+    public function downloadBlank()
+    {
+        $file = $this->getFile()->getPath();
+
+        header('Content-Type: application/pdf');
+        header('Content-Description: File Transfer');
+        header('Cache-Control: private, must-revalidate, post-check=0, pre-check=0, max-age=1');
+        header('Pragma: public');
+        header('Expires: Sat, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Content-Disposition: attachment; filename="'.basename($file).'";');
+        header("Content-Transfer-Encoding: Binary");
+        readfile($file);
+        die();
+    }
+
+    /**
+     * @param $model
+     * @param $directory
+     * @return bool
+     */
+    public function generateFile($model, $directory)
+    {
+        $pdf = $this->generatePdfObj($model);
+
+        if ($model->demo === true) {
+            $this->pdfDrawGuidelines($pdf);
+        }
+        $fileName = $this->getFileNameFromModel($model).'.pdf';
+        if (is_dir($directory)) {
+            return $pdf->Output($directory.$fileName, 'F');
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Record
+     */
+    public function getItem()
+    {
+        $manager = $this->getItemsManager();
+
+        return $manager->findOne($this->id_item);
+    }
+
+    /**
+     * @return Records
+     */
+    abstract public function getItemsManager();
 }
