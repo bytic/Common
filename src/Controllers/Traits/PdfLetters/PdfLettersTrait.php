@@ -15,7 +15,6 @@ use Nip\Request;
 trait PdfLettersTrait
 {
 
-
     /**
      * @var string
      */
@@ -151,9 +150,10 @@ trait PdfLettersTrait
     }
 
     /**
-     * @return Record|PdfLetterTrait
+     * @param bool $key
+     * @return PdfLetterTrait|Record
      */
-    abstract protected function getModelFromRequest();
+    abstract protected function getModelFromRequest($key = false);
 
     /**
      * @return Records|PdfLettersRecordTrait

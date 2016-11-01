@@ -55,10 +55,23 @@ trait PdfLettersTrait
 
     protected function initCustomFieldsRelation()
     {
-
-        $this->hasMany('CustomFields', ['class' => 'Diploma_Fields']);
+        $this->hasMany('CustomFields', $this->getCustomFieldsRelationParams());
     }
 
+    /**
+     * @return array
+     */
+    protected function getCustomFieldsRelationParams()
+    {
+        return [
+            'class' => $this->getCustomFieldsManagerClass(),
+            'fk' => 'id_letter'
+        ];
+    }
+
+    /**
+     * @return string
+     */
     abstract protected function getCustomFieldsManagerClass();
 
     /**
