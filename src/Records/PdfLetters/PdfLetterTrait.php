@@ -17,9 +17,10 @@ use TCPDF;
  *
  * @method FieldTrait[] getCustomFields()
  *
- * @property $id_item
- * @property $orientation
- * @property $format
+ * @property int $id_item
+ * @property string $type
+ * @property string $orientation
+ * @property string $format
  */
 trait PdfLetterTrait
 {
