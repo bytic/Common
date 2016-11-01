@@ -48,6 +48,12 @@ trait PdfLettersTrait
         return $diploma;
     }
 
+    /**
+     * @param $type
+     * @return Records
+     */
+    abstract public function getParentManagerFromType($type);
+
     protected function initRelations()
     {
         parent::initRelations();
@@ -74,10 +80,4 @@ trait PdfLettersTrait
      * @return string
      */
     abstract protected function getCustomFieldsManagerClass();
-
-    /**
-     * @param $type
-     * @return Records
-     */
-    abstract protected function getParentManagerFromType($type);
 }
