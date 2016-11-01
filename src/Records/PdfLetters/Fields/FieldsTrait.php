@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\PdfLetters\Fields;
 
 use ByTIC\Common\Records\PdfLetters\Fields\Types\AbstractType;
+use ByTIC\Common\Records\PdfLetters\PdfLettersTrait;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
 use ByTIC\Common\Records\Traits\HasTypes\RecordsTrait as HasTypeRecordsTrait;
 
@@ -34,16 +35,6 @@ trait FieldsTrait
         }
 
         return $this->mergeFields;
-    }
-
-    protected function initMergeFields()
-    {
-        /** @var AbstractType[] $types */
-        $types = $this->getTypes();
-        $this->mergeFields = [];
-        foreach ($types as $type) {
-            $this->populateTagsFromType($type);
-        }
     }
 
     /**
@@ -83,5 +74,20 @@ trait FieldsTrait
         parent::injectParams($params);
         $params['order'][] = ['Y', 'ASC'];
         $params['order'][] = ['X', 'ASC', false];
+    }
+
+    /**
+     * @return PdfLettersTrait
+     */
+    abstract public function getLetterManager();
+
+    protected function initMergeFields()
+    {
+        /** @var AbstractType[] $types */
+        $types = $this->getTypes();
+        $this->mergeFields = [];
+        foreach ($types as $type) {
+            $this->populateTagsFromType($type);
+        }
     }
 }

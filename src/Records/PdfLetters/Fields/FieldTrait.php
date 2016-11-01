@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\PdfLetters\Fields;
 
 use ByTIC\Common\Records\PdfLetters\Fields\Types\AbstractType;
+use ByTIC\Common\Records\PdfLetters\PdfLetterTrait;
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypeRecordTrait;
 use FPDI;
@@ -11,6 +12,7 @@ use FPDI;
  * Class FieldTrait
  * @package ByTIC\Common\Records\PdfLetters\Fields
  *
+ * @property string $id_letter
  * @property string $field
  * @property string $size
  * @property string $color
@@ -42,6 +44,14 @@ trait FieldTrait
     }
 
     /**
+     * @param PdfLetterTrait $letter
+     */
+    public function populateFromLetter($letter)
+    {
+        $this->id_letter = $letter->id;
+    }
+
+    /**
      * @param FPDI $pdf
      * @param Record $model
      */
@@ -53,6 +63,48 @@ trait FieldTrait
         $value = $this->getValue($model);
         $x = $this->pdfXPosition($pdf, $value);
         $pdf->Text($x, $this->y, $value);
+    }
+
+    /**
+     * @param Record $model
+     * @return string
+     */
+    public function getValue($model)
+    {
+        if ($model->id > 0) {
+            $valueType = $this->getType()->getValue($model);
+
+            return $valueType;
+        }
+
+        return '<<' . $this->field . '>>';
+    }
+
+    /**
+     * @return PdfLetterTrait
+     */
+    abstract public function getPdfLetter();
+
+    /**
+     * @return bool
+     */
+    public function hasColor()
+    {
+        return substr_count($this->color, ',') == 2;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getColorArray()
+    {
+        if ($this->hasColor()) {
+            list ($red, $green, $blue) = explode(',', $this->color);
+            if ($red && $green && $blue) {
+                return [intval($red), intval($green), intval($blue)];
+            }
+        }
+        return null;
     }
 
     /**
@@ -68,23 +120,11 @@ trait FieldTrait
      */
     protected function pdfPrepareColor($pdf)
     {
-        list ($red, $green, $blue) = explode(',', $this->color);
-        $pdf->SetTextColor(intval($red), intval($green), intval($blue));
-    }
-
-    /**
-     * @param Record $model
-     * @return string
-     */
-    public function getValue($model)
-    {
-        if ($model->id > 0) {
-            $valueType = $this->getType()->getValue($model);
-
-            return $valueType;
+        $pdf->SetTextColor(0, 0, 0);
+        $colors = $this->getColorArray();
+        if (is_array($colors)) {
+            $pdf->SetTextColor($colors);
         }
-
-        return '<<'.$this->field.'>>';
     }
 
     /**

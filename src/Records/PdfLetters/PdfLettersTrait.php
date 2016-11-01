@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\PdfLetters;
 
+use ByTIC\Common\Records\Records;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
 
 /**
@@ -15,13 +16,14 @@ trait PdfLettersTrait
     use AbstractRecordsTrait;
 
     /**
-     * @param $type
-     * @param $idItem
+     * @param string $type
+     * @param int $idItem
      * @return bool|PdfLetterTrait
      */
     public function getByItem($type, $idItem)
     {
-        $diplomas = $this->findByParams(
+        /** @var PdfLetterTrait[] $letters */
+        $letter = $this->findByParams(
             [
                 'where' => [
                     ['id_item = ?', $idItem],
@@ -33,8 +35,8 @@ trait PdfLettersTrait
 
         $diploma = false;
 
-        if (count($diplomas)) {
-            foreach ($diplomas as $item) {
+        if (count($letter)) {
+            foreach ($letter as $item) {
                 if ($item->hasFile() && !$diploma) {
                     $diploma = $item;
                 } else {
@@ -54,10 +56,28 @@ trait PdfLettersTrait
 
     protected function initCustomFieldsRelation()
     {
-
-        $this->hasMany('CustomFields', ['class' => 'Diploma_Fields']);
+        $this->hasMany('CustomFields', $this->getCustomFieldsRelationParams());
     }
 
+    /**
+     * @return array
+     */
+    protected function getCustomFieldsRelationParams()
+    {
+        return [
+            'class' => $this->getCustomFieldsManagerClass(),
+            'fk' => 'id_letter'
+        ];
+    }
+
+    /**
+     * @return string
+     */
     abstract protected function getCustomFieldsManagerClass();
 
+    /**
+     * @param $type
+     * @return Records
+     */
+    abstract protected function getParentManagerFromType($type);
 }
