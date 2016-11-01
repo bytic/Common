@@ -11,14 +11,14 @@ trait Files
         $file = $item->uploadFile($_FILES['Filedata']);
 
         if ($file) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $file->getURL();
-            $this->_response['name'] = $file->getName();
-            $this->_response['extension'] = $file->getExtension();
-            $this->_response['size'] = $file->formatSize();
-            $this->_response['time'] = date("d.m.Y H:i", $file->getTime());
+            $this->response['type'] = 'success';
+            $this->response['url'] = $file->getURL();
+            $this->response['name'] = $file->getName();
+            $this->response['extension'] = $file->getExtension();
+            $this->response['size'] = $file->formatSize();
+            $this->response['time'] = date("d.m.Y H:i", $file->getTime());
         } else {
-            $this->_response['type'] = 'error';
+            $this->response['type'] = 'error';
         }
     }
 
@@ -28,7 +28,7 @@ trait Files
         $item = $this->checkItem();
 
         if ($item->removeFile($_POST)) {
-            $this->_response['type'] = 'success';
+            $this->response['type'] = 'success';
         }
     }
 

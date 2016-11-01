@@ -2,9 +2,12 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Models
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Models
 {
-
     public function order()
     {
         parse_str($_POST['order'], $order);
@@ -25,5 +28,4 @@ trait Models
 
         $this->Async()->sendMessage('Items reordered');
     }
-
 }

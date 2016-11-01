@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Images
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Images
 {
 
@@ -12,14 +16,14 @@ trait Images
         $image = $item->uploadImage();
 
         if (is_object($image)) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $image->url;
-            $this->_response['path'] = $image->name;
-            $this->_response['width'] = $item->getImageWidth("default");
-            $this->_response['height'] = $item->getImageHeight("default");
+            $this->response['type'] = 'success';
+            $this->response['url'] = $image->url;
+            $this->response['path'] = $image->name;
+            $this->response['width'] = $item->getImageWidth("default");
+            $this->response['height'] = $item->getImageHeight("default");
         }
 
-        $this->_response['message'] = $item->errors['upload'];
+        $this->response['message'] = $item->errors['upload'];
     }
 
     public function cropImage()
@@ -29,9 +33,9 @@ trait Images
         $image = $item->cropImages($_POST);
 
         if ($image) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $image->url;
-            $this->_response['name'] = $image->name;
+            $this->response['type'] = 'success';
+            $this->response['url'] = $image->url;
+            $this->response['name'] = $image->name;
         }
     }
 
@@ -40,7 +44,7 @@ trait Images
         $item = $this->checkItem();
 
         if ($item->setDefaultImage($_POST)) {
-            $this->_response['type'] = 'success';
+            $this->response['type'] = 'success';
         }
     }
 
@@ -49,8 +53,7 @@ trait Images
         $item = $this->checkItem();
 
         if ($item->removeImage($_POST)) {
-            $this->_response['type'] = 'success';
+            $this->response['type'] = 'success';
         }
     }
-
 }

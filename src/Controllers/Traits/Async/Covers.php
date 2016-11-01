@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Covers
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Covers
 {
     
@@ -12,14 +16,14 @@ trait Covers
         $cover = $item->uploadCover();
 
         if (is_object($cover)) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $cover->url;
-            $this->_response['path'] = $cover->name;
-            $this->_response['width'] = $cover->cropWidth;
-            $this->_response['height'] = $cover->cropHeight;
+            $this->response['type'] = 'success';
+            $this->response['url'] = $cover->url;
+            $this->response['path'] = $cover->name;
+            $this->response['width'] = $cover->cropWidth;
+            $this->response['height'] = $cover->cropHeight;
         }
 
-        $this->_response['message'] = $item->errors['upload'];
+        $this->response['message'] = $item->errors['upload'];
     }
 
 
@@ -30,9 +34,9 @@ trait Covers
         $cover = $item->cropCovers($_POST);
 
         if ($cover) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $cover->url;
-            $this->_response['name'] = $cover->name;
+            $this->response['type'] = 'success';
+            $this->response['url'] = $cover->url;
+            $this->response['name'] = $cover->name;
         }
     }
 
@@ -41,7 +45,7 @@ trait Covers
         $item = $this->checkItem();
 
         if ($item->setDefaultCover($_POST)) {
-            $this->_response['type'] = 'success';
+            $this->response['type'] = 'success';
         }
     }
 
@@ -51,8 +55,7 @@ trait Covers
         $item = $this->checkItem();
 
         if ($item->removeCover($_POST)) {
-            $this->_response['type'] = 'success';
+            $this->response['type'] = 'success';
         }
     }
-
 }

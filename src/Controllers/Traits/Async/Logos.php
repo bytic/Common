@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Logos
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Logos
 {
 
@@ -14,17 +18,16 @@ trait Logos
             $image = $item->uploadLogo($type);
 
             if (is_object($image)) {
-                $this->_response['type'] = 'success';
-                $this->_response['url'] = $image->getUrl();
-                $this->_response['path'] = $image->getPath();
-                $this->_response['imageType'] = $image->getImageType();
+                $this->response['type'] = 'success';
+                $this->response['url'] = $image->getUrl();
+                $this->response['path'] = $image->getPath();
+                $this->response['imageType'] = $image->getImageType();
             } else {
                 $this->sendError($item->errors['upload']);
             }
         } else {
             $this->sendError('bad logo type');
         }
-
     }
 
     public function removeLogo()
@@ -32,15 +35,14 @@ trait Logos
         $item = $this->checkItem();
 
         if ($item->removeLogo($_REQUEST)) {
-            $this->_response['message'] = 'Logo sters';
+            $this->response['message'] = 'Logo sters';
         } else {
-            $this->_response['message'] = 'Logo-ul convertit la default';
+            $this->response['message'] = 'Logo-ul convertit la default';
         }
 
         $image = $item->getLogo($_REQUEST['type']);
-        $this->_response['type'] = 'success';
-        $this->_response['url'] = $image->getUrl();
-        $this->_response['path'] = $image->getPath();
+        $this->response['type'] = 'success';
+        $this->response['url'] = $image->getUrl();
+        $this->response['path'] = $image->getPath();
     }
-
 }

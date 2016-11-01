@@ -112,25 +112,25 @@ trait Gallery
         ];
         if (@$_POST['action'] == 'crop') {
             // Image versions:
-            $options['versions'] = array(
-                'full' => array(
+            $options['versions'] = [
+                'full' => [
                     'upload_dir' => $item->getImageBasePath('full'),
                     'upload_url' => $item->getImageBaseURL('full'),
                     'max_width' => 1600,
                     'max_height' => 1600,
-                ),
-                'default' => array(
+                ],
+                'default' => [
                     'upload_dir' => $item->getImageBasePath('default'),
                     'upload_url' => $item->getImageBaseURL('default'),
                     'max_width' => $item->getImageWidth(),
                     'crop' => $item->getImageHeight(),
-                ),
-            );
+                ],
+            ];
         }
 
         if (intval($_SERVER['CONTENT_LENGTH']) > 0 && count($_POST) === 0) {
             $maxSize = round(($this->getRequest()->server->getMaxFileSize() / 1048576), 2).'MB';
-            $this->_response['error'] = 'File to big. Max size ['.$maxSize.']';
+            $this->response['error'] = 'File to big. Max size ['.$maxSize.']';
 
             return $this->_output();
         }
