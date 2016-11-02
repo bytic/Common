@@ -14,13 +14,14 @@ use Nip\Request;
  * @package ByTIC\Common\Payments\Controllers\Traits
  *
  * @method IsPurchasableModelTrait checkItem
+ * @method IsPurchasableModelTrait getModelFromRequest
  */
 trait PurchaseControllerTrait
 {
 
     public function redirectToPayment()
     {
-        $model = $this->checkItem();
+        $model = $this->getModelFromRequest();
         $request = $model->getPurchaseRequest();
         $response = $request->send();
         $response->getView()->set('subtitle', $model->getPurchaseName());
