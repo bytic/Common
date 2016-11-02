@@ -22,16 +22,6 @@ class Form extends AbstractForm
         $this->addInput('signature', 'Signature', false);
     }
 
-    protected function initElementSandbox()
-    {
-        $this->addRadioGroup('sandbox', 'sandbox', true);
-        /** @var SelectElement $element */
-        $element = $this->getForm()->getElement('mobilpay[sandbox]');
-        $element->getRenderer()->setSeparator('');
-        $element->addOption('yes', 'Yes');
-        $element->addOption('no', 'No');
-    }
-
     public function getDataFromModel()
     {
         parent::getDataFromModel();
@@ -42,7 +32,7 @@ class Form extends AbstractForm
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('public.cer');
 
-            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(['file' => 'public.cer']).'">
+            $text = '<a href="' . $this->getForm()->getModel()->getDeleteFileURL(['file' => 'public.cer']) . '">
                 [Delete]</a>
             ';
             $decorator = $element->newDecorator('text')->setText($text);
@@ -57,7 +47,7 @@ class Form extends AbstractForm
             $element->setAttrib('readonly', 'readonly');
             $element->setValue('private.key');
 
-            $text = '<a href="'.$this->getForm()->getModel()->getDeteleFileURL(['file' => 'private.key']).'">
+            $text = '<a href="' . $this->getForm()->getModel()->getDeleteFileURL(['file' => 'private.key']) . '">
                         [Delete]
                     </a>';
             $decorator = $element->newDecorator('text')->setText($text);
@@ -135,5 +125,15 @@ class Form extends AbstractForm
         }
 
         return true;
+    }
+
+    protected function initElementSandbox()
+    {
+        $this->addRadioGroup('sandbox', 'sandbox', true);
+        /** @var SelectElement $element */
+        $element = $this->getForm()->getElement('mobilpay[sandbox]');
+        $element->getRenderer()->setSeparator('');
+        $element->addOption('yes', 'Yes');
+        $element->addOption('no', 'No');
     }
 }

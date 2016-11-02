@@ -77,6 +77,18 @@ trait RecordTrait
     }
 
     /**
+     * @return bool
+     */
+    public function canDelete()
+    {
+        if ($this->getPurchasesCount() > 0) {
+            return $this->getManager()->getMessage('delete.denied.has-purchases');
+        }
+
+        return true;
+    }
+
+    /**
      * @return bool|Gateway|null
      */
     public function getGateway()
