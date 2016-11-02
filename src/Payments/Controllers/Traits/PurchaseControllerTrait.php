@@ -3,9 +3,11 @@
 namespace ByTIC\Common\Payments\Controllers\Traits;
 
 use ByTIC\Common\Payments\Gateways\Manager as GatewaysManager;
+use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
 use Nip\Records\RecordManager;
+use Nip\Request;
 
 /**
  * Class PurchaseControllerTrait
@@ -22,18 +24,59 @@ trait PurchaseControllerTrait
         $request = $model->getPurchaseRequest();
         $response = $request->send();
         $response->getView()->set('subtitle', $model->getPurchaseName());
+        $response->getView()->set('item', $model);
+        $response->getView()->set('response', $model);
         echo $response->getRedirectResponse()->getContent();
         die();
     }
 
     public function confirm()
     {
-        /** @var ServerCompletePurchaseResponse $response */
-        $response = $this->getGatewaysManager()->detectItemFromHttpRequest(
-            $this->getModelManager(),
-            'serverCompletePurchase'
-        );
+        $response = $this->getConfirmActionResponse();
+        $model = $response->getModel();
+        if ($model) {
+            $response->processModel();
+        }
+        $this->confirmProcessResponse($response);
+        $response->send();
+        die();
     }
+
+    public function ipn()
+    {
+        $response = $this->getIpnActionResponse();
+        $model = $response->getModel();
+        if ($model) {
+            $response->processModel();
+        }
+        $this->ipnProcessResponse($response);
+        $response->send();
+        die();
+    }
+
+    /**
+     * @return CompletePurchaseResponse
+     */
+    protected function getConfirmActionResponse()
+    {
+        /** @var CompletePurchaseResponse $response */
+        $response = GatewaysManager::instance()->detectItemFromHttpRequest(
+            $this->getModelManager(),
+            'completePurchase',
+            $this->getRequest()
+        );
+
+        if (($response instanceof CompletePurchaseResponse) === false) {
+            $this->dispatchAccessDeniedResponse();
+        }
+        return $response;
+    }
+
+    /**
+     * @param CompletePurchaseResponse $response
+     * @return void
+     */
+    abstract protected function confirmProcessResponse($response);
 
     /**
      * @return GatewaysManager
@@ -44,18 +87,38 @@ trait PurchaseControllerTrait
     }
 
     /**
+     * @return ServerCompletePurchaseResponse
+     */
+    protected function getIpnActionResponse()
+    {
+        /** @var ServerCompletePurchaseResponse $response */
+        $response = GatewaysManager::instance()->detectItemFromHttpRequest(
+            $this->getModelManager(),
+            'serverCompletePurchase',
+            $this->getRequest()
+        );
+
+        if (($response instanceof ServerCompletePurchaseResponse) === false) {
+            $this->dispatchAccessDeniedResponse();
+        }
+        return $response;
+    }
+
+    /**
+     * @param ServerCompletePurchaseResponse $response
+     * @return void
+     */
+    abstract protected function ipnProcessResponse($response);
+
+    /**
      * @return RecordManager
      */
     protected abstract function getModelManager();
 
-    public function ipn()
-    {
-        /** @var ServerCompletePurchaseResponse $response */
-        $response = $this->getGatewaysManager()->detectItemFromHttpRequest(
-            $this->getModelManager(),
-            'serverCompletePurchase'
-        );
+    /**
+     * @return Request
+     */
+    abstract protected function getRequest();
 
-        $response->send();
-    }
+    abstract protected function dispatchAccessDeniedResponse();
 }
