@@ -114,11 +114,6 @@ abstract class Generic
     /**
      * @return string
      */
-    abstract protected function getLabelSlug();
-
-    /**
-     * @return string
-     */
     public function getName()
     {
         if ($this->name == null) {
@@ -264,4 +259,17 @@ abstract class Generic
     public function postUpdate()
     {
     }
+
+    /**
+     * @return string
+     */
+    public function getMessageType()
+    {
+        return 'info';
+    }
+
+    /**
+     * @return string
+     */
+    abstract protected function getLabelSlug();
 }
