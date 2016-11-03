@@ -6,6 +6,7 @@ use ByTIC\Common\Payments\Gateways\Manager as GatewaysManager;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
+use ByTIC\Common\Records\Record;
 use Nip\Records\RecordManager;
 use Nip\Request;
 
@@ -14,7 +15,6 @@ use Nip\Request;
  * @package ByTIC\Common\Payments\Controllers\Traits
  *
  * @method IsPurchasableModelTrait checkItem
- * @method IsPurchasableModelTrait getModelFromRequest
  */
 trait PurchaseControllerTrait
 {
@@ -122,4 +122,10 @@ trait PurchaseControllerTrait
     abstract protected function getRequest();
 
     abstract protected function dispatchAccessDeniedResponse();
+
+    /**
+     * @param bool|array $key
+     * @return Record|IsPurchasableModelTrait
+     */
+    abstract protected function getModelFromRequest($key = false);
 }
