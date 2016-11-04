@@ -67,7 +67,7 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     {
         $this->setErrorParameters(
             ApiAbstractRequest::CONFIRM_ERROR_TYPE_PERMANENT,
-            ApiAbstractRequest::CONFIRM_ERROR_TYPE_NONE,
+            ApiAbstractRequest::ERROR_CONFIRM_INVALID_POST_PARAMETERS,
             'mobilpay.ro posted invalid parameters'
         );
     }

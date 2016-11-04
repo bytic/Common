@@ -25,8 +25,24 @@ trait HasModelRequest
      */
     public function getModelIdFromRequest()
     {
-        return $this->getHttpRequest()->query->get('id');
+        $modelKey = $this->getModelIdRequestKey();
+
+        return $this->getHttpRequest()->query->get($modelKey);
     }
+
+    /**
+     * @return string
+     */
+    public function getModelIdRequestKey()
+    {
+        $modelIdMethod = 'getPaymentsUrlPK';
+        if (method_exists($this->getModelManager(), $modelIdMethod)) {
+            return $this->getModelManager()->$modelIdMethod();
+        }
+
+        return 'id';
+    }
+
 
     /**
      * @param $idModel
@@ -38,6 +54,7 @@ trait HasModelRequest
         $model = $this->findModel($idModel);
         if ($model) {
             $this->pushData('model', $model);
+
             return true;
         }
 
@@ -50,7 +67,14 @@ trait HasModelRequest
      */
     protected function findModel($id)
     {
-        return $this->getModelManager()->findOne($id);
+        $field = $this->getModelIdRequestKey();
+        if ($field == 'id') {
+            return $this->getModelManager()->findOne($id);
+        } else {
+            $method = 'findOneBy'.ucfirst($field);
+
+            return $this->getModelManager()->$method($id);
+        }
     }
 
     /**
