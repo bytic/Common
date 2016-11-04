@@ -12,6 +12,10 @@ use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypesRecordTrait;
  * Class MethodTrait
  * @package ByTIC\Common\Payments\Models\Methods\Traits
  *
+ * @property string $name
+ * @property string $internal_name
+ * @property string $descriptio
+ *
  * @method AbstractType|CreditCards getType
  * @method RecordsTrait getManager()
  */
@@ -24,6 +28,64 @@ trait RecordTrait
     use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
     use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait {
         getFileModelName as getFileModelNameAbstract;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function writeData($data = [])
+    {
+        if (!$data['type']) {
+            $data['type'] = 'bank-transfer';
+        }
+
+        return parent::writeData($data);
+    }
+
+    /**
+     * @param bool $type
+     * @return string
+     */
+    public function getName($type = false)
+    {
+        if ($type == 'internal') {
+            return $this->internal_name;
+        }
+        return $this->name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function checkConfirmRedirect()
+    {
+        if ($this->getType()->checkConfirmRedirect()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getEntryDescription()
+    {
+        $return = $this->getType()->getEntryDescription();
+        $return .= $this->description;
+        $return .= $this->__notes;
+
+        return $return;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canDelete()
+    {
+        if ($this->getPurchasesCount() > 0) {
+            return $this->getManager()->getMessage('delete.denied.has-purchases');
+        }
+
+        return true;
     }
 
     /**
