@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\RedirectResponse\RedirectTrait;
-use Nip\Utility\Traits\NameWorksTrait;
 
 /**
  * Class PurchaseRequest
@@ -13,7 +12,6 @@ use Nip\Utility\Traits\NameWorksTrait;
  */
 abstract class PurchaseRequest extends AbstractRequest
 {
-    use NameWorksTrait;
 
     /**
      * @return string
