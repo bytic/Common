@@ -62,6 +62,6 @@ class CompletePurchaseRequest extends AbstractRequest
      */
     protected function isProviderRequest()
     {
-        return $this->hasGet('id', 'ctrl');
+        return $this->hasGet('ctrl');
     }
 }

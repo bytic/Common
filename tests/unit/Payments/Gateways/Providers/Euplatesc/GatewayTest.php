@@ -40,7 +40,7 @@ class GatewayTest extends AbstractGatewayTest
         Debug::debug($body);
 
         if (strpos($body, '<META HTTP-EQUIV=') === false) {
-            $crawler = new Crawler('<body>'.$body.'</body>', $gatewayResponse->getEffectiveUrl());
+            $crawler = new Crawler('<body>' . $body . '</body>', $gatewayResponse->getEffectiveUrl());
             $form = $crawler->filter('form')->form();
 
             self::assertSame('https://secure2.euplatesc.ro/tdsprocess/tranzactd.php', $form->getUri());
@@ -63,16 +63,22 @@ class GatewayTest extends AbstractGatewayTest
 
     public function testCompletePurchaseResponse()
     {
-        $this->testGenericCompletePurchaseResponse('completePurchase');
+        $httpRequest = EuplatescData::getCompletePurchaseRequest();
+        $this->testGenericCompletePurchaseResponse('completePurchase', $httpRequest);
+    }
+
+    public function testServerCompletePurchaseAuthorizedResponse()
+    {
+        $httpRequest = EuplatescData::getServerCompletePurchaseRequest();
+        $this->testGenericCompletePurchaseResponse('serverCompletePurchase', $httpRequest);
     }
 
     /**
      * @param $type
+     * @param $httpRequest
      */
-    protected function testGenericCompletePurchaseResponse($type)
+    protected function testGenericCompletePurchaseResponse($type, $httpRequest)
     {
-        $method = 'get'.ucfirst($type).'Request';
-        $httpRequest = EuplatescData::$method();
 
         /** @var CompletePurchaseResponse $response */
         $response = $this->gatewayManager->detectItemFromHttpRequest(
@@ -87,11 +93,6 @@ class GatewayTest extends AbstractGatewayTest
         self::assertTrue($response->isSuccessful());
         self::assertEquals('active', $response->getModelResponseStatus());
         self::assertEquals($response->getTransactionId(), $response->getModel()->getPrimaryKey());
-    }
-
-    public function testServerCompletePurchaseAuthorizedResponse()
-    {
-        $this->testGenericCompletePurchaseResponse('serverCompletePurchase');
     }
 
     protected function setUp()

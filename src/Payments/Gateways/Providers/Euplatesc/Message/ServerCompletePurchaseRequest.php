@@ -12,4 +12,38 @@ use ByTIC\Common\Payments\Gateways\Providers\Euplatesc\Message\Traits\CompletePu
 class ServerCompletePurchaseRequest extends AbstractRequest
 {
     use CompletePurchaseRequestTrait;
+
+    /**
+     * @return mixed
+     */
+    public function getKey()
+    {
+        return $this->getParameter('key');
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function setMid($value)
+    {
+        return $this->setParameter('mid', $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMid()
+    {
+        return $this->getParameter('mid');
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function setKey($value)
+    {
+        return $this->setParameter('key', $value);
+    }
 }

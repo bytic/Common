@@ -24,40 +24,6 @@ trait CompletePurchaseRequestTrait
     }
 
     /**
-     * @return boolean
-     */
-    protected function validateHash()
-    {
-        $hash = $this->getHttpRequest()->request->get('fp_hash');
-        $hmac = $this->generateHmac($this->generateHashString());
-        if ($hmac == $hash) {
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $data
-     * @return string
-     */
-    protected function generateHmac($data)
-    {
-        $key = $this->getKey();
-
-        return Helper::generateHmac($data, $key);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getKey()
-    {
-        return $this->getParameter('key');
-    }
-
-    /**
      * @return string
      */
     public function generateHashString()
@@ -84,37 +50,37 @@ trait CompletePurchaseRequestTrait
     }
 
     /**
-     * @param $value
-     * @return mixed
-     */
-    public function setMid($value)
-    {
-        return $this->setParameter('mid', $value);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMid()
-    {
-        return $this->getParameter('mid');
-    }
-
-    /**
-     * @param $value
-     * @return mixed
-     */
-    public function setKey($value)
-    {
-        return $this->setParameter('key', $value);
-    }
-
-    /**
      * @return mixed
      */
     public function getModelIdFromRequest()
     {
         return $this->getHttpRequest()->request->get('invoice_id');
+    }
+
+    /**
+     * @return boolean
+     */
+    protected function validateHash()
+    {
+        $hash = $this->getHttpRequest()->request->get('fp_hash');
+        $hmac = $this->generateHmac($this->generateHashString());
+
+        if ($hmac == $hash) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    protected function generateHmac($data)
+    {
+        $key = $this->getKey();
+
+        return Helper::generateHmac($data, $key);
     }
 
     /**
