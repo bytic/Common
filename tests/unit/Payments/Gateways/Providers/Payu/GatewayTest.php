@@ -41,7 +41,16 @@ class GatewayTest extends AbstractGatewayTest
     public function testCompletePurchaseResponse()
     {
         $httpRequest = PayuData::getConfirmAuthorizedRequest();
+        $response = $this->doCompletePurchaseResponse($httpRequest);
+        self::assertEquals(null, $response->getModel()->status);
+    }
 
+    /**
+     * @param $httpRequest
+     * @return CompletePurchaseResponse
+     */
+    protected function doCompletePurchaseResponse($httpRequest)
+    {
         /** @var CompletePurchaseResponse $response */
         $response = $this->gatewayManager->detectItemFromHttpRequest(
             $this->purchaseManager,
@@ -52,6 +61,16 @@ class GatewayTest extends AbstractGatewayTest
         self::assertInstanceOf(CompletePurchaseResponse::class, $response);
         self::assertTrue($response->isSuccessful());
         self::assertEquals($httpRequest->query->get('id'), $response->getModel()->getPrimaryKey());
+
+        return $response;
+    }
+
+    public function testCompletePurchaseResponseAfterServerCompletePurchaseAuthorizedResponse()
+    {
+        $this->purchase->status = 'active';
+        $httpRequest = PayuData::getConfirmAuthorizedRequest();
+        $response = $this->doCompletePurchaseResponse($httpRequest);
+        self::assertEquals('active', $response->getModel()->status);
     }
 
     public function testServerCompletePurchaseAuthorizedResponse()
