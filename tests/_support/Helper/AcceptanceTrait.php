@@ -45,12 +45,13 @@ trait AcceptanceTrait
     abstract protected function getModule($name);
 
     /**
+     * @param $method
      * @param $url
      * @param $post
      */
-    public function loadPage($url, $post)
+    public function loadPage($method, $url, $post)
     {
-        return $this->getBrowserModule()->_loadPage('POST', $url, $post);
+        return $this->getBrowserModule()->_loadPage($method, $url, $post);
     }
 
     /**
