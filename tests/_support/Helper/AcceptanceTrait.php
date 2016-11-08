@@ -20,8 +20,6 @@ trait AcceptanceTrait
         $result = $this->runSqlQuery($query);
 
         return $result->fetch();
-
-        return $result->fetchAll();
     }
 
     /**
