@@ -139,7 +139,7 @@ $response = $this->get('response');
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <form action="<?php echo $response->getRedirectUrl() ?>" name="form-gateway"
-                  id="form-gateway" method="POST">
+                  id="form-gateway" method="POST" target="_top">
                 <?php echo $this->get('inputsHidden'); ?>
 
                 <?php if ($this->has('subtitle')) { ?>
