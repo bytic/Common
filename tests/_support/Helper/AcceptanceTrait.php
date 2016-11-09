@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Tests\Helper;
 
+use Codeception\Module\Db;
+use Codeception\Module\PhpBrowser;
 use Codeception\Util\Fixtures;
 use RuntimeException;
 
@@ -20,8 +22,6 @@ trait AcceptanceTrait
         $result = $this->runSqlQuery($query);
 
         return $result->fetch();
-
-        return $result->fetchAll();
     }
 
     /**
@@ -30,7 +30,9 @@ trait AcceptanceTrait
      */
     public function runSqlQuery($query)
     {
-        $dbh = $this->getModule("Db")->dbh;
+        /** @var Db $dbModule */
+        $dbModule = $this->getModule("Db");
+        $dbh = $dbModule->dbh;
 
         return $dbh->query($query);
     }
@@ -41,6 +43,24 @@ trait AcceptanceTrait
      * @throws \Codeception\Exception\ModuleException
      */
     abstract protected function getModule($name);
+
+    /**
+     * @param $method
+     * @param $url
+     * @param $post
+     */
+    public function loadPage($method, $url, $post)
+    {
+        return $this->getBrowserModule()->_loadPage($method, $url, $post);
+    }
+
+    /**
+     * @return PhpBrowser
+     */
+    protected function getBrowserModule()
+    {
+        return $this->getModule('PhpBrowser');
+    }
 
     /**
      * @param $name
@@ -60,7 +80,7 @@ trait AcceptanceTrait
      */
     public function getCurrentUri()
     {
-        return $this->getModule('PhpBrowser')->_getCurrentUri();
+        return $this->getBrowserModule()->_getCurrentUri();
     }
 
     /**

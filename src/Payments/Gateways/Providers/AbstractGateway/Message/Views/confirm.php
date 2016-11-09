@@ -58,19 +58,21 @@ $messageType = $response->getMessageType();
                 </p>
             <?php } ?>
 
-            <?php if (!$response->isSuccessful() && !$response->isPending()) { ?>
-                <p>
-                    <?php
-                    /** @noinspection PhpStaticAsDynamicMethodCallInspection */
-                    echo $this->Messages()->error(
-                        '<strong>'
-                        .translator()->translate('payment-gateways.messages.confirm.error.message')
-                        .'</strong>:<br />'
-                        .$response->getMessage()
-                    );
-                    ?>
-                </p>
-            <?php } ?>
+            <?php
+            if ($model && $model->getStatus()->getName() != 'active'
+                && !$response->isSuccessful() && !$response->isPending()
+            ) {
+                echo '<p>';
+                /** @noinspection PhpStaticAsDynamicMethodCallInspection */
+                echo $this->Messages()->error(
+                    '<strong>'
+                    .translator()->translate('payment-gateways.messages.confirm.error.message')
+                    .'</strong>:<br />'
+                    .$response->getMessage()
+                );
+                echo '</p>';
+            }
+            ?>
 
             <?php if ($response->isRedirect() || $response->hasButton()) { ?>
                 <?php $src = $response->isRedirect() ? $response->getRedirectUrl() : $response->getButtonHref() ?>
