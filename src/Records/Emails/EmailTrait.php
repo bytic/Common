@@ -242,6 +242,18 @@ trait EmailTrait
     }
 
     /**
+     * @return array|null
+     */
+    protected function getCustomArgs()
+    {
+        $args = [];
+        $args['category'] = $this->type;
+        $args['id_email'] = $this->id;
+
+        return $args;
+    }
+
+    /**
      * @param Mailer $mailer
      * @param Message $message
      * @param $response
