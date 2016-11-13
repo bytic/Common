@@ -253,8 +253,8 @@ trait EmailTrait
             $this->smtp_user = '';
             $this->smtp_host = '';
             $this->smtp_password = '';
-            $this->subject = '';
-            $this->body = '';
+//            $this->subject = '';
+//            $this->body = '';
             //        $this->vars = '';
             $this->date_sent = date(DATE_DB);
             $this->update();
