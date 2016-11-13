@@ -2,10 +2,13 @@
 
 namespace ByTIC\Common\Records\Emails;
 
+use ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait as AbstractRecordTrait;
+use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as FilesRecordTrait;
+use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as MediaRecordTrait;
 use Nip\Mail\Mailer;
 use Nip\Mail\Message;
+use Nip\Mail\Models\Mailable\RecordTrait as MailableRecordTrait;
 use Nip\Records\Record;
-use Nip_Config;
 use Nip_File_System;
 use Swift_Attachment;
 
@@ -33,11 +36,11 @@ use Swift_Attachment;
  */
 trait EmailTrait
 {
-    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+    use AbstractRecordTrait;
 
-    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
-    use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
-    use \Nip\Mail\Models\Mailable\RecordTrait;
+    use MediaRecordTrait;
+    use FilesRecordTrait;
+    use MailableRecordTrait;
 
     /**
      * @var array
@@ -137,6 +140,7 @@ trait EmailTrait
                 }
             }
         }
+
         return $emailsTos;
     }
 
@@ -244,7 +248,7 @@ trait EmailTrait
      */
     protected function afterSend($mailer, $message, $response)
     {
-        if ($response) {
+        if ($response > 0) {
             $this->sent = 'yes';
             $this->smtp_user = '';
             $this->smtp_host = '';

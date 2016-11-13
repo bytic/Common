@@ -85,8 +85,9 @@ trait RecordTrait
         return true;
     }
 
+
     /**
-     * @return array
+     * @return ModelFile[]
      */
     public function findFiles()
     {
