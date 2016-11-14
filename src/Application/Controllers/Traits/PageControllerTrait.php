@@ -4,6 +4,7 @@ namespace ByTIC\Common\Application\Controllers\Traits;
 
 use ByTIC\Common\Controllers\Traits\HasForms;
 use Nip\Config\Config;
+use Nip\Html\Head\Entities\Favicon;
 use Nip\Http\Response\Response;
 use Nip\View;
 
@@ -62,16 +63,12 @@ trait PageControllerTrait
 
     protected function setMeta()
     {
-        $tagline = Options::instance()->website_tagline->value;
-        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
-        $this->getView()->Meta()->authors = explode(",", $this->getConfig()->META->authors);
-        $this->getView()->Meta()->description = $this->getConfig()->META->description;
-        $this->getView()->Meta()->addKeywords(explode(",", $this->getConfig()->META->keywords));
-        $this->getView()->Meta()->copyright = $this->getConfig()->META->copyright;
-        $this->getView()->Meta()->robots = $this->getConfig()->META->robots;
-        $this->getView()->Meta()->verify_v1 = $this->getConfig()->META->verify_v1;
+//        $tagline = Options::instance()->website_tagline->value;
+//        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
 
-        $favicon = new \Nip\Html\Head\Entities\Favicon();
+        $this->getView()->Meta()->populateFromConfig($this->getConfig()->get('META'));
+
+        $favicon = new Favicon();
         $favicon->setBaseDir(IMAGES_URL.'/favicon');
         $favicon->addAll();
         $this->getView()->set('favicon', $favicon);
