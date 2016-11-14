@@ -3,6 +3,8 @@
 namespace ByTIC\Common\Application\Controllers\Traits;
 
 use ByTIC\Common\Controllers\Traits\HasForms;
+use Nip\Config\Config;
+use Nip\Http\Response\Response;
 use Nip\View;
 
 /**
@@ -13,6 +15,21 @@ trait PageControllerTrait
 {
     use HasForms;
 
+    /**
+     * @return Response
+     */
+    public abstract function getResponse();
+
+    /**
+     * @return View
+     */
+    public abstract function getView();
+
+    /**
+     * @return Config
+     */
+    public abstract function getConfig();
+
     protected function beforeAction()
     {
         parent::beforeAction();
@@ -21,28 +38,24 @@ trait PageControllerTrait
         $this->setBreadcrumbs();
     }
 
-    /**
-     * @return View
-     */
-    public abstract function getView();
-
     protected function setBreadcrumbs()
     {
     }
 
     protected function afterAction()
     {
-        header("Content-Type: text/html; charset=utf-8");
-
         $this->setMeta();
         $this->getView()->set('forms', $this->getForms());
-        $this->getView()->_config = $this->getConfig();
-        $this->getView()->_stage = app('kernel')->getStaging()->getStage();
-        $this->getView()->layout = $this->getLayout();
-        $this->getView()->_module = $this->getRequest()->getModuleName();
+        $this->getView()->set('_config', $this->getConfig());
+        $this->getView()->set('_stage', app('kernel')->getStaging()->getStage());
+        $this->getView()->set('layout', $this->getLayout());
+        $this->getView()->set('_module', $this->getRequest()->getModuleName());
 
         $content = $this->getView()->load('/layouts/'.$this->getLayout(), [], true);
         $this->getResponse()->setContent($content);
+
+        $this->getResponse()->headers->set('Content-Type', 'text/html');
+        $this->getResponse()->setCharset('utf-8');
 
         parent::afterAction();
     }
