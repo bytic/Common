@@ -46,6 +46,8 @@ trait PageControllerTrait
     protected function afterAction()
     {
         $this->setMeta();
+        $this->prepareResponseHeaders();
+
         $this->getView()->set('forms', $this->getForms());
         $this->getView()->set('_config', $this->getConfig());
         $this->getView()->set('_stage', app('kernel')->getStaging()->getStage());
@@ -55,10 +57,21 @@ trait PageControllerTrait
         $content = $this->getView()->load('/layouts/'.$this->getLayout(), [], true);
         $this->getResponse()->setContent($content);
 
+        parent::afterAction();
+    }
+
+    protected function prepareResponseHeaders()
+    {
         $this->getResponse()->headers->set('Content-Type', 'text/html');
         $this->getResponse()->setCharset('utf-8');
 
-        parent::afterAction();
+
+        // FIX FOR IE SESSION COOKIE
+        // CAO IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT
+        // ALL ADM DEV PSAi COM OUR OTRo STP IND ONL
+//        header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
+
+        $this->getResponse()->headers->set('P3P', 'CP="CAO PSA OUR"');
     }
 
     protected function setMeta()
