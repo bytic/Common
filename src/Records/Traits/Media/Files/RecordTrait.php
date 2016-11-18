@@ -64,10 +64,33 @@ trait RecordTrait
      */
     public function getFileModelName($type = null)
     {
+        $name = $this->isNamespaced() ? $this->getFileModelNamespaced($type) : $this->getFileModelNameDefault($type);
+
+        return $name;
+    }
+
+    /**
+     * @param null $type
+     * @return string
+     */
+    public function getFileModelNamespaced($type = null)
+    {
+        $type = $type ? $type : 'Generic';
+
+        return $this->getManager()->getModelNamespace().'\Files\\'.ucfirst($type);
+    }
+
+    /**
+     * @param null $type
+     * @return string
+     */
+    public function getFileModelNameDefault($type = null)
+    {
         if ($type) {
-            return $this->getManager()->getModel() . "_File_" . ucfirst($type);
+            return $this->getManager()->getModel()."_File_".ucfirst($type);
         }
-        return $this->getManager()->getModel() . "_File";
+
+        return $this->getManager()->getModel()."_File";
     }
 
     /**
