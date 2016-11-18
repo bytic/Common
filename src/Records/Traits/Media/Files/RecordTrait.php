@@ -77,7 +77,7 @@ trait RecordTrait
     {
         $type = $type ? $type : 'Generic';
 
-        return $this->getManager()->getModelNamespace().'\Files\\'.ucfirst($type);
+        return $this->getManager()->getModelNamespace().'Files\\'.ucfirst($type);
     }
 
     /**
