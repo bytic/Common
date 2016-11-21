@@ -212,9 +212,9 @@ trait PdfLettersTrait
     }
 
     /**
-     * @param int $skip
+     * @inheritdoc
      */
-    protected function setBreadcrumbs($skip = 0)
+    protected function setBreadcrumbs()
     {
         $this->call('setClassBreadcrumbs', $this->parentManager->getController());
         $this->call('setItemBreadcrumbs', $this->parentManager->getController(), false, [$this->parent]);
