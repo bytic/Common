@@ -137,7 +137,7 @@ trait PdfLetterTrait
             $pdf->useTemplate($tplidx);
             $pdf->endPage();
         }
-        $pdf->setPage(2);
+        $pdf->setPage(1);
 
         return $pdf;
     }
