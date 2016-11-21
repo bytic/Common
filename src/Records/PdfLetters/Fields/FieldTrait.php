@@ -57,12 +57,14 @@ trait FieldTrait
      */
     public function addToPdf($pdf, $model)
     {
+        /** Set positions before Fonts and colors */
+        $value = $this->getValue($model);
+        $y = $this->pdfYPosition($pdf, $value);
+        $x = $this->pdfXPosition($pdf, $value);
+
         $this->pdfPrepareFont($pdf);
         $this->pdfPrepareColor($pdf);
 
-        $value = $this->getValue($model);
-        $x = $this->pdfXPosition($pdf, $value);
-        $y = $this->pdfYPosition($pdf, $value);
         $pdf->Text($x, $y, $value);
     }
 
