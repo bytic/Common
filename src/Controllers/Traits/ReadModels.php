@@ -35,6 +35,13 @@ trait ReadModels
         $this->doModelsListing();
     }
 
+    public function view()
+    {
+        $item = $this->getViewItemFromRequest();
+        $this->getView()->set('item', $item);
+        $this->getView()->Meta()->prependTitle($item->getName());
+    }
+
     protected function doModelsListing()
     {
         $query = $this->newIndexQuery();
@@ -98,13 +105,6 @@ trait ReadModels
     {
     }
 
-    public function view()
-    {
-        $item = $this->getViewItemFromRequest();
-        $this->getView()->set('item', $item);
-        $this->getView()->Meta()->prependTitle($item->getName());
-    }
-
     /**
      * @return Record
      */
@@ -132,16 +132,15 @@ trait ReadModels
         }
     }
 
-    protected function setBreadcrumbs($skip = 0)
+    protected function setBreadcrumbs()
     {
-        $skip--;
-        parent::setBreadcrumbs($skip);
-
-        if ($skip < 0) {
-            $this->setClassBreadcrumbs();
-        }
+        parent::setBreadcrumbs();
+        $this->setClassBreadcrumbs();
     }
 
+    /**
+     * @param bool $parent
+     */
     protected function setClassBreadcrumbs($parent = false)
     {
         $this->getView()->Breadcrumbs()->addItem(
