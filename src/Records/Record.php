@@ -18,8 +18,10 @@ use Nip_Registry;
  */
 class Record extends NipRecord
 {
-
     use HasFormRecordTrait;
+
+    protected $_urlPK;
+    protected $_urlCol = 'name';
 
     /**
      * @var Nip_Registry
@@ -44,5 +46,59 @@ class Record extends NipRecord
         }
 
         return $this->registry;
+    }
+
+    /**
+     * @param $action
+     * @param array $params
+     * @param null $module
+     * @return mixed
+     */
+    public function compileURL($action, $params = [], $module = null)
+    {
+        $params = $this->injectURLParams($action, $params, $module);
+        $this->filterURLParams($params);
+
+        $action = ucfirst($action);
+
+        return $this->getManager()->{"get".$action."URL"}($params, $module);
+    }
+
+    /**
+     * @param $action
+     * @param $params
+     * @param null $module
+     */
+    public function injectURLParams($action, $params, $module = null)
+    {
+        $params = $this->injectUrlPK($action, $params, $module = null);
+
+        return $params;
+    }
+
+    /**
+     * @param $params
+     */
+    public function filterURLParams($params)
+    {
+    }
+
+    /**
+     * @param $action
+     * @param $params
+     * @param null $module
+     */
+    protected function injectUrlPK($action, $params, $module = null)
+    {
+        $pk = $this->getManager()->getUrlPK();
+        if (is_array($pk)) {
+            foreach ($pk as $field) {
+                $params[$field] = $this->{$field};
+            }
+        } else {
+            $params[$pk] = $this->{$pk};
+        }
+
+        return $params;
     }
 }
