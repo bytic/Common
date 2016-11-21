@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Controllers\Traits;
 
 use Nip\Controller;
+use Nip\Dispatcher\Dispatcher;
 use Nip\Records\AbstractModels\Record;
 use Nip\Records\AbstractModels\RecordManager;
 use Nip\Request;
@@ -23,6 +24,44 @@ trait HasModels
     protected $model = null;
 
     protected $modelManager = null;
+
+    /**
+     * @return null|string
+     */
+    public function getModel()
+    {
+        if ($this->model === null) {
+            $this->initModel();
+        }
+
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @return bool
+     */
+    abstract public function isNamespaced();
+
+    /**
+     * @return string
+     */
+    public function getModelNamespace()
+    {
+        return $this->getRootNamespace().'Models\\';
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getRootNamespace();
 
     /**
      * @param bool $key
@@ -67,26 +106,6 @@ trait HasModels
         return call_user_func([$managerName, "instance"]);
     }
 
-    /**
-     * @return null|string
-     */
-    public function getModel()
-    {
-        if ($this->model === null) {
-            $this->initModel();
-        }
-
-        return $this->model;
-    }
-
-    /**
-     * @param string $model
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-    }
-
     protected function initModel()
     {
         $this->setModel($this->generateModelName());
@@ -110,24 +129,6 @@ trait HasModels
 
         return $model;
     }
-
-    /**
-     * @return bool
-     */
-    abstract public function isNamespaced();
-
-    /**
-     * @return string
-     */
-    public function getModelNamespace()
-    {
-        return $this->getRootNamespace().'Models\\';
-    }
-
-    /**
-     * @return string
-     */
-    abstract public function getRootNamespace();
 
     /**
      * @param bool $key
@@ -165,9 +166,17 @@ trait HasModels
         list($urlKey, $modelKey) = $this->getUrlModelKey($key);
 
         $manager = $this->getModelManager();
-        $value = $this->getItemValueFromRequest($request, $urlKey);
         $params = [];
-        $params['where'][] = ["`{$modelKey}` = ?", $value];
+        if (is_array($modelKey)) {
+            foreach ($modelKey as $i => $field) {
+                $urlKeyField = $urlKey[$i];
+                $value = $this->getItemValueFromRequest($request, $urlKeyField);
+                $params['where'][] = ["`{$field}` = ?", $value];
+            }
+        } else {
+            $value = $this->getItemValueFromRequest($request, $urlKey);
+            $params['where'][] = ["`{$modelKey}` = ?", $value];
+        }
 
         return $manager->findOneByParams($params);
     }

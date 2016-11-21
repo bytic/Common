@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use Nip\Records\Record;
-use Nip\Records\RecordManager;
+use ByTIC\Common\Records\Record as Record;
+use ByTIC\Common\Records\Records as RecordManager;
 use Nip\Request;
 use Nip\View;
 use Nip_Form_Model as Form;
