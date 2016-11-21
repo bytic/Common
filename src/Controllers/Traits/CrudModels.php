@@ -23,6 +23,8 @@ use Nip_Record_Paginator as RecordPaginator;
  */
 trait CrudModels
 {
+    use HasRecordPaginator;
+
     protected $_urls = [];
     protected $_flash = [];
     /**
@@ -58,51 +60,8 @@ trait CrudModels
         $this->getView()->Paginator()->setPaginator($paginator)->setURL($this->getModelManager()->getURL());
     }
 
-    /**
-     * @param RecordPaginator $paginator
-     * @return $this
-     */
-    public function setRecordPaginator($paginator)
-    {
-        $this->_paginator = $paginator;
-
-        return $this;
-    }
-
-    public function prepareRecordPaginator()
-    {
-        $this->getRecordPaginator()->setPage(intval($_GET['page']));
-        $this->getRecordPaginator()->setItemsPerPage(50);
-    }
-
-    /**
-     * @return RecordPaginator
-     */
-    public function getRecordPaginator()
-    {
-        if ($this->_paginator == null) {
-            $this->initRecordPaginator();
-        }
-
-        return $this->_paginator;
-    }
-
-    public function initRecordPaginator()
-    {
-        $this->setRecordPaginator($this->newRecordPaginator());
-    }
-
-    /**
-     * @return RecordPaginator
-     */
-    public function newRecordPaginator()
-    {
-        return new RecordPaginator();
-    }
-
     public function add()
     {
-
         $item = $this->addNewModel();
         $form = $this->addGetForm($item);
 
