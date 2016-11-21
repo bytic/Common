@@ -62,7 +62,8 @@ trait FieldTrait
 
         $value = $this->getValue($model);
         $x = $this->pdfXPosition($pdf, $value);
-        $pdf->Text($x, $this->y, $value);
+        $y = $this->pdfYPosition($pdf, $value);
+        $pdf->Text($x, $y, $value);
     }
 
     /**
@@ -77,7 +78,7 @@ trait FieldTrait
             return $valueType;
         }
 
-        return '<<' . $this->field . '>>';
+        return '<<'.$this->field.'>>';
     }
 
     /**
@@ -104,6 +105,7 @@ trait FieldTrait
                 return [intval($red), intval($green), intval($blue)];
             }
         }
+
         return null;
     }
 
@@ -150,5 +152,27 @@ trait FieldTrait
         }
 
         return $x;
+    }
+
+    /**
+     * @param FPDI $pdf
+     * @param $value
+     * @return int|string
+     */
+    protected function pdfYPosition($pdf, $value)
+    {
+        $y = $this->y;
+        $page = 1;
+        if ($y > 297) {
+            $page = round($y / 297, 0);
+            $y -= ($page * 297);
+            $page++;
+        }
+
+        if ($pdf->getPage() != $page && $page <= $pdf->getNumPages()) {
+            $pdf->setPage($page);
+        }
+
+        return $y;
     }
 }

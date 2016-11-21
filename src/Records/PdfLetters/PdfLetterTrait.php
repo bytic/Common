@@ -58,14 +58,6 @@ trait PdfLetterTrait
     }
 
     /**
-     * @return string
-     */
-    protected function getFileNameDefault()
-    {
-        return 'letter';
-    }
-
-    /**
      * @return mixed
      */
     public function delete()
@@ -137,46 +129,17 @@ trait PdfLetterTrait
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(app('config')->get('SITE.name'));
 
-        $pdf->setSourceFile($this->getFile()->getPath());
-        $tplidx = $pdf->importPage(1, '/MediaBox');
+        $pageCount = $pdf->setSourceFile($this->getFile()->getPath());
+        for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+            $tplidx = $pdf->importPage($pageNo, '/MediaBox');
 
-        $pdf->addPage(ucfirst($this->orientation), $this->format);
-        $pdf->useTemplate($tplidx);
+            $pdf->addPage(ucfirst($this->orientation), $this->format);
+            $pdf->useTemplate($tplidx);
+            $pdf->endPage();
+        }
+        $pdf->setPage(2);
 
         return $pdf;
-    }
-
-    /**
-     * @param FPDI|TCPDF $pdf
-     */
-    protected function pdfDrawGuidelines($pdf)
-    {
-        for ($pos = 5; $pos < 791; $pos = $pos + 5) {
-            if (($pos % 100) == 0) {
-                $pdf->SetDrawColor(0, 0, 200);
-                $pdf->SetLineWidth(.7);
-            } elseif (($pos % 50) == 0) {
-                $pdf->SetDrawColor(200, 0, 0);
-                $pdf->SetLineWidth(.4);
-            } else {
-                $pdf->SetDrawColor(128, 128, 128);
-                $pdf->SetLineWidth(.05);
-            }
-
-            $pdf->Line(0, $pos, 611, $pos);
-            if ($pos < 611) {
-                $pdf->Line($pos, 0, $pos, 791);
-            }
-        }
-    }
-
-    /** @noinspection PhpUnusedParameterInspection
-     * @param $model
-     * @return string
-     */
-    protected function getFileNameFromModel($model)
-    {
-        return $this->getFileNameDefault();
     }
 
     public function downloadBlank()
@@ -229,4 +192,45 @@ trait PdfLetterTrait
      * @return Records
      */
     abstract public function getItemsManager();
+
+    /**
+     * @return string
+     */
+    protected function getFileNameDefault()
+    {
+        return 'letter';
+    }
+
+    /**
+     * @param FPDI|TCPDF $pdf
+     */
+    protected function pdfDrawGuidelines($pdf)
+    {
+        for ($pos = 5; $pos < 791; $pos = $pos + 5) {
+            if (($pos % 100) == 0) {
+                $pdf->SetDrawColor(0, 0, 200);
+                $pdf->SetLineWidth(.7);
+            } elseif (($pos % 50) == 0) {
+                $pdf->SetDrawColor(200, 0, 0);
+                $pdf->SetLineWidth(.4);
+            } else {
+                $pdf->SetDrawColor(128, 128, 128);
+                $pdf->SetLineWidth(.05);
+            }
+
+            $pdf->Line(0, $pos, 611, $pos);
+            if ($pos < 611) {
+                $pdf->Line($pos, 0, $pos, 791);
+            }
+        }
+    }
+
+    /** @noinspection PhpUnusedParameterInspection
+     * @param $model
+     * @return string
+     */
+    protected function getFileNameFromModel($model)
+    {
+        return $this->getFileNameDefault();
+    }
 }
