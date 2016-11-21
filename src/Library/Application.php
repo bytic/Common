@@ -28,6 +28,8 @@ abstract class Application extends NipApplication
         $this->getAutoLoader()->addDirectory(APPLICATION_PATH);
         $this->getAutoLoader()->addDirectory(LIBRARY_PATH);
 
+        $this->getAutoLoader()->addNamespace($this->getRootNamespace().'Models\\', APPLICATION_PATH.'models');
+
         $this->getAutoLoader()->addNamespace($this->getRootNamespace().'Modules\Admin\\', MODULES_PATH.'admin');
         $this->getAutoLoader()->addNamespace(
             $this->getRootNamespace().'Modules\Frontend\\',
