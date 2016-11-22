@@ -12,7 +12,7 @@ trait ResponseTrait
     /**
      * @var array
      */
-    protected $response = [];
+    protected $response_values = [];
     protected $response_type = 'json';
 
     /**
@@ -27,19 +27,6 @@ trait ResponseTrait
     public function afterAction()
     {
         $this->output();
-    }
-
-    /**
-     * @param string $response
-     */
-    protected function output($response = '')
-    {
-        if ($response) {
-            $this->response = $response;
-        }
-        $method = 'output'.strtoupper($this->response_type);
-        $this->$method();
-        exit();
     }
 
     /**
@@ -71,7 +58,7 @@ trait ResponseTrait
      */
     public function setResponse($response)
     {
-        $this->response = $response;
+        $this->response_values = $response;
     }
 
     /**
@@ -83,21 +70,34 @@ trait ResponseTrait
         $this->sendResponse('error', $message, $params);
     }
 
+    /**
+     * @param string $response
+     */
+    protected function output($response = '')
+    {
+        if ($response) {
+            $this->response_values = $response;
+        }
+        $method = 'output' . strtoupper($this->response_type);
+        $this->$method();
+        exit();
+    }
+
     protected function outputJSON()
     {
         header("Content-type: text/x-json");
-        echo(json_encode($this->response));
+        echo(json_encode($this->response_values));
     }
 
     protected function outputTXT()
     {
         header("Content-type: text/plain");
-        echo($this->response);
+        echo($this->response_values);
     }
 
     protected function outputHTML()
     {
         header("Content-type: text/html");
-        echo($this->response);
+        echo($this->response_values);
     }
 }
