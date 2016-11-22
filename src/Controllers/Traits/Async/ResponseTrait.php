@@ -35,7 +35,7 @@ trait ResponseTrait
      */
     public function sendSuccess($message, $params = [])
     {
-        $this->sendResponse('success', $message, $params);
+        $this->sendResponseMessage('success', $message, $params);
     }
 
     /**
@@ -43,22 +43,22 @@ trait ResponseTrait
      * @param $message
      * @param array $params
      */
-    public function sendResponse($type, $message, $params = [])
+    public function sendResponseMessage($type, $message, $params = [])
     {
         $response = $params;
         $response['type'] = $type;
         $response['message'] = $message;
 
-        $this->setResponse($response);
+        $this->setResponseValues($response);
         $this->output();
     }
 
     /**
-     * @param array $response
+     * @param array $values
      */
-    public function setResponse($response)
+    public function setResponseValues($values)
     {
-        $this->response_values = $response;
+        $this->response_values = $values;
     }
 
     /**
@@ -67,7 +67,7 @@ trait ResponseTrait
      */
     public function sendError($message, $params = [])
     {
-        $this->sendResponse('error', $message, $params);
+        $this->sendResponseMessage('error', $message, $params);
     }
 
     /**
