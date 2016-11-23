@@ -1,10 +1,10 @@
 <?php
 
-namespace ByTIC\Common\Records\Users\Traits\Authentication;
+namespace ByTIC\Common\Application\Models\Users\Traits\Authentication;
 
+use ByTIC\Common\Application\Models\Users\Traits\Authentication\AuthenticationUserTrait as User;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
 use ByTIC\Common\Records\Traits\PersistentCurrent;
-use ByTIC\Common\Records\Users\Traits\Authentication\AuthenticationUserTrait as User;
 use Nip\Cookie\Jar as CookieJar;
 use Nip\HelperBroker;
 use Nip_Helper_Passwords as PasswordsHelper;

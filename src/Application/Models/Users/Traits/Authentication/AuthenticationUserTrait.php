@@ -1,9 +1,9 @@
 <?php
 
-namespace ByTIC\Common\Records\Users\Traits\Authentication;
+namespace ByTIC\Common\Application\Models\Users\Traits\Authentication;
 
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait as User;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait as AbstractRecordTrait;
-use ByTIC\Common\Records\Users\Traits\AbstractUser\AbstractUserTrait as User;
 use Nip\HelperBroker;
 use Nip_Helper_Passwords as PasswordsHelper;
 
