@@ -24,7 +24,7 @@ trait ResponseTrait
         ini_set('html_errors', 0);
     }
 
-    public function afterAction()
+    protected function afterAction()
     {
         $this->output();
     }
