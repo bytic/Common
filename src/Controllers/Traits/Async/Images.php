@@ -16,15 +16,22 @@ trait Images
         $image = $item->uploadImage();
 
         if (is_object($image)) {
-            $this->response['type'] = 'success';
-            $this->response['url'] = $image->url;
-            $this->response['path'] = $image->name;
-            $this->response['width'] = $item->getImageWidth("default");
-            $this->response['height'] = $item->getImageHeight("default");
+            $response['type'] = 'success';
+            $response['url'] = $image->url;
+            $response['path'] = $image->name;
+            $response['width'] = $item->getImageWidth("default");
+            $response['height'] = $item->getImageHeight("default");
         }
 
-        $this->response['message'] = $item->errors['upload'];
+        $response['message'] = $item->errors['upload'];
+        $this->setResponseValues($response);
     }
+
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
 
     public function cropImage()
     {
@@ -33,10 +40,11 @@ trait Images
         $image = $item->cropImages($_POST);
 
         if ($image) {
-            $this->response['type'] = 'success';
-            $this->response['url'] = $image->url;
-            $this->response['name'] = $image->name;
+            $response['type'] = 'success';
+            $response['url'] = $image->url;
+            $response['name'] = $image->name;
         }
+        $this->setResponseValues($response);
     }
 
     public function setDefaultImage()
@@ -44,7 +52,7 @@ trait Images
         $item = $this->checkItem();
 
         if ($item->setDefaultImage($_POST)) {
-            $this->response['type'] = 'success';
+            $response['type'] = 'success';
         }
     }
 
@@ -53,7 +61,8 @@ trait Images
         $item = $this->checkItem();
 
         if ($item->removeImage($_POST)) {
-            $this->response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
 }

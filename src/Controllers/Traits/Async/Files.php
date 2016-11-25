@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Files
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Files
 {
     public function uploadAttachment()
@@ -11,25 +15,31 @@ trait Files
         $file = $item->uploadFile($_FILES['Filedata']);
 
         if ($file) {
-            $this->response['type'] = 'success';
-            $this->response['url'] = $file->getURL();
-            $this->response['name'] = $file->getName();
-            $this->response['extension'] = $file->getExtension();
-            $this->response['size'] = $file->formatSize();
-            $this->response['time'] = date("d.m.Y H:i", $file->getTime());
+            $response['type'] = 'success';
+            $response['url'] = $file->getURL();
+            $response['name'] = $file->getName();
+            $response['extension'] = $file->getExtension();
+            $response['size'] = $file->formatSize();
+            $response['time'] = date("d.m.Y H:i", $file->getTime());
         } else {
-            $this->response['type'] = 'error';
+            $response['type'] = 'error';
         }
+        $this->setResponseValues($response);
     }
 
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
 
     public function removeFile()
     {
         $item = $this->checkItem();
 
         if ($item->removeFile($_POST)) {
-            $this->response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
-
 }

@@ -16,16 +16,22 @@ trait Covers
         $cover = $item->uploadCover();
 
         if (is_object($cover)) {
-            $this->response['type'] = 'success';
-            $this->response['url'] = $cover->url;
-            $this->response['path'] = $cover->name;
-            $this->response['width'] = $cover->cropWidth;
-            $this->response['height'] = $cover->cropHeight;
+            $response['type'] = 'success';
+            $response['url'] = $cover->url;
+            $response['path'] = $cover->name;
+            $response['width'] = $cover->cropWidth;
+            $response['height'] = $cover->cropHeight;
         }
 
-        $this->response['message'] = $item->errors['upload'];
+        $response['message'] = $item->errors['upload'];
+        $this->setResponseValues($response);
     }
 
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
 
     public function cropCover()
     {
@@ -34,10 +40,11 @@ trait Covers
         $cover = $item->cropCovers($_POST);
 
         if ($cover) {
-            $this->response['type'] = 'success';
-            $this->response['url'] = $cover->url;
-            $this->response['name'] = $cover->name;
+            $response['type'] = 'success';
+            $response['url'] = $cover->url;
+            $response['name'] = $cover->name;
         }
+        $this->setResponseValues($response);
     }
 
     public function setDefaultCover()
@@ -45,17 +52,18 @@ trait Covers
         $item = $this->checkItem();
 
         if ($item->setDefaultCover($_POST)) {
-            $this->response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
-
 
     public function removeCover()
     {
         $item = $this->checkItem();
 
         if ($item->removeCover($_POST)) {
-            $this->response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
 }
