@@ -5,9 +5,6 @@ namespace ByTIC\Common\Application\Controllers\Traits;
 use ByTIC\Common\Controllers\Traits\HasForms;
 use Nip\Config\Config;
 use Nip\Html\Head\Entities\Favicon;
-use Nip\Http\Response\Response;
-use Nip\Request;
-use Nip\View;
 
 /**
  * Class PageControllerTrait
@@ -16,26 +13,7 @@ use Nip\View;
 trait PageControllerTrait
 {
     use HasForms;
-
-    /**
-     * @return Response
-     */
-    public abstract function getResponse();
-
-    /**
-     * @return Request
-     */
-    public abstract function getRequest();
-
-    /**
-     * @return View
-     */
-    public abstract function getView();
-
-    /**
-     * @return Config
-     */
-    public abstract function getConfig();
+    use AbstractControllerTrait;
 
     protected function beforeAction()
     {
@@ -59,6 +37,24 @@ trait PageControllerTrait
         parent::afterAction();
     }
 
+    protected function setMeta()
+    {
+//        $tagline = Options::instance()->website_tagline->value;
+//        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
+
+        $this->getView()->Meta()->populateFromConfig($this->getConfig()->get('META'));
+
+        $favicon = new Favicon();
+        $favicon->setBaseDir(IMAGES_URL.'/favicon');
+        $favicon->addAll();
+        $this->getView()->set('favicon', $favicon);
+    }
+
+    /**
+     * @return Config
+     */
+    public abstract function getConfig();
+
     protected function prepareResponseHeaders()
     {
         $this->getResponse()->headers->set('Content-Type', 'text/html');
@@ -71,19 +67,6 @@ trait PageControllerTrait
 //        header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
 
         $this->getResponse()->headers->set('P3P', 'CP="CAO PSA OUR"');
-    }
-
-    protected function setMeta()
-    {
-//        $tagline = Options::instance()->website_tagline->value;
-//        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
-
-        $this->getView()->Meta()->populateFromConfig($this->getConfig()->get('META'));
-
-        $favicon = new Favicon();
-        $favicon->setBaseDir(IMAGES_URL.'/favicon');
-        $favicon->addAll();
-        $this->getView()->set('favicon', $favicon);
     }
 
     protected function afterActionViewVariables()
