@@ -18,10 +18,11 @@ trait Logos
             $image = $item->uploadLogo($type);
 
             if (is_object($image)) {
-                $this->response['type'] = 'success';
-                $this->response['url'] = $image->getUrl();
-                $this->response['path'] = $image->getPath();
-                $this->response['imageType'] = $image->getImageType();
+                $response['type'] = 'success';
+                $response['url'] = $image->getUrl();
+                $response['path'] = $image->getPath();
+                $response['imageType'] = $image->getImageType();
+                $this->setResponseValues($response);
             } else {
                 $this->sendError($item->errors['upload']);
             }
@@ -30,19 +31,26 @@ trait Logos
         }
     }
 
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
+
     public function removeLogo()
     {
         $item = $this->checkItem();
 
         if ($item->removeLogo($_REQUEST)) {
-            $this->response['message'] = 'Logo sters';
+            $response['message'] = 'Logo sters';
         } else {
-            $this->response['message'] = 'Logo-ul convertit la default';
+            $response['message'] = 'Logo-ul convertit la default';
         }
 
         $image = $item->getLogo($_REQUEST['type']);
-        $this->response['type'] = 'success';
-        $this->response['url'] = $image->getUrl();
-        $this->response['path'] = $image->getPath();
+        $response['type'] = 'success';
+        $response['url'] = $image->getUrl();
+        $response['path'] = $image->getPath();
+        $this->setResponseValues($response);
     }
 }

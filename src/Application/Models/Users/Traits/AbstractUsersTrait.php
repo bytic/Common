@@ -1,9 +1,9 @@
 <?php
 
-namespace ByTIC\Common\Records\Users\Traits\AbstractUser;
+namespace ByTIC\Common\Application\Models\Users\Traits;
 
+use ByTIC\Common\Application\Models\Users\Traits\Authentication\AuthenticationUsersTrait;
 use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
-use ByTIC\Common\Records\Users\Traits\Authentication\AuthenticationUsersTrait;
 
 /**
  * Class AbstractUsersTrait

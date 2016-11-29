@@ -4,6 +4,7 @@ namespace ByTIC\Common\Controllers\Traits;
 
 use Nip\Controller;
 use Nip\Dispatcher\Dispatcher;
+use Nip\Logger\Exception;
 use Nip\Records\AbstractModels\Record;
 use Nip\Records\AbstractModels\RecordManager;
 use Nip\Request;
@@ -24,44 +25,6 @@ trait HasModels
     protected $model = null;
 
     protected $modelManager = null;
-
-    /**
-     * @return null|string
-     */
-    public function getModel()
-    {
-        if ($this->model === null) {
-            $this->initModel();
-        }
-
-        return $this->model;
-    }
-
-    /**
-     * @param string $model
-     */
-    public function setModel($model)
-    {
-        $this->model = $model;
-    }
-
-    /**
-     * @return bool
-     */
-    abstract public function isNamespaced();
-
-    /**
-     * @return string
-     */
-    public function getModelNamespace()
-    {
-        return $this->getRootNamespace().'Models\\';
-    }
-
-    /**
-     * @return string
-     */
-    abstract public function getRootNamespace();
 
     /**
      * @param bool $key
@@ -90,20 +53,37 @@ trait HasModels
     }
 
     /**
-     * @return void
+     * @throws Exception
      */
     protected function initModelManager()
     {
-        $this->modelManager = $this->newModelManagerInstance($this->getModel());
+        $managerClass = $this->getModel();
+        $modelManager = $this->newModelManagerInstance($this->getModel());
+        if ($modelManager instanceof RecordManager) {
+            $this->modelManager = $this->newModelManagerInstance($this->getModel());
+        } else {
+            throw new Exception("invalid ModelManager name [$managerClass] for controller [" . $this->getClassName() . "]");
+        }
     }
 
     /**
-     * @param string $managerName
-     * @return RecordManager
+     * @return null|string
      */
-    protected function newModelManagerInstance($managerName)
+    public function getModel()
     {
-        return call_user_func([$managerName, "instance"]);
+        if ($this->model === null) {
+            $this->initModel();
+        }
+
+        return $this->model;
+    }
+
+    /**
+     * @param string $model
+     */
+    public function setModel($model)
+    {
+        $this->model = $model;
     }
 
     protected function initModel()
@@ -131,6 +111,38 @@ trait HasModels
     }
 
     /**
+     * @return bool
+     */
+    abstract public function isNamespaced();
+
+    /**
+     * @return string
+     */
+    public function getModelNamespace()
+    {
+        return $this->getRootNamespace() . 'Models\\';
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getRootNamespace();
+
+    /**
+     * @param string $managerName
+     * @return RecordManager
+     */
+    protected function newModelManagerInstance($managerName)
+    {
+        return call_user_func([$managerName, "instance"]);
+    }
+
+    /**
+     * @return string
+     */
+    abstract public function getClassName();
+
+    /**
      * @param bool $key
      */
     protected function initModelFromRequest($key = false)
@@ -142,7 +154,7 @@ trait HasModels
     /**
      * @param bool $request
      * @param bool $key
-     * @return void|Record
+     * @return null|Record
      */
     protected function checkItem($request = false, $key = false)
     {
@@ -377,7 +389,7 @@ trait HasModels
      *
      * @param bool $request
      * @param bool $key
-     * @return false|Record|void
+     * @return false|Record
      */
     protected function findItemOrFail($request = false, $key = false)
     {
