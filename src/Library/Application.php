@@ -42,7 +42,12 @@ abstract class Application extends NipApplication
     public function setupURLConstants()
     {
         parent::setupURLConstants();
-        require_once(ROOT_PATH.'config.php');
+        $this->setupURLConstantsFromFile();
+    }
+
+    protected function setupURLConstantsFromFile()
+    {
+        require_once(ROOT_PATH . 'config.php');
     }
 
     public function initLanguages()
