@@ -187,6 +187,20 @@ trait FormTrait
     }
 
     /**
+     * @param $field
+     * @param $count
+     * @param null $form
+     */
+    public function selectOptionCountForm($field, $count, $form = null)
+    {
+        $form = $this->initFormName($form);
+        $path = $this->getFieldFormPath($field, $form);
+
+        $option = $this->getTester()->grabTextFrom($path . ' option:nth-child(' . $count . ')');
+        $this->selectOptionForm($field, $option);
+    }
+
+    /**
      * @param $path
      * @param null $name
      */
