@@ -54,42 +54,16 @@ trait FormTrait
     abstract protected function getTester();
 
     /**
+     * @param array $params
      * @param null $name
      */
-    public function submitForm($name = null)
+    public function setFieldsAndsubmitForm($params = [], $name = null)
     {
-        $name = $this->initFormName($name);
-        $form = $this->forms[$name];
-        $this->getTester()->click($form['path'].' '.$form['submit']);
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     */
-    public function setFieldFormData($name, $value)
-    {
-        $this->formData[$name] = $value;
-    }
-
-    /**
-     * sets a field value from data object
-     * @param $name
-     * @return mixed
-     */
-    public function setFieldFromData($name)
-    {
-        $value = $this->getFieldFormData($name);
-        return $this->setFieldValue($name, $value);
-    }
-
-    /**
-     * @param $name
-     * @return null
-     */
-    public function getFieldFormData($name)
-    {
-        return isset($this->formData[$name]) ? $this->formData[$name] : null;
+        foreach ($this->formData as $field => $value) {
+            $value = isset($params[$field]) ? $params[$field] : $value;
+            $this->setFieldValue($field, $value);
+        }
+        $this->submitForm($name);
     }
 
     /**
@@ -184,6 +158,46 @@ trait FormTrait
         $path = $this->getFieldFormPath($field, $form);
 
         return $this->getTester()->fillField($path, $value);
+    }
+
+    /**
+     * @param null $name
+     * @param array $params
+     */
+    public function submitForm($name = null, $params = [])
+    {
+        $name = $this->initFormName($name);
+        $form = $this->forms[$name];
+        $this->getTester()->submitForm($form['path'], $params);
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function setFieldFormData($name, $value)
+    {
+        $this->formData[$name] = $value;
+    }
+
+    /**
+     * sets a field value from data object
+     * @param $name
+     * @return mixed
+     */
+    public function setFieldFromData($name)
+    {
+        $value = $this->getFieldFormData($name);
+        return $this->setFieldValue($name, $value);
+    }
+
+    /**
+     * @param $name
+     * @return null
+     */
+    public function getFieldFormData($name)
+    {
+        return isset($this->formData[$name]) ? $this->formData[$name] : null;
     }
 
     /**
