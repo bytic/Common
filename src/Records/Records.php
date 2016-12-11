@@ -47,7 +47,7 @@ abstract class Records extends RecordManager
 
         $table = $this->getTable();
         if ($filters['name']) {
-            $query->where("$table.name LIKE ?", "%{$filters['name']}%");
+            $query->where("`$table`.`name` LIKE ?", "%{$filters['name']}%");
         }
 
         return $query;
