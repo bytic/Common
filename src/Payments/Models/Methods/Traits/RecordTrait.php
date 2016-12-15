@@ -14,7 +14,7 @@ use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypesRecordTrait;
  *
  * @property string $name
  * @property string $internal_name
- * @property string $descriptio
+ * @property string $description
  *
  * @method AbstractType|CreditCards getType
  * @method RecordsTrait getManager()
@@ -67,13 +67,24 @@ trait RecordTrait
         return false;
     }
 
+    /**
+     * @return bool|string
+     */
     public function getEntryDescription()
     {
         $return = $this->getType()->getEntryDescription();
-        $return .= $this->description;
+        $return .= $this->getDescription();
         $return .= $this->__notes;
 
         return $return;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**

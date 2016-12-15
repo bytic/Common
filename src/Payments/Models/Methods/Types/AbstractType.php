@@ -14,6 +14,14 @@ abstract class AbstractType extends Generic
     protected $message;
 
     /**
+     * @return bool|string
+     */
+    public function getEntryDescription()
+    {
+        return null;
+    }
+
+    /**
      * @return mixed
      */
     public function getMessage()

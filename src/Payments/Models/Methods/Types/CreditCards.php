@@ -16,6 +16,9 @@ class CreditCards extends AbstractType
 
     use HasGatewaysTrait;
 
+    /**
+     * @return bool|string
+     */
     public function getEntryDescription()
     {
         if (!$this->getGateway()) {
