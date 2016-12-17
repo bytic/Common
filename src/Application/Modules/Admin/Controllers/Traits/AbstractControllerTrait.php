@@ -2,6 +2,9 @@
 
 namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
+use Admin_View as AdminView;
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait as GenericAbstractControllerTrait;
+
 /**
  * Class AbstractControllerTrait
  * @package ByTIC\Common\Application\Modules\Admin\Controllers\Traits
@@ -9,6 +12,7 @@ namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 trait AbstractControllerTrait
 {
     use AuthenticationTrait;
+    use GenericAbstractControllerTrait;
 
     protected function beforeAction()
     {
@@ -31,8 +35,11 @@ trait AbstractControllerTrait
         parent::afterAction();
     }
 
+    /**
+     * @return AdminView
+     */
     protected function getViewObject()
     {
-        return new Admin_View();
+        return new AdminView();
     }
 }
