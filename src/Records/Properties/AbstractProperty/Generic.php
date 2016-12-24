@@ -84,12 +84,19 @@ abstract class Generic
     public function getLabel($short = false)
     {
         if (!$this->label) {
-            $this->label = $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName());
-            $this->label_short = $this->getManager()->translate(
-                $this->getLabelSlug().'.'.$this->getName().'.short');
+            $this->label = $this->generateLabel();
+            $this->label_short = $this->generateLabelShort();
         }
 
         return $short ? $this->label_short : $this->label;
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateLabel()
+    {
+        return $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName());
     }
 
     /**
@@ -110,6 +117,11 @@ abstract class Generic
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    abstract protected function getLabelSlug();
 
     /**
      * @return string
@@ -137,6 +149,14 @@ abstract class Generic
         $name = inflector()->unclassify($name);
 
         return $name;
+    }
+
+    /**
+     * @return string
+     */
+    protected function generateLabelShort()
+    {
+        return $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName() . '.short');
     }
 
     /**
@@ -194,7 +214,7 @@ abstract class Generic
     }
 
     /**
-     * @return bool|void
+     * @return bool|mixed
      */
     public function update()
     {
@@ -267,9 +287,4 @@ abstract class Generic
     {
         return 'info';
     }
-
-    /**
-     * @return string
-     */
-    abstract protected function getLabelSlug();
 }
