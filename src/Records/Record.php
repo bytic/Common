@@ -22,30 +22,41 @@ class Record extends NipRecord
 
     protected $_urlPK;
     protected $_urlCol = 'name';
-
     /**
      * @var Nip_Registry
      */
     protected $registry;
 
     /**
-     * @return mixed
+     * @inheritdoc
      */
-    public function getName()
+    public function __call($name, $arguments = [])
     {
-        return $this->name;
+        /** @noinspection PhpAssignmentInConditionInspection */
+        if ($return = $this->isCallUrl($name, $arguments)) {
+            return $return;
+        }
+
+        return parent::__call($name, $arguments);
     }
 
     /**
-     * @return Nip_Registry
+     * @param $name
+     * @param $arguments
+     * @return bool
      */
-    public function getRegistry()
+    protected function isCallUrl($name, $arguments)
     {
-        if (!$this->registry) {
-            $this->registry = new Nip_Registry();
+        if (substr($name, 0, 3) == "get" || substr($name, -3) == "URL") {
+            $action = substr($name, 3, -3);
+            $action = (!empty($action)) ? $action : 'View';
+            $params = $arguments[0];
+            $module = $arguments[1];
+
+            return $this->compileURL($action, $params, $module);
         }
 
-        return $this->registry;
+        return false;
     }
 
     /**
@@ -59,9 +70,7 @@ class Record extends NipRecord
         $params = $this->injectURLParams($action, $params, $module);
         $this->filterURLParams($params);
 
-        $action = ucfirst($action);
-
-        return $this->getManager()->{"get".$action."URL"}($params, $module);
+        return $this->getManager()->compileURL($action, $params, $module);
     }
 
     /**
@@ -71,16 +80,9 @@ class Record extends NipRecord
      */
     public function injectURLParams($action, $params, $module = null)
     {
-        $params = $this->injectUrlPK($action, $params, $module = null);
+        $params = $this->injectUrlPK($action, $params, $module);
 
         return $params;
-    }
-
-    /**
-     * @param $params
-     */
-    public function filterURLParams($params)
-    {
     }
 
     /**
@@ -100,5 +102,32 @@ class Record extends NipRecord
         }
 
         return $params;
+    }
+
+    /**
+     * @param $params
+     */
+    public function filterURLParams($params)
+    {
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Nip_Registry
+     */
+    public function getRegistry()
+    {
+        if (!$this->registry) {
+            $this->registry = new Nip_Registry();
+        }
+
+        return $this->registry;
     }
 }
