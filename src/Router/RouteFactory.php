@@ -19,9 +19,27 @@ class RouteFactory extends NipRouteFactory
      */
     public static function generateGenericModuleDefaultRoutes($collection, $module, $prefix)
     {
-        $classBase = ucfirst($module).'_Route_';
-        self::generateIndexRoute($collection, $module, $classBase.'Literal', $prefix);
-        self::generateStandardRoute($collection, $module.".default", $classBase.'Standard', $prefix);
+        $moduleName = is_array($module) ? $module[0] : $module;
+        self::generateIndexRoute($collection, $moduleName, self::generateModuleRouteClassBase($module, 'Literal'),
+            $prefix);
+        self::generateStandardRoute($collection, $moduleName . ".default",
+            self::generateModuleRouteClassBase($module, 'Standard'), $prefix);
+    }
+
+    /**
+     * @param string|array $module
+     * @param string $type
+     * @return string
+     */
+    public static function generateModuleRouteClassBase($module, $type)
+    {
+        if (is_array($module)) {
+            $namespace = $module[1];
+            $module = $module[0];
+            $module = $module == 'default' ? 'frontend' : $module;
+            return $namespace . 'Modules\\' . ucfirst($module) . '\Routes\\' . ucfirst($type) . 'Route';
+        }
+        return ucfirst($module) . '_Route_' . ucfirst($type);
     }
 
     /**
