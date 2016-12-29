@@ -47,7 +47,7 @@ class Record extends NipRecord
      */
     protected function isCallUrl($name, $arguments)
     {
-        if (substr($name, 0, 3) == "get" || substr($name, -3) == "URL") {
+        if (substr($name, 0, 3) == "get" && substr($name, -3) == "URL") {
             $action = substr($name, 3, -3);
             $action = (!empty($action)) ? $action : 'View';
             $params = $arguments[0];
