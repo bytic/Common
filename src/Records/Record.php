@@ -67,10 +67,20 @@ class Record extends NipRecord
      */
     public function compileURL($action, $params = [], $module = null)
     {
-        $params = $this->injectURLParams($action, $params, $module);
-        $this->filterURLParams($params);
+        $manager = $this->getManager();
 
-        return $this->getManager()->compileURL($action, $params, $module);
+        if ($this->hasRelation($action)) {
+            $relation = $this->getRelation($action);
+            $manager = $relation->getWith();
+            $action = 'index';
+            $params[$this->getManager()->getPrimaryFK()] = $this->getPrimaryKey();
+            $manager->compileURL('index', $params, $module);
+        } else {
+            $params = $this->injectURLParams($action, $params, $module);
+            $this->filterURLParams($params);
+        }
+
+        return $manager->compileURL($action, $params, $module);
     }
 
     /**
