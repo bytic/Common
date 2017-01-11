@@ -10,6 +10,7 @@ use Nip_Registry;
  * Class Record
  *
  * @property int $id
+ * @property string $name
  * @property string $modified
  * @property string $created
  *
@@ -69,8 +70,8 @@ class Record extends NipRecord
     {
         $manager = $this->getManager();
 
-        if ($this->hasRelation($action)) {
-            $relation = $this->getRelation($action);
+        if ($manager->hasRelation($action)) {
+            $relation = $manager->getRelation($action);
             $manager = $relation->getWith();
             $action = 'index';
             $params[$this->getManager()->getPrimaryFK()] = $this->getPrimaryKey();
