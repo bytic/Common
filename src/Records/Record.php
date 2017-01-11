@@ -74,7 +74,6 @@ class Record extends NipRecord
             $manager = $relation->getWith();
             $action = 'index';
             $params[$this->getManager()->getPrimaryFK()] = $this->getPrimaryKey();
-            $manager->compileURL('index', $params, $module);
         } else {
             $params = $this->injectURLParams($action, $params, $module);
             $this->filterURLParams($params);
