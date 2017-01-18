@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Application\Controllers\Traits;
 
+use ByTIC\Common\Records\Records;
 use Nip\Http\Response\Response;
 use Nip\Request;
 use Nip\View;
@@ -32,4 +33,9 @@ trait AbstractControllerTrait
      * @return string
      */
     public abstract function getAction();
+
+    /**
+     * @return Records
+     */
+    public abstract function getModelManager();
 }
