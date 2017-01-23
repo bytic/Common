@@ -13,13 +13,31 @@ trait HasViewTrait
 
     protected $view = null;
 
+    protected $layout = '/layouts/email';
+
+    /**
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
     /**
      * @return null|string
      */
     protected function generateEmailBody()
     {
         $this->compileView();
-        return $this->getView()->load('/layouts/email', [], true);
+        return $this->getView()->load($this->layout, [], true);
     }
 
     protected function compileView()
