@@ -43,14 +43,19 @@ abstract class AbstractBuilder
         return true;
     }
 
+    public function generateEmail()
+    {
+        $this->compile();
+        $this->compileSubject();
+        $this->compileEmailBody();
+    }
+
     /**
      * @return EmailTrait
      */
     public function createEmail()
     {
-        $this->compile();
-        $this->compileSubject();
-        $this->compileEmailBody();
+        $this->generateEmail();
         $this->saveEmail();
         $this->compileAttachments();
 
