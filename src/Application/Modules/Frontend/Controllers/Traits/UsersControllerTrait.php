@@ -12,7 +12,6 @@ use ByTIC\Common\Controllers\Traits\HasUser;
 trait UsersControllerTrait
 {
     use AbstractControllerTrait;
-    use HasUser;
 
     public function login()
     {
@@ -248,4 +247,9 @@ trait UsersControllerTrait
         $this->setLayout('login');
         parent::afterAction();
     }
+
+    /**
+     * @return User
+     */
+    abstract protected function _getUser();
 }
