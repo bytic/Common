@@ -23,7 +23,7 @@ trait PdfLettersTrait
     public function getByItem($type, $idItem)
     {
         /** @var PdfLetterTrait[] $letters */
-        $letter = $this->findByParams(
+        $letters = $this->findByParams(
             [
                 'where' => [
                     ['id_item = ?', $idItem],
@@ -33,19 +33,19 @@ trait PdfLettersTrait
             ]
         );
 
-        $diploma = false;
+        $return = false;
 
-        if (count($letter)) {
-            foreach ($letter as $item) {
-                if ($item->hasFile() && !$diploma) {
-                    $diploma = $item;
+        if (count($letters)) {
+            foreach ($letters as $letter) {
+                if ($letter->hasFile() && !$return) {
+                    $return = $letter;
                 } else {
-                    $item->delete();
+//                    $item->delete();
                 }
             }
         }
 
-        return $diploma;
+        return $return;
     }
 
     /**
