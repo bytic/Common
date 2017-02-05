@@ -4,7 +4,7 @@ namespace ByTIC\Common\Records\Media\Files;
 
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
-use Nip_File_System;
+use Nip_File_System as FileSystem;
 use ZipArchive;
 
 /**
@@ -35,7 +35,7 @@ class Model
     protected $path;
 
     /**
-     * @var
+     * @var string
      */
     protected $url;
 
@@ -55,11 +55,11 @@ class Model
      */
     public function upload($upload)
     {
-        $error = Nip_File_System::instance()->getUploadError($upload, $this->getExtensions());
+        $error = FileSystem::instance()->getUploadError($upload, $this->getExtensions());
         if (!$error) {
             $this->setName($this->parseName($upload['name']));
 
-            Nip_File_System::instance()->createDirectory(dirname($this->path));
+            FileSystem::instance()->createDirectory(dirname($this->path));
 
             if (!move_uploaded_file($upload["tmp_name"], $this->path)) {
                 return false;
@@ -93,20 +93,20 @@ class Model
     }
 
     /**
-     * @param bool $dir
+     * @param string|boolean $destination
      * @return bool
      */
-    public function unzip($dir = false)
+    public function unzip($destination = false)
     {
-        if (!$dir) {
-            $dir = dirname($this->path);
+        if (!$destination) {
+            $destination = dirname($this->path);
         }
 
-        $zip = new ZipArchive();
+        $archive = new ZipArchive();
 
-        if ($zip->open($this->path) === true) {
-            $zip->extractTo($dir);
-            $zip->close();
+        if ($archive->open($this->path) === true) {
+            $archive->extractTo($destination);
+            $archive->close();
 
             return true;
         }
@@ -119,7 +119,7 @@ class Model
      */
     public function delete()
     {
-        Nip_File_System::instance()->deleteFile($this->path);
+        FileSystem::instance()->deleteFile($this->path);
 
         return $this;
     }
@@ -146,22 +146,6 @@ class Model
     }
 
     /**
-     * @return string
-     */
-    public function getUrlPath()
-    {
-        return UPLOADS_URL.$this->getRoutePath();
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoutePath()
-    {
-        return 'files/'.$this->getModel()->getManager()->getTable().'/'.$this->getModel()->id.'/';
-    }
-
-    /**
      * @return Record
      */
     public function getModel()
@@ -185,7 +169,7 @@ class Model
      */
     public function getExtension()
     {
-        return Nip_File_System::instance()->getExtension($this->getPath());
+        return FileSystem::instance()->getExtension($this->getPath());
     }
 
     /**
@@ -201,7 +185,47 @@ class Model
      */
     public function getDirPath()
     {
-        return UPLOADS_PATH.$this->getRoutePath();
+        return $this->getRootDirPath().$this->getRoutePath();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlPath()
+    {
+        return $this->getRootUrlPath().$this->getRoutePath();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoutePath()
+    {
+        return 'files/'.$this->getModelDirectoryName().'/'.$this->getModel()->id.'/';
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelDirectoryName()
+    {
+        return $this->getModel()->getManager()->getTable();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootDirPath()
+    {
+        return UPLOADS_PATH;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootUrlPath()
+    {
+        return UPLOADS_URL;
     }
 
     public function getName()
