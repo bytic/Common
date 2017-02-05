@@ -13,8 +13,11 @@ trait Models
 {
     public function order()
     {
-        parse_str($_POST['order'], $order);
-        $idFields = $order['item'];
+        $orderString = $this->getRequest()->request->get('order');
+        $orderName = $this->getRequest()->request->get('name', 'item');
+        parse_str($orderString, $order);
+
+        $idFields = $order[$orderName];
 
         $fields = $this->getModelManager()->findByPrimary($idFields);
         if (count($fields) < 1) {
