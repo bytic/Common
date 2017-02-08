@@ -4,6 +4,7 @@ namespace ByTIC\Common\Controllers\Traits;
 
 use ByTIC\Common\Records\Record as Record;
 use ByTIC\Common\Records\Records as RecordManager;
+use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecordTrait;
 use Nip\Request;
 use Nip\View;
 use Nip_Form_Model as Form;
@@ -27,10 +28,6 @@ trait CrudModels
 
     protected $_urls = [];
     protected $_flash = [];
-    /**
-     * @var null|RecordPaginator
-     */
-    protected $_paginator = null;
 
     public function index()
     {
@@ -38,10 +35,6 @@ trait CrudModels
         $filters = $this->filters ? $this->filters : $this->getRequestFilters();
         $query = $this->getModelManager()->filter($query, $filters);
 
-        if ($this->paginator) {
-            trigger_error('use paginator functions instead of paginator attribute', E_USER_DEPRECATED);
-            $this->setRecordPaginator($this->paginator);
-        }
         $this->prepareRecordPaginator();
         $paginator = $this->getRecordPaginator();
         $paginator->paginate($query);
@@ -62,14 +55,14 @@ trait CrudModels
 
     public function add()
     {
-        $item = $this->addNewModel();
-        $form = $this->addGetForm($item);
+        $record = $this->addNewModel();
+        $form = $this->addGetForm($record);
 
         if ($form->execute()) {
-            $this->addRedirect($item);
+            $this->addRedirect($record);
         }
 
-        $this->getView()->set('item', $item);
+        $this->getView()->set('item', $record);
         $this->getView()->set('form', $form);
         $this->getView()->set('title', $this->getModelManager()->getLabel('add'));
 
@@ -126,17 +119,17 @@ trait CrudModels
 
     public function view()
     {
-        $item = $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $this->clone = clone $item;
-        $this->form = $this->getModelForm($this->clone);
+        $clone = clone $record;
+        $form = $this->getModelForm($clone);
 
-        $this->processForm($this->form);
+        $this->processForm($form);
 
-        $this->getView()->set('item', $item);
-        $this->getView()->set('clone', $this->clone);
-        $this->getView()->set('form', $this->form);
-        $this->getView()->set('title', $item->getName());
+        $this->getView()->set('item', $record);
+        $this->getView()->set('clone', $clone);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $record->getName());
 
         $this->getView()->append('section', ".view");
         $this->getView()->TinyMCE()->setEnabled();
@@ -147,17 +140,17 @@ trait CrudModels
 
     public function edit()
     {
-        $item = $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $this->clone = clone $item;
-        $this->form = $this->getModelForm($this->clone);
+        $clone = clone $record;
+        $form = $this->getModelForm($clone);
 
-        $this->processForm($this->form);
+        $this->processForm($form);
 
-        $this->getView()->set('item', $item);
-        $this->getView()->set('clone', $this->clone);
-        $this->getView()->set('form', $this->form);
-        $this->getView()->set('title', $item->getName());
+        $this->getView()->set('item', $record);
+        $this->getView()->set('clone', $clone);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $record->getName());
 
         $this->getView()->append('section', ".edit");
         $this->getView()->TinyMCE()->setEnabled();
@@ -167,9 +160,9 @@ trait CrudModels
 
     public function duplicate()
     {
-        $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $this->item->duplicate();
+        $record->duplicate();
 
         $url = $this->getAfterUrl("after-duplicate", $this->getModelManager()->getURL());
         $flashName = $this->getAfterFlashName("after-duplicate", $this->getModelManager()->getController());
@@ -186,9 +179,9 @@ trait CrudModels
 
     public function activate()
     {
-        $item = $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $item->activate();
+        $record->activate();
         $this->flashRedirect(
             $this->getModelManager()->getMessage('activate'),
             $this->item->getURL()
@@ -197,9 +190,9 @@ trait CrudModels
 
     public function deactivate()
     {
-        $item = $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $item->deactivate();
+        $record->deactivate();
         $this->flashRedirect(
             $this->getModelManager()->getMessage('deactivate'),
             $this->item->getURL()
@@ -235,13 +228,13 @@ trait CrudModels
 
     public function uploadFile()
     {
-        $item = $this->initExistingItem();
+        $record = $this->initExistingItem();
 
-        $file = $item->uploadFile($_FILES['Filedata']);
+        $file = $record->uploadFile($_FILES['Filedata']);
 
         if ($file) {
             $response['type'] = "success";
-            $response['url'] = $item->getFileURL($file);
+            $response['url'] = $record->getFileURL($file);
             $response['name'] = $file->getName();
             $response['extension'] = $file->getExtension();
             $response['size'] = \Nip_File_System::instance()->formatSize($file->getSize());
@@ -270,7 +263,7 @@ trait CrudModels
     }
 
     /**
-     * @return Record
+     * @return Record|HasFilesRecordTrait
      */
     protected function initExistingItem()
     {
@@ -347,7 +340,7 @@ trait CrudModels
      */
     protected function processView()
     {
-        return $this->processForm($this->form);
+        $this->processForm($this->form);
     }
 
     protected function deleteRedirect()
