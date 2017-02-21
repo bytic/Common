@@ -3,12 +3,18 @@
 namespace ByTIC\Common\Records\Media\Images;
 
 use Nip\Records\Record as Record;
+use Nip_File_Image;
 
-class Model extends \Nip_File_Image
+class Model extends Nip_File_Image
 {
 
+    /**
+     * @var Record
+     */
     protected $_model;
+
     protected $_type;
+
     protected $_mediaType = 'images';
 
     public $basePath;
@@ -65,40 +71,23 @@ class Model extends \Nip_File_Image
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDefaultWidth()
     {
         $option = "images_" . $this->getModel()->getManager()->getTable() . "_" . $this->_type . "_width";
         return Options::instance()->$option;
     }
 
+    /**
+     * @return mixed
+     */
     public function getDefaultHeight()
     {
         $option = "images_" . $this->getManager()->getTable() . "_" . $this->_type . "_height";
         return Options::instance()->$option;
     }
-//
-//	public function resize($width = false, $height = false)
-//	{
-//		if (!$width) {
-//			$width = $this->cropWidth;
-//		}
-//
-//		if (!$height) {
-//			$height = $this->cropHeight;
-//		}
-//
-//		$image = imagecreatetruecolor($width, $height);
-//		imagealphablending($image, false);
-//		imagesavealpha($image, true);
-//
-//		imagecopyresampled($image, $this->_resource, 0, 0, 0, 0, $width, $height, $this->_width, $this->_height);
-//
-//		$this->_width = $width;
-//		$this->_height = $height;
-//		$this->_resource = $image;
-//
-//		return $this;
-//	}
 
     /**
      * @param Record|\ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait $model
@@ -124,8 +113,8 @@ class Model extends \Nip_File_Image
     public function setName($name)
     {
         parent::setName($name);
-        $this->url = $this->_model->getImageURL($this->_type, $this->name);
-        $this->path = $this->_model->getImagePath($this->_type, $this->name);
+        $this->url = $this->getModel()->getImageURL($this->_type, $this->name);
+        $this->path = $this->getModel()->getImagePath($this->_type, $this->name);
     }
 
     public function save()
@@ -141,7 +130,7 @@ class Model extends \Nip_File_Image
         if ($bubble) {
             return parent::delete();
         } else {
-            return $this->_model->deleteImage($this->name);
+            return $this->getModel()->deleteImage($this->name);
         }
     }
 
@@ -150,21 +139,33 @@ class Model extends \Nip_File_Image
         return $this->url;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUploadRootPath()
     {
         return UPLOADS_PATH;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUploadRootURL()
     {
         return UPLOADS_URL;
     }
 
+    /**
+     * @return mixed
+     */
     public function getImagesRootURL()
     {
         return IMAGES_URL;
     }
 
+    /**
+     * @return mixed
+     */
     public function getImagesRootPath()
     {
         return IMAGES_PATH;
