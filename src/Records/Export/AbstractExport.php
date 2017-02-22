@@ -32,7 +32,8 @@ class AbstractExport
 
     public function generate()
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', 300);
         $this->populateItems();
         $this->generateItemsData();
         $this->generateData();
