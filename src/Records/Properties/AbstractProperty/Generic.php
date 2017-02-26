@@ -17,6 +17,7 @@ abstract class Generic
     protected $name = null;
 
     protected $label = null;
+
     protected $label_short = null;
 
     /**
@@ -40,7 +41,7 @@ abstract class Generic
      */
     public function __get($name)
     {
-        $method = 'get'.ucfirst($name);
+        $method = 'get' . ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method();
         }
@@ -54,22 +55,26 @@ abstract class Generic
      */
     public function getLabelHTML($short = false)
     {
-        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
-        style="'.$this->getColorCSS().'">
-            '.$this->getIconHTML().'
-            '.$this->getLabel($short).'
+        return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
+        style="' . $this->getColorCSS() . '">
+            ' . $this->getIconHTML() . '
+            ' . $this->getLabel($short) . '
         </span>';
     }
 
     /**
+     * get the label class name
+     *
      * @return string
      */
     public function getLabelClasses()
     {
-        return 'label label-'.$this->getColorClass();
+        return 'label label-' . $this->getColorClass();
     }
 
     /**
+     * Get the color class
+     *
      * @return string
      */
     public function getColorClass()
@@ -78,14 +83,19 @@ abstract class Generic
     }
 
     /**
-     * @param bool $short
+     * Get Property label
+     *
+     * @param bool $short short flag
+     *
      * @return null
      */
     public function getLabel($short = false)
     {
         if (!$this->label) {
             $this->label = $this->generateLabel();
-            $this->label_short = $this->generateLabelShort();
+            if ($this->hasShortLabel()) {
+                $this->label_short = $this->generateLabelShort();
+            }
         }
 
         return $short ? $this->label_short : $this->label;
@@ -152,6 +162,14 @@ abstract class Generic
     }
 
     /**
+     * @return boolean
+     */
+    protected function hasShortLabel()
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     protected function generateLabelShort()
@@ -166,10 +184,10 @@ abstract class Generic
     {
         $css = [];
         if ($this->getBGColor()) {
-            $css[] = 'background-color: '.$this->getBGColor();
+            $css[] = 'background-color: ' . $this->getBGColor();
         }
         if ($this->getFGColor()) {
-            $css[] = 'color: '.$this->getFGColor();
+            $css[] = 'color: ' . $this->getFGColor();
         }
 
         return implode(';', $css);
@@ -199,7 +217,7 @@ abstract class Generic
         $icon = $this->getIcon();
         $return = '';
         if ($icon) {
-            $return .= '<span class="glyphicon glyphicon-white '.$icon.'"></span> ';
+            $return .= '<span class="glyphicon glyphicon-white ' . $icon . '"></span> ';
         }
 
         return $return;
