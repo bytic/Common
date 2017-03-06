@@ -14,16 +14,23 @@ class RouteFactory extends NipRouteFactory
 
     /**
      * @param RouteCollection $collection
-     * @param $module
-     * @param $prefix
+     * @param string $module
+     * @param string $prefix
      */
     public static function generateGenericModuleDefaultRoutes($collection, $module, $prefix)
     {
         $moduleName = is_array($module) ? $module[0] : $module;
-        self::generateIndexRoute($collection, $moduleName, self::generateModuleRouteClassBase($module, 'Literal'),
-            $prefix);
-        self::generateStandardRoute($collection, $moduleName . ".default",
-            self::generateModuleRouteClassBase($module, 'Standard'), $prefix);
+        self::generateIndexRoute(
+            $collection,
+            $moduleName, self::generateModuleRouteClassBase($module, 'Literal'),
+            $prefix
+        );
+        self::generateStandardRoute(
+            $collection,
+            $moduleName . ".default",
+            self::generateModuleRouteClassBase($module, 'Standard'),
+            $prefix
+        );
     }
 
     /**
@@ -49,8 +56,11 @@ class RouteFactory extends NipRouteFactory
     public static function generateModuleDefaultErrorRoutes($collection, $class)
     {
         foreach (['403', '404', '500'] as $code) {
-            self::generateLiteralRoute($collection, "default.error.".$code, $class, '', '/'.$code,
-                ["controller" => "error", "action" => "index", "error_type" => $code]);
+            self::generateLiteralRoute(
+                $collection,
+                "default.error." . $code, $class, '', '/' . $code,
+                ["controller" => "error", "action" => "index", "error_type" => $code]
+            );
         }
     }
 }
