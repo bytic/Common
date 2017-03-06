@@ -12,11 +12,6 @@ use Nip\Request;
  */
 abstract class Application extends NipApplication
 {
-    public function setupConfig()
-    {
-        parent::setupConfig();
-        app('config')->mergeFile(CONFIG_PATH.'general.ini');
-    }
 
     public function setupAutoLoaderCache()
     {
