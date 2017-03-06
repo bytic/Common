@@ -22,6 +22,9 @@ trait HasView
      */
     protected $layout = 'default';
 
+    /**
+     * @inheritdoc
+     */
     public function loadView()
     {
         echo $this->getView()->load($this->getLayoutPath());
@@ -72,17 +75,11 @@ trait HasView
      */
     protected function populateView($view)
     {
-        $view->setBasePath(MODULES_PATH.$this->getRequest()->getModuleName().'/views/');
         $view = $this->initViewVars($view);
         $view = $this->initViewContentBlocks($view);
 
         return $view;
     }
-
-    /**
-     * @return Request
-     */
-    abstract public function getRequest();
 
     /**
      * @param View $view
@@ -99,6 +96,11 @@ trait HasView
     }
 
     /**
+     * @return Request
+     */
+    abstract public function getRequest();
+
+    /**
      * @return string
      */
     abstract public function getName();
@@ -109,7 +111,10 @@ trait HasView
      */
     protected function initViewContentBlocks($view)
     {
-        $view->setBlock('content', $this->getRequest()->getControllerName().'/'.$this->getRequest()->getActionName());
+        $view->setBlock(
+            'content',
+            $this->getRequest()->getControllerName() . '/' . $this->getRequest()->getActionName()
+        );
 
         return $view;
     }
@@ -119,7 +124,7 @@ trait HasView
      */
     public function getLayoutPath()
     {
-        return '/layouts/'.$this->getLayout();
+        return '/layouts/' . $this->getLayout();
     }
 
     /**
