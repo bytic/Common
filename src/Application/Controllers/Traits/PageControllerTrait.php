@@ -15,16 +15,25 @@ trait PageControllerTrait
     use HasForms;
     use AbstractControllerTrait;
 
+    /**
+     * @inheritdoc
+     */
     protected function beforeAction()
     {
         parent::beforeAction();
         $this->setBreadcrumbs();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function setBreadcrumbs()
     {
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function afterAction()
     {
         $this->setMeta();
@@ -72,7 +81,7 @@ trait PageControllerTrait
     {
         $this->getView()->set('forms', $this->getForms());
         $this->getView()->set('_config', $this->getConfig());
-        $this->getView()->set('_stage', app('kernel')->getStaging()->getStage());
+        $this->getView()->set('_stage', config('env'));
 
         $this->getView()->set('layout', $this->getLayout());
         $this->getView()->set('_layout', $this->getLayout());
