@@ -31,7 +31,7 @@ trait PageControllerTrait
         $this->prepareResponseHeaders();
         $this->afterActionViewVariables();
 
-        $content = $this->getView()->load('/layouts/'.$this->getLayout(), [], true);
+        $content = $this->getView()->load('/layouts/' . $this->getLayout(), [], true);
         $this->getResponse()->setContent($content);
 
         parent::afterAction();
@@ -39,13 +39,12 @@ trait PageControllerTrait
 
     protected function setMeta()
     {
-//        $tagline = Options::instance()->website_tagline->value;
-//        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
-
-        $this->getView()->Meta()->populateFromConfig($this->getConfig()->get('META'));
+        $this->getView()->Meta()->populateFromConfig(
+            $this->getConfig()->get('meta')
+        );
 
         $favicon = new Favicon();
-        $favicon->setBaseDir(IMAGES_URL.'/favicon');
+        $favicon->setBaseDir(IMAGES_URL . '/favicon');
         $favicon->addAll();
         $this->getView()->set('favicon', $favicon);
     }
