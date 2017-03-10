@@ -3,8 +3,8 @@
 namespace ByTIC\Common\Records;
 
 use ByTIC\Common\Records\Traits\HasForms\RecordTrait as HasFormRecordTrait;
+use Nip\Collections\Registry;
 use Nip\Records\Record as NipRecord;
-use Nip_Registry;
 
 /**
  * Class Record
@@ -24,9 +24,9 @@ class Record extends NipRecord
     protected $_urlPK;
     protected $_urlCol = 'name';
     /**
-     * @var Nip_Registry
+     * @var Registry
      */
-    protected $registry;
+    protected $registry = null;
 
     /**
      * @inheritdoc
@@ -130,12 +130,12 @@ class Record extends NipRecord
     }
 
     /**
-     * @return Nip_Registry
+     * @return Registry
      */
     public function getRegistry()
     {
-        if (!$this->registry) {
-            $this->registry = new Nip_Registry();
+        if ($this->registry === null) {
+            $this->registry = new Registry();
         }
 
         return $this->registry;
