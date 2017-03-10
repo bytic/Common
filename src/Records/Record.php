@@ -51,8 +51,8 @@ class Record extends NipRecord
         if (substr($name, 0, 3) == "get" && substr($name, -3) == "URL") {
             $action = substr($name, 3, -3);
             $action = (!empty($action)) ? $action : 'View';
-            $params = $arguments[0];
-            $module = $arguments[1];
+            $params = isset($arguments[0]) ? $arguments[0] : null;
+            $module = isset($arguments[1]) ? $arguments[1] : null;
 
             return $this->compileURL($action, $params, $module);
         }
