@@ -35,20 +35,13 @@ trait ReadModels
         $this->doModelsListing();
     }
 
-    public function view()
-    {
-        $item = $this->getViewItemFromRequest();
-        $this->getView()->set('item', $item);
-        $this->getView()->Meta()->prependTitle($item->getName());
-    }
-
     protected function doModelsListing()
     {
         $query = $this->newIndexQuery();
         $filters = $this->getRequestFilters();
         $query = $this->getModelManager()->filter($query, $filters);
 
-        $pageNumber = intval($_GET['page']);
+        $pageNumber = intval($this->getRequest()->query->get('page', 1));
         $itemsPerPage = $this->getRecordPaginator()->getItemsPerPage();
 
         if ($pageNumber * $itemsPerPage < $this->recordLimit) {
@@ -103,6 +96,13 @@ trait ReadModels
      */
     protected function indexPrepareItems($items)
     {
+    }
+
+    public function view()
+    {
+        $item = $this->getViewItemFromRequest();
+        $this->getView()->set('item', $item);
+        $this->getView()->Meta()->prependTitle($item->getName());
     }
 
     /**
