@@ -7,6 +7,7 @@ use Nip\View;
 
 /**
  * Class HasView
+ *
  * @package ByTIC\Common\Controllers\Traits
  */
 trait HasView
@@ -51,6 +52,8 @@ trait HasView
     }
 
     /**
+     * Init view Object
+     *
      * @return View
      */
     protected function initView()
@@ -82,7 +85,10 @@ trait HasView
     }
 
     /**
-     * @param View $view
+     * Init View variables
+     *
+     * @param View $view View Instance
+     *
      * @return View
      */
     protected function initViewVars($view)
@@ -90,23 +96,29 @@ trait HasView
         $view->setRequest($this->getRequest());
         $view->set('controller', $this->getName());
         $view->set('action', $this->getRequest()->getActionName());
-        $view->set('options', $this->options);
 
         return $view;
     }
 
     /**
+     * Returns request instance
+     *
      * @return Request
      */
     abstract public function getRequest();
 
     /**
+     * Returns controller name
+     *
      * @return string
      */
     abstract public function getName();
 
     /**
-     * @param View $view
+     * Init View Content block
+     *
+     * @param View $view View instance
+     *
      * @return View
      */
     protected function initViewContentBlocks($view)
@@ -120,6 +132,8 @@ trait HasView
     }
 
     /**
+     * Return layout path
+     *
      * @return string
      */
     public function getLayoutPath()
@@ -128,6 +142,8 @@ trait HasView
     }
 
     /**
+     * Return layout name
+     *
      * @return string
      */
     public function getLayout()
@@ -136,7 +152,9 @@ trait HasView
     }
 
     /**
-     * @param string $layout
+     * Set layout name
+     *
+     * @param string $layout Layout name
      */
     public function setLayout($layout)
     {
@@ -157,4 +175,3 @@ trait HasView
         return $controller;
     }
 }
-
