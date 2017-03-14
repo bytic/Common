@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
 use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
+use function Nip\url;
 
 /**
  * Class PageControllerTrait
@@ -26,14 +27,17 @@ trait PageControllerTrait
             ]
         );
 
-        $this->_setBreadcrumbs();
-
-        //Console::disable();
+        $this->setBreadcrumbs();
     }
 
-    protected function _setBreadcrumbs()
+    /**
+     * Set Breadcrumbs
+     *
+     * @return void
+     */
+    protected function setBreadcrumbs()
     {
-        $this->getView()->Breadcrumbs()->addItem("Home", BASE_URL);
+        $this->getView()->Breadcrumbs()->addItem("Home", url()->to('/'));
     }
 
     protected function _checkUser()
