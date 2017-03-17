@@ -24,7 +24,7 @@ trait UsersControllerTrait
 
         if ($loginForm->submited()) {
             if ($loginForm->processRequest()) {
-                $this->loginRedirect();
+                $this->afterLoginRedirect();
             }
         } else {
             if ($_GET['message']) {
@@ -53,7 +53,7 @@ trait UsersControllerTrait
     /**
      * Redirect after login
      */
-    protected function loginRedirect()
+    public function afterLoginRedirect()
     {
         $redirect = $this->getRequest()->query->get(
             'redirect',
@@ -110,7 +110,7 @@ trait UsersControllerTrait
 
             $userExist->doAuthentication();
 
-            $this->loginRedirect();
+            $this->afterLoginRedirect();
         }
     }
 
@@ -153,7 +153,8 @@ trait UsersControllerTrait
                 $userLogin->provider_uid = $userProfile->identifier;
                 $userLogin->insert();
 
-                $this->{'_' . $_action . 'Redirect'}();
+
+                $this->{'after' . ucfirst($_action) . 'Redirect'}();
             }
             $this->forms[$_action] = $form;
         }
@@ -170,13 +171,13 @@ trait UsersControllerTrait
 
         /** @var \Default_Forms_User_Register $formRegister */
         if ($formRegister->execute()) {
-            $this->registerRedirect();
+            $this->afterRegisterRedirect();
         }
         $this->forms['register'] = $formRegister;
         $this->setLoginMeta('register');
     }
 
-    protected function registerRedirect()
+    protected function afterRegisterRedirect()
     {
         $redirect = $_GET['redirect'] ? $_GET['redirect'] : $this->Url()->default();
         $thankYouURL = $this->getModelManager()->getRegisterThankYouURL(['redirect' => $redirect]);
@@ -211,8 +212,14 @@ trait UsersControllerTrait
         $formsProfile = $this->_getUser()->getForm('profile');
 
         if ($formsProfile->execute()) {
-            $redirect = $_GET['redirect'] ? $_GET['redirect'] : Users::instance()->getProfileURL();
-            $this->flashRedirect($this->getModelManager()->getMessage('profile.success'), $redirect);
+            $redirect = $this->getRequest()->query->get(
+                'redirect',
+                $this->getModelManager()->getProfileURL()
+            );
+            $this->flashRedirect(
+                $this->getModelManager()->getMessage('profile.success'),
+                $redirect
+            );
         }
         $this->forms['profile'] = $formsProfile;
         $this->setLoginMeta('profile');
@@ -223,8 +230,14 @@ trait UsersControllerTrait
         $formPassword = $this->_getUser()->getForm('password');
 
         if ($formPassword->execute()) {
-            $redirect = $_GET['redirect'] ? $_GET['redirect'] : Users::instance()->getChangePasswordURL();
-            $this->flashRedirect($this->getModelManager()->getMessage('password.change'), $redirect);
+            $redirect = $this->getRequest()->query->get(
+                'redirect',
+                $this->getModelManager()->getChangePasswordURL()
+            );
+            $this->flashRedirect(
+                $this->getModelManager()->getMessage('password.change'),
+                $redirect
+            );
         }
         $this->forms['password'] = $formPassword;
         $this->setLoginMeta('changePassword');
@@ -283,7 +296,11 @@ trait UsersControllerTrait
 
     protected function _checkAuth()
     {
-        $noAuthFunctions = ['login', 'loginWith', 'oAuth', 'oAuthLink', 'register', 'recoverPassword'];
+        $noAuthFunctions = [
+            'login', 'loginWith',
+            'oAuth', 'oAuthLink',
+            'register', 'recoverPassword'
+        ];
 
         if (!in_array($this->getAction(), $noAuthFunctions)) {
             $this->_checkUser();
@@ -295,6 +312,11 @@ trait UsersControllerTrait
         }
     }
 
+    /**
+     * After Action
+     *
+     * @return void
+     */
     protected function afterAction()
     {
         $this->setLayout('login');
