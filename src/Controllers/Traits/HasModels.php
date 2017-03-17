@@ -32,7 +32,7 @@ trait HasModels
      */
     protected function getModelFromRequest($key = false)
     {
-        $requestKey = 'model-'.$this->getModelManager()->getTable();
+        $requestKey = 'model-' . $this->getModelManager()->getTable();
         if ($this->getRequest()->attributes->has($requestKey) === false) {
             $this->initModelFromRequest($key);
         }
@@ -62,7 +62,9 @@ trait HasModels
         if ($modelManager instanceof RecordManager) {
             $this->modelManager = $this->newModelManagerInstance($this->getModel());
         } else {
-            throw new Exception("invalid ModelManager name [$managerClass] for controller [" . $this->getClassName() . "]");
+            throw new Exception(
+                "invalid ModelManager name [$managerClass] for controller [" . $this->getClassName() . "]"
+            );
         }
     }
 
@@ -303,7 +305,14 @@ trait HasModels
      */
     protected function getRequestKeyFromString($name)
     {
-        return 'model-'.$name;
+        return 'model-' . $name;
+    }
+
+    protected function initViewModelManager()
+    {
+        if (!$this->getView()->has('modelManager')) {
+            $this->getView()->set('modelManager', $this->getModelManager());
+        }
     }
 
     /**

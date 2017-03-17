@@ -125,13 +125,6 @@ trait ReadModels
         parent::afterAction();
     }
 
-    protected function initViewModelManager()
-    {
-        if (!$this->getView()->has('modelManager')) {
-            $this->getView()->set('modelManager', $this->getModelManager());
-        }
-    }
-
     protected function setBreadcrumbs()
     {
         parent::setBreadcrumbs();

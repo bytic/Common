@@ -4,6 +4,7 @@ namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
 use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait;
+use ByTIC\Common\Controllers\Traits\HasModels;
 use Exception;
 use Nip\Form\AbstractForm;
 
@@ -14,6 +15,7 @@ use Nip\Form\AbstractForm;
 trait UsersControllerTrait
 {
     use AbstractControllerTrait;
+    use HasModels;
 
     public function login()
     {
@@ -296,6 +298,7 @@ trait UsersControllerTrait
     protected function afterAction()
     {
         $this->setLayout('login');
+        $this->initViewModelManager();
         parent::afterAction();
     }
 }
