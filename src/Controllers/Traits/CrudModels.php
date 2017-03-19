@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Controllers\Traits\Models\HasModelLister;
 use ByTIC\Common\Records\Record as Record;
 use ByTIC\Common\Records\Records as RecordManager;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecordTrait;
@@ -25,6 +26,7 @@ use Nip_Form_Model as Form;
 trait CrudModels
 {
     use HasRecordPaginator;
+    use HasModelLister;
 
     protected $_urls = [];
     protected $_flash = [];
@@ -59,47 +61,14 @@ trait CrudModels
      */
     protected $form = null;
 
+    /**
+     * Model index action / listing
+     *
+     * @return void
+     */
     public function index()
     {
-        $query = $this->query ? $this->query : $this->newIndexQuery();
-        $filters = $this->filters ? $this->filters : $this->getRequestFilters();
-        $query = $this->getModelManager()->filter($query, $filters);
-
-        $this->prepareRecordPaginator();
-        $paginator = $this->getRecordPaginator();
-        $paginator->paginate($query);
-
-        if ($this->items) {
-            $items = $this->items;
-        } else {
-            $items = $this->getModelManager()->findByQuery($query);
-            $paginator->count();
-        }
-
-        $this->getView()->set('items', $items);
-        $this->getView()->set('filters', $filters);
-        $this->getView()->set('filtersManager', $this->getModelManager()->getFilterManager());
-        $this->getView()->set('title', $this->getModelManager()->getLabel('title'));
-
-        $this->getView()->Paginator()
-            ->setPaginator($paginator)
-            ->setURL($this->getModelManager()->getURL());
-    }
-
-    /**
-     * @return \Nip\Database\Query\Select
-     */
-    protected function newIndexQuery()
-    {
-        return $this->getModelManager()->paramsToQuery();
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getRequestFilters()
-    {
-        return $this->getModelManager()->requestFilters($this->getRequest());
+        $this->doModelsListing();
     }
 
     /**

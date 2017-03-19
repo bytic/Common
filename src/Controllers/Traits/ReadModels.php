@@ -2,10 +2,9 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Controllers\Traits\Models\HasModelLister;
 use Nip\Database\Query\Select as SelectQuery;
-use Nip\Records\Collections\Collection;
 use Nip\Records\Record;
-use Nip\Records\RecordManager;
 use Nip\Request;
 use Nip\View;
 use Nip_Form as Form;
@@ -15,7 +14,6 @@ use Nip_Form as Form;
  * @package ByTIC\Common\Controllers\Traits
  *
  * @method string getModel()
- * @method RecordManager getModelManager()
  * @method View getView()
  * @method Request getRequest()
  * @method Form getModelForm($model, $action = null)
@@ -25,6 +23,7 @@ use Nip_Form as Form;
 trait ReadModels
 {
     use HasRecordPaginator;
+    use HasModelLister;
 
     protected $urls = [];
 
@@ -33,69 +32,6 @@ trait ReadModels
     public function index()
     {
         $this->doModelsListing();
-    }
-
-    protected function doModelsListing()
-    {
-        $query = $this->newIndexQuery();
-        $filters = $this->getRequestFilters();
-        $query = $this->getModelManager()->filter($query, $filters);
-
-        $pageNumber = intval($this->getRequest()->query->get('page', 1));
-        $itemsPerPage = $this->getRecordPaginator()->getItemsPerPage();
-
-        if ($pageNumber * $itemsPerPage < $this->recordLimit) {
-            $this->getRecordPaginator()->setPage($pageNumber);
-            $this->getRecordPaginator()->paginate($query);
-
-            $items = $this->indexFindItems($query);
-            $this->indexPrepareItems($items);
-
-            $this->getView()->set('filters', $filters);
-            $this->getView()->set('title', $this->getModelManager()->getLabel('title'));
-
-            $this->getView()->Paginator()->setPaginator($this->getRecordPaginator());
-            $this->getView()->Paginator()->setURL($this->getModelManager()->getURL($filters));
-        } else {
-            $this->getView()->set('recordLimit', true);
-        }
-    }
-
-    /**
-     * @return \Nip\Database\Query\Select
-     */
-    protected function newIndexQuery()
-    {
-        return $this->getModelManager()->paramsToQuery();
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getRequestFilters()
-    {
-        return $this->getModelManager()->requestFilters($this->getRequest());
-    }
-
-    /**
-     * @param SelectQuery $query
-     * @return Collection
-     */
-    protected function indexFindItems($query)
-    {
-        $items = $this->getModelManager()->findByQuery($query);
-        $this->getRecordPaginator()->count();
-
-        $this->getView()->set('items', $items);
-
-        return $items;
-    }
-
-    /**
-     * @param Collection $items
-     */
-    protected function indexPrepareItems($items)
-    {
     }
 
     public function view()
