@@ -13,7 +13,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ByTIC/Framework.git",
-                "reference": "0c74c8f023c4ba6fdd3a503af9a78abc4cb780dc"
+                "reference": "47469258e434d15340bd10b6fdbd168b1cae587d"
             },
             "require": {
                 "bytic/requestdetective": "dev-develop",
@@ -60,7 +60,7 @@
                 }
             ],
             "description": "Php Framework",
-            "time": "2017-03-14 12:13:51"
+            "time": "2017-03-19 14:48:31"
         },
         {
             "name": "ByTIC/RequestDetective",
@@ -924,16 +924,16 @@
         },
         {
             "name": "sendgrid/sendgrid",
-            "version": "5.2.3",
+            "version": "5.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sendgrid/sendgrid-php.git",
-                "reference": "bc6e1fca4d4c626031c849b639db436df72b6403"
+                "reference": "c7bc436f2290c1d57c5b20b50c5e436ea70b43d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/bc6e1fca4d4c626031c849b639db436df72b6403",
-                "reference": "bc6e1fca4d4c626031c849b639db436df72b6403",
+                "url": "https://api.github.com/repos/sendgrid/sendgrid-php/zipball/c7bc436f2290c1d57c5b20b50c5e436ea70b43d5",
+                "reference": "c7bc436f2290c1d57c5b20b50c5e436ea70b43d5",
                 "shasum": ""
             },
             "require": {
@@ -966,7 +966,7 @@
                 "send",
                 "sendgrid"
             ],
-            "time": "2017-03-04 04:07:26"
+            "time": "2017-03-16 17:19:32"
         },
         {
             "name": "setasign/fpdi",
@@ -2758,16 +2758,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.15",
+            "version": "5.7.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5"
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b99112aecc01f62acf3d81a3f59646700a1849e5",
-                "reference": "b99112aecc01f62acf3d81a3f59646700a1849e5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/dafc78e2a7d12139b0e97078d1082326bd09363d",
+                "reference": "dafc78e2a7d12139b0e97078d1082326bd09363d",
                 "shasum": ""
             },
             "require": {
@@ -2836,7 +2836,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-02 15:22:43"
+            "time": "2017-03-15 13:02:34"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

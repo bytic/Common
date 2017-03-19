@@ -78,6 +78,7 @@ trait CrudModels
 
         $this->getView()->set('items', $items);
         $this->getView()->set('filters', $filters);
+        $this->getView()->set('filtersManager', $this->getModelManager()->getFilterManager());
         $this->getView()->set('title', $this->getModelManager()->getLabel('title'));
 
         $this->getView()->Paginator()
