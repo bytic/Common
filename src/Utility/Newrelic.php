@@ -4,17 +4,30 @@ namespace ByTIC\Common\Utility;
 
 use Nip\Request;
 
+/**
+ * Class Newrelic
+ * @package ByTIC\Common\Utility
+ */
 class Newrelic
 {
 
     static $licence;
     static $name;
 
+    /**
+     * Get the App Name
+     *
+     * @return string
+     */
     static function getAppname()
     {
         return self::$name;
     }
 
+    /**
+     * @param $name
+     * @param $licence
+     */
     static function init($name, $licence)
     {
         if (self::isLoaded()) {
@@ -23,11 +36,20 @@ class Newrelic
         }
     }
 
+    /**
+     * @return bool
+     */
     static function isLoaded()
     {
         return extension_loaded('newrelic');
     }
 
+    /**
+     * Set the App Name
+     *
+     * @param $name
+     * @param $licence
+     */
     static function setAppname($name, $licence)
     {
         self::$licence = $licence;
@@ -58,6 +80,11 @@ class Newrelic
         }
     }
 
+    /**
+     * Get Licence key
+     *
+     * @return string
+     */
     static function getLicence()
     {
         return self::$licence;
