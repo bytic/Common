@@ -17,7 +17,8 @@ class MM
      */
     public static function get($name)
     {
-        if ($class = self::getNamespaced($name)) {
+        $class = self::getNamespaced($name);
+        if (is_object($class)) {
             return $class;
         }
         return self::initClass($name);
@@ -32,7 +33,7 @@ class MM
      */
     protected static function getNamespaced($name)
     {
-        $baseNamespace = app()->getRootNamespace() . 'Modules\\';
+        $baseNamespace = app('app')->getRootNamespace() . 'Models\\';
         if (strpos($name, '\\') === false) {
             $name = $name . '\\' . $name;
         }
@@ -44,7 +45,10 @@ class MM
     }
 
     /**
+     * Return Model Manager Singleton
+     *
      * @param string $class
+     *
      * @return Records
      */
     public static function initClass($class)
