@@ -31,6 +31,8 @@ trait AuthenticationUserTrait
     protected $authenticated = false;
 
     /**
+     * Authenticate user from request
+     *
      * @param array $request
      * @return bool|null
      */

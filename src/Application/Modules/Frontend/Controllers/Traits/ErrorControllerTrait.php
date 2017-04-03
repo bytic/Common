@@ -12,6 +12,9 @@ trait ErrorControllerTrait
 {
     use AbstractControllerTrait;
 
+    /**
+     * @inheritdoc
+     */
     public function beforeAction()
     {
         parent::beforeAction();
@@ -34,5 +37,4 @@ trait ErrorControllerTrait
     {
         $this->getView()->set('title', "Error");
     }
-
 }

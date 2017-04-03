@@ -3,7 +3,10 @@
 namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
 use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
-use ByTIC\Common\Controllers\Traits\HasUser;
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait;
+use ByTIC\Common\Controllers\Traits\HasModels;
+use Exception;
+use Nip\Form\AbstractForm;
 
 /**
  * Class UsersControllerTrait
@@ -12,14 +15,16 @@ use ByTIC\Common\Controllers\Traits\HasUser;
 trait UsersControllerTrait
 {
     use AbstractControllerTrait;
+    use HasModels;
 
     public function login()
     {
+        /** @var AbstractForm $loginForm */
         $loginForm = $this->_getUser()->getForm('login');
 
         if ($loginForm->submited()) {
             if ($loginForm->processRequest()) {
-                $this->_loginRedirect();
+                $this->afterLoginRedirect();
             }
         } else {
             if ($_GET['message']) {
@@ -28,68 +33,111 @@ trait UsersControllerTrait
         }
 
         $this->forms['login'] = $loginForm;
-        $this->_setMeta('login');
+        $this->setLoginMeta('login');
 
         $this->getView()->Breadcrumbs()->addItem(
             $this->getModelManager()->getLabel('login-title'),
             $this->_getUser()->getManager()->getLoginURL()
         );
-        $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('login-title'));
 
-    }
+        $this->getView()->Meta()
+            ->prependTitle($this->getModelManager()->getLabel('login-title'));
 
-    protected function _loginRedirect()
-    {
-        $redirect = $_GET['redirect'] ? urldecode($_GET['redirect']) : $this->Url()->default();
-        $this->flashRedirect($this->getModelManager()->getMessage('login-success'), $redirect, 'success', 'index');
     }
 
     /**
-     * @param $action
+     * @return AbstractUserTrait
      */
-    protected function _setMeta($action)
+    abstract protected function _getUser();
+
+    /**
+     * Redirect after login
+     */
+    public function afterLoginRedirect()
+    {
+        $redirect = $this->getRequest()->query->get(
+            'redirect',
+            $this->Url()->default()
+        );
+
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('login-success'),
+            $redirect,
+            'success',
+            'index'
+        );
+    }
+
+    /**
+     * Set Login Meta
+     *
+     * @param string $action Action name
+     *
+     * @return void
+     */
+    protected function setLoginMeta($action)
     {
         $label = $this->getModelManager()->getLabel($action . '-title');
         $urlMethod = 'get' . ucfirst($action) . 'URL';
-        $this->getView()->Breadcrumbs()->addItem($label, $this->_getUser()->getManager()->$urlMethod());
+        $this->getView()->Breadcrumbs()
+            ->addItem($label, $this->_getUser()->getManager()->$urlMethod());
 
         $this->getView()->Meta()->prependTitle($label);
     }
 
+    /**
+     *  Login with Auth Provider
+     */
     public function loginWith()
     {
         $providerName = $_REQUEST["provider"];
         $redirect = $_GET['redirect'];
 
-        $userProfile = APP_Hybrid_Auth::instance()->authenticate($providerName);
+        $userProfile = $this->getAuthProvider()->authenticate($providerName);
 
         if ($userProfile instanceof Exception) {
-            $this->getView()->exception = $userProfile;
+            $this->getView()->set('exception', $userProfile);
         } else {
             $userExist = User_Logins::instance()->getUserByProvider($providerName, $userProfile->identifier);
 
             if (!$userExist) {
-                $this->redirect(Users::instance()->getOAuthLinkURL([
-                    'provider' => $providerName,
-                    'redirect' => $redirect
-                ]));
+                $this->redirect(
+                    $this->getModelManager()->getOAuthLinkURL([
+                        'provider' => $providerName,
+                        'redirect' => $redirect
+                    ]));
             }
 
             $userExist->doAuthentication();
 
-            $this->_loginRedirect();
+            $this->afterLoginRedirect();
         }
     }
 
+    /**
+     * @return APP_Hybrid_Auth
+     */
+    protected function getAuthProvider()
+    {
+        return APP_Hybrid_Auth::instance();
+    }
+
+    /**
+     * Process OAuth request
+     * @return mixed
+     */
     public function oAuth()
     {
         return Hybrid_Endpoint::process();
     }
 
+    /**
+     *  Link an OAuth to existing user
+     */
     public function oAuthLink()
     {
         $providerName = $_REQUEST["provider"];
-        $userProfile = APP_Hybrid_Auth::instance()->authenticate($providerName);
+        $userProfile = $this->getAuthProvider()->authenticate($providerName);
 
         $this->_getUser()->first_name = $userProfile->firstName;
         $this->_getUser()->last_name = $userProfile->lastName;
@@ -105,27 +153,31 @@ trait UsersControllerTrait
                 $userLogin->provider_uid = $userProfile->identifier;
                 $userLogin->insert();
 
-                $this->{'_' . $_action . 'Redirect'}();
+
+                $this->{'after' . ucfirst($_action) . 'Redirect'}();
             }
             $this->forms[$_action] = $form;
         }
 
-        $this->_setMeta('login');
+        $this->setLoginMeta('login');
     }
 
+    /**
+     *  Register Action
+     */
     public function register()
     {
         $formRegister = $this->_getUser()->getForm('register');
 
         /** @var \Default_Forms_User_Register $formRegister */
         if ($formRegister->execute()) {
-            $this->_registerRedirect();
+            $this->afterRegisterRedirect();
         }
         $this->forms['register'] = $formRegister;
-        $this->_setMeta('register');
+        $this->setLoginMeta('register');
     }
 
-    protected function _registerRedirect()
+    protected function afterRegisterRedirect()
     {
         $redirect = $_GET['redirect'] ? $_GET['redirect'] : $this->Url()->default();
         $thankYouURL = $this->getModelManager()->getRegisterThankYouURL(['redirect' => $redirect]);
@@ -144,24 +196,33 @@ trait UsersControllerTrait
         $formsRecover = $this->_getUser()->getForm('recoverPassword');
 
         if ($formsRecover->execute()) {
-            $redirect = $this->getModelManager()->getRecoverPasswordURL();
+            $redirect = $this->getModelManager()->compileURL('recoverPassword');
             $this->flashRedirect($this->getModelManager()->getMessage('recoverPassword.success'), $redirect);
         }
 
         $this->forms['recover'] = $formsRecover;
-        $this->_setMeta('recoverPassword');
+        $this->setLoginMeta('recoverPassword');
     }
 
+    /**
+     * User Profile Page
+     */
     public function profile()
     {
         $formsProfile = $this->_getUser()->getForm('profile');
 
         if ($formsProfile->execute()) {
-            $redirect = $_GET['redirect'] ? $_GET['redirect'] : Users::instance()->getProfileURL();
-            $this->flashRedirect($this->getModelManager()->getMessage('profile.success'), $redirect);
+            $redirect = $this->getRequest()->query->get(
+                'redirect',
+                $this->getModelManager()->getProfileURL()
+            );
+            $this->flashRedirect(
+                $this->getModelManager()->getMessage('profile.success'),
+                $redirect
+            );
         }
         $this->forms['profile'] = $formsProfile;
-        $this->_setMeta('profile');
+        $this->setLoginMeta('profile');
     }
 
     public function changePassword()
@@ -169,16 +230,21 @@ trait UsersControllerTrait
         $formPassword = $this->_getUser()->getForm('password');
 
         if ($formPassword->execute()) {
-            $redirect = $_GET['redirect'] ? $_GET['redirect'] : Users::instance()->getChangePasswordURL();
-            $this->flashRedirect($this->getModelManager()->getMessage('password.change'), $redirect);
+            $redirect = $this->getRequest()->query->get(
+                'redirect',
+                $this->getModelManager()->getChangePasswordURL()
+            );
+            $this->flashRedirect(
+                $this->getModelManager()->getMessage('password.change'),
+                $redirect
+            );
         }
         $this->forms['password'] = $formPassword;
-        $this->_setMeta('changePassword');
+        $this->setLoginMeta('changePassword');
     }
 
     public function setProfilePicture()
     {
-
         $item = $this->_getUser();
         $url = $this->getModelManager()->getSetProfilePictureURL();
 
@@ -196,7 +262,7 @@ trait UsersControllerTrait
                     $this->_response['url'] = $image->getUrl();
                     $this->_response['path'] = $image->getPath();
                     $this->_response['imageType'] = $image->getImageType();
-                    $message = Users::instance()->getMessage('profile.picture.add');
+                    $message = $this->getModelManager()->getMessage('profile.picture.add');
                     $mType = 'success';
                 } else {
                     $message = $item->errors['upload'];
@@ -208,7 +274,7 @@ trait UsersControllerTrait
             $this->flashRedirect($message, $url, $mType);
         }
 
-        $this->_setMeta('setProfilePicture');
+        $this->setLoginMeta('setProfilePicture');
 
     }
 
@@ -230,7 +296,11 @@ trait UsersControllerTrait
 
     protected function _checkAuth()
     {
-        $noAuthFunctions = ['login', 'loginWith', 'oAuth', 'oAuthLink', 'register', 'recoverPassword'];
+        $noAuthFunctions = [
+            'login', 'loginWith',
+            'oAuth', 'oAuthLink',
+            'register', 'recoverPassword'
+        ];
 
         if (!in_array($this->getAction(), $noAuthFunctions)) {
             $this->_checkUser();
@@ -242,14 +312,15 @@ trait UsersControllerTrait
         }
     }
 
+    /**
+     * After Action
+     *
+     * @return void
+     */
     protected function afterAction()
     {
         $this->setLayout('login');
+        $this->initViewModelManager();
         parent::afterAction();
     }
-
-    /**
-     * @return User
-     */
-    abstract protected function _getUser();
 }

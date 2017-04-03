@@ -2,15 +2,15 @@
 
 namespace ByTIC\Common\Records\Traits\AbstractTrait;
 
+use Nip\Collections\Registry;
 use Nip\Records\AbstractModels\RecordManager;
-use Nip_Registry;
 
 /**
  * Class RecordTrait
+ *
  * @package ByTIC\Common\Records\Traits\AbstractTrait
  *
  * @property int $id
- *
  */
 trait RecordTrait
 {
@@ -27,7 +27,7 @@ trait RecordTrait
     abstract public function setManager($manager);
 
     /**
-     * @return Nip_Registry
+     * @return Registry
      */
     abstract public function getRegistry();
 

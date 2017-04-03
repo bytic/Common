@@ -42,7 +42,7 @@ trait AuthenticationUsersTrait
      */
     public function getFromCookie()
     {
-        if ($_COOKIE['login']) {
+        if (isset($_COOKIE['login'])) {
             list($id, $password) = explode(":", $_COOKIE['login']);
 
             /** @var User $user */
@@ -77,7 +77,10 @@ trait AuthenticationUsersTrait
         $varName = $this->getCurrentVarName();
         $helper = $this->getPasswordHelper()->setSalt($user->salt);
         $value = $user->id.':'.$helper->hash($user->password);
-        CookieJar::instance()->newCookie()->setName($varName)->setValue($value)->save();
+        CookieJar::instance()->newCookie()
+            ->setName($varName)
+            ->setValue($value)
+            ->save();
     }
 
 

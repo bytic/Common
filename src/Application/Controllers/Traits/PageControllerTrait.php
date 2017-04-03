@@ -40,12 +40,21 @@ trait PageControllerTrait
         $this->prepareResponseHeaders();
         $this->afterActionViewVariables();
 
-        $content = $this->getView()->load('/layouts/' . $this->getLayout(), [], true);
+        $content = $this->getView()->load(
+            '/layouts/' . $this->getLayout(),
+            [],
+            true
+        );
         $this->getResponse()->setContent($content);
 
         parent::afterAction();
     }
 
+    /**
+     * Set meta information
+     *
+     * @return void
+     */
     protected function setMeta()
     {
         $this->getView()->Meta()->populateFromConfig(
@@ -53,16 +62,23 @@ trait PageControllerTrait
         );
 
         $favicon = new Favicon();
-        $favicon->setBaseDir(IMAGES_URL . '/favicon');
+        $favicon->setBaseDir(asset('images/favicon'));
         $favicon->addAll();
         $this->getView()->set('favicon', $favicon);
     }
 
     /**
+     * Return Config Object
+     *
      * @return Config
      */
     public abstract function getConfig();
 
+    /**
+     * Prepare headers
+     *
+     * @return void
+     */
     protected function prepareResponseHeaders()
     {
         $this->getResponse()->headers->set('Content-Type', 'text/html');
@@ -93,6 +109,13 @@ trait PageControllerTrait
         $this->getView()->set('user', $this->_getUser());
         $this->getView()->set('_user', $this->_getUser());
     }
+
+    /**
+     * Get Layout Name
+     *
+     * @return string
+     */
+    public abstract function getLayout();
 
     protected function setClassBreadcrumbs()
     {

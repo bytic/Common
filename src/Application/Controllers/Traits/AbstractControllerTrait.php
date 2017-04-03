@@ -38,4 +38,20 @@ trait AbstractControllerTrait
      * @return Records
      */
     public abstract function getModelManager();
+
+    /**
+     * @param $url
+     * @param null $code
+     * @return mixed
+     */
+    abstract protected function redirect($url, $code = null);
+
+    /**
+     * @param $message
+     * @param $url
+     * @param string $type
+     * @param bool $name
+     * @return mixed
+     */
+    abstract protected function flashRedirect($message, $url, $type = 'success', $name = false);
 }

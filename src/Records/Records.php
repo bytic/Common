@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records;
 
 use ByTIC\Common\Records\Export\AbstractExport;
+use ByTIC\Common\Records\Filters\FilterManager;
 use ByTIC\Common\Records\Traits\HasForms\RecordsTrait as HasFormsRecordsTrait;
 use ByTIC\Common\Records\Traits\I18n\RecordsTrait as I18nRecordsTrait;
 use Nip\Records\RecordManager;
@@ -20,54 +21,26 @@ abstract class Records extends RecordManager
     protected $_urlPK;
 
     /**
-     * @inheritdoc
-     */
-    public function requestFilters($request = [])
-    {
-        $filters = parent::requestFilters($request);
-
-        if (!empty($request['name'])) {
-            $filters['name'] = clean($request['name']);
-        }
-
-        if (!empty($request['title'])) {
-            $filters['title'] = clean($request['title']);
-        }
-
-        $filters['page'] = $request['page'];
-
-        return $filters;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function filter($query, $filters = [])
-    {
-        $query = parent::filter($query);
-
-        $table = $this->getTable();
-
-        if (isset($filters['name']) && empty($filters['name'])) {
-            $query->where("`$table`.`name` LIKE ?", "%{$filters['name']}%");
-        }
-
-        return $query;
-    }
-
-    /**
      * @param $query
      * @param string $type
      * @return AbstractExport
      */
     public function getExportByQuery($query, $type = 'excel')
     {
-        $name = get_class($this).'_Export_'.ucfirst($type);
+        $name = get_class($this) . '_Export_' . ucfirst($type);
         /** @var AbstractExport $object */
         $object = new $name();
         $object->setQuery($query);
         $object->setManager($this);
 
         return $object;
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection
+     * @inheritdoc
+     */
+    protected function generateFilterManagerDefaultClass()
+    {
+        return FilterManager::class;
     }
 }
