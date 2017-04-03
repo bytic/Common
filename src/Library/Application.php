@@ -21,6 +21,16 @@ abstract class Application extends NipApplication
         parent::setupAutoLoaderPaths();
 
         $this->getAutoLoader()->addDirectory($this->path());
+
+        $this->getAutoLoader()->addNamespace(
+            $this->getRootNamespace() . 'Models\\',
+            $this->path() . DIRECTORY_SEPARATOR . 'models'
+        );
+
+        $this->getAutoLoader()->addNamespace(
+            $this->getRootNamespace() . 'Modules\\',
+            $this->path() . DIRECTORY_SEPARATOR . 'modules'
+        );
     }
 
     /**
