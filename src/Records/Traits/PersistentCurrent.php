@@ -49,7 +49,10 @@ trait PersistentCurrent
     }
 
     /**
-     * @param Record|boolean $item
+     * Set the curent item in class
+     *
+     * @param Record|boolean $item Model to be persisted
+     *
      * @return $this
      */
     public function setCurrent($item = false)
@@ -102,7 +105,10 @@ trait PersistentCurrent
     }
 
     /**
-     * @param $item
+     * Check if the current user has access to model persisted
+     *
+     * @param Record $item Model to be persisted
+     *
      * @return bool
      */
     public function checkAccessCurrent($item)
@@ -111,7 +117,10 @@ trait PersistentCurrent
     }
 
     /**
+     * Set and save persisted model
+     *
      * @param Record|boolean $item
+     *
      * @return $this
      */
     public function setAndSaveCurrent($item = false)
@@ -179,7 +188,11 @@ trait PersistentCurrent
     }
 
     /**
-     * @param Record $item
+     * Method triggered before setting current model
+     *
+     * @param Record $item Model to be persisted
+     *
+     * @return void
      */
     public function beforeSetCurrent($item)
     {
@@ -222,7 +235,7 @@ trait PersistentCurrent
     public function getFromCookie()
     {
         $varName = $this->getCurrentVarName();
-        if ($_COOKIE[$varName]) {
+        if (isset($_COOKIE[$varName])) {
             $recordId = $_COOKIE[$varName];
 
             $item = $this->findOne(intval($recordId));
