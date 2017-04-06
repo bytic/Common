@@ -1,5 +1,5 @@
 {
-  "name": "ByTIC/Common",
+  "name": "bytic/common",
   "description": "Common Classes used by Nip Framework",
   "authors": [
     {
@@ -17,18 +17,14 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/ByTIC/Framework.git"
-    },
-    {
-      "type": "git",
-      "url": "https://github.com/ByTIC/RequestDetective.git"
+      "url": "https://github.com/ByTIC/framework.git"
     }
   ],
   "require": {
-    "php": ">=5.5.0",
-    "ByTIC/Framework": "dev-develop",
-    "ByTIC/RequestDetective": "dev-develop",
-    "setasign/fpdi-tcpdf": "1.6.*",
+    "php": "^7.0",
+    "bytic/framework": "dev-develop",
+    "bytic/request-detective": "dev-develop",
+    "setasign/fpdi-tcpdf": "^1.6",
     "omnipay/common": "~2.5"
   },
   "require-dev": {
