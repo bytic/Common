@@ -7,6 +7,7 @@ use Nip_Form_Model as Form;
 
 /**
  * Class RecordTrait
+ *
  * @package ByTIC\Common\Records\Traits\HasForms
  *
  * @method RecordsTrait getManager
@@ -18,12 +19,15 @@ trait RecordTrait
     protected $forms = [];
 
     /**
-     * @param string $type
-     * @return \Nip_Form
+     * Get Form object by name
+     *
+     * @param string $type Form name
+     *
+     * @return Form
      */
     public function getForm($type = null)
     {
-        if (!$this->forms[$type]) {
+        if (!isset($this->forms[$type])) {
             $form = $this->getManager()->newForm($type);
 
             $this->forms[$type] = $this->initForm($form);
@@ -33,8 +37,11 @@ trait RecordTrait
     }
 
     /**
-     * @param Form $form
-     * @return mixed
+     * Init a form object for this model
+     *
+     * @param Form $form Form object
+     *
+     * @return Form
      */
     public function initForm($form)
     {
