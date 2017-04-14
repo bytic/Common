@@ -4,7 +4,6 @@ namespace ByTIC\Common\Records\Traits\Media\Files;
 
 use ByTIC\Common\Records\Media\Files\Model as ModelFile;
 use Nip\Filesystem\FileDisk;
-use Nip_File_System;
 
 /**
  * Class RecordTrait
@@ -18,7 +17,7 @@ trait RecordTrait
     /**
      * @var ModelFile[]
      */
-    public $files = [];
+    public $files = null;
 
     /**
      * @param ModelFile $file
@@ -120,7 +119,7 @@ trait RecordTrait
      */
     public function removeFile($request)
     {
-        $this->findFiles();
+        $this->checkFiles();
 
         if ($this->files[$request['file']]) {
             $this->files[$request['file']]->delete();
@@ -130,25 +129,65 @@ trait RecordTrait
     }
 
     /**
-     * @return ModelFile[]
+     * Check if files have been inited
+     *
+     * @return ModelFile[]|null
+     */
+    public function checkFiles()
+    {
+        if ($this->files === null) {
+            $this->findFiles();
+        }
+        return $this->files;
+    }
+
+    /**
+     * Find files
+     *
+     * @return void
      */
     public function findFiles()
     {
-        $files = Nip_File_System::instance()->scanDirectory($this->getFilesDirectory());
-        natsort($files);
-        $this->setFiles($files);
-
-        return $this->files;
+        $files = $this->getFilesystemDisk()->listContents($this->getFilesPath());
+        foreach ($files as $fileData) {
+            $this->addNewFileFromArray($fileData);
+        }
     }
 
     /**
      * @return string
      */
-    public function getFilesDirectory()
+    public function getFilesPath()
     {
-        $file = $this->getNewFile();
+        return '/files/' . $this->getManager()->getTable() . '/' . $this->id . '/';
+    }
 
-        return $file->getDirPath();
+    /**
+     * @param $data
+     */
+    public function addNewFileFromArray($data)
+    {
+        $name = $data['basename'];
+        $file = $this->getNewFile();
+        $file->setName($name);
+        $this->appendFile($file);
+    }
+
+    /**
+     * @param ModelFile $file
+     */
+    public function appendFile($file)
+    {
+        $this->files[$file->getName()] = $file;
+    }
+
+    /**
+     * @return ModelFile[]
+     */
+    public function getFiles(): array
+    {
+        $this->checkFiles();
+        return $this->files;
     }
 
     /**

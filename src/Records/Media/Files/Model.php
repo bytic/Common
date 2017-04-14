@@ -11,6 +11,7 @@ use ZipArchive;
 
 /**
  * Class Model
+ *
  * @package ByTIC\Common\Records\Media\Files
  *
  * @method FileDisk getFilesystem()
@@ -76,6 +77,8 @@ class Model extends File
     }
 
     /**
+     * Init Path
+     *
      * @return string
      */
     protected function initPath()
@@ -84,24 +87,17 @@ class Model extends File
     }
 
     /**
+     * Get file path folder
+     *
      * @return string
      */
     public function getPathFolder()
     {
-        return '/files/'
-            . $this->getModelDirectoryName() . '/' . $this->getModel()->id . '/';
+        return $this->getModel()->getFilesPath();
     }
 
     /**
-     * @return string
-     */
-    public function getModelDirectoryName()
-    {
-        return $this->getModel()->getManager()->getTable();
-    }
-
-    /**
-     * @return Record
+     * @return Record|RecordTrait
      */
     public function getModel()
     {
@@ -109,7 +105,10 @@ class Model extends File
     }
 
     /**
+     * Set Model
+     *
      * @param Record|RecordTrait $model
+     *
      * @return $this
      */
     public function setModel(Record $model)
@@ -120,6 +119,8 @@ class Model extends File
     }
 
     /**
+     * Get valid extensions
+     *
      * @return array
      */
     public function getExtensions()
@@ -128,7 +129,10 @@ class Model extends File
     }
 
     /**
-     * @param string|boolean $destination
+     * Unzip file
+     *
+     * @param string|boolean $destination Destination folder
+     *
      * @return bool
      */
     public function unzip($destination = false)
@@ -150,6 +154,8 @@ class Model extends File
     }
 
     /**
+     * Get errors array
+     *
      * @return mixed
      */
     public function getErrors()
@@ -158,6 +164,8 @@ class Model extends File
     }
 
     /**
+     * Get default name
+     *
      * @return string
      */
     public function getDefaultName()
