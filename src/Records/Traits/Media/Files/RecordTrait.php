@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\Traits\Media\Files;
 
 use ByTIC\Common\Records\Media\Files\Model as ModelFile;
+use Nip\Filesystem\FileDisk;
 use Nip_File_System;
 
 /**
@@ -45,7 +46,9 @@ trait RecordTrait
 
     /**
      * File factory
+     *
      * @param null $type
+     *
      * @return ModelFile
      */
     public function getNewFile($type = null)
@@ -53,9 +56,27 @@ trait RecordTrait
         $class = $this->getFileModelName($type);
         /** @var ModelFile $file */
         $file = new $class();
-
         $file->setModel($this);
+        $file->setFilesystem($this->getFilesystemDisk());
         return $file;
+    }
+
+    /**
+     * Get the default files disk instance for current model
+     *
+     * @return FileDisk
+     */
+    public function getFilesystemDisk()
+    {
+        return app('filesystem')->disk($this->getFilesystemDiskName());
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilesystemDiskName()
+    {
+        return 'public';
     }
 
     /**
@@ -77,7 +98,7 @@ trait RecordTrait
     {
         $type = $type ? $type : 'Generic';
 
-        return $this->getManager()->getModelNamespace().'Files\\'.ucfirst($type);
+        return $this->getManager()->getModelNamespace() . 'Files\\' . ucfirst($type);
     }
 
     /**
@@ -87,10 +108,10 @@ trait RecordTrait
     public function getFileModelNameDefault($type = null)
     {
         if ($type) {
-            return $this->getManager()->getModel()."_File_".ucfirst($type);
+            return $this->getManager()->getModel() . "_File_" . ucfirst($type);
         }
 
-        return $this->getManager()->getModel()."_File";
+        return $this->getManager()->getModel() . "_File";
     }
 
     /**
@@ -107,7 +128,6 @@ trait RecordTrait
 
         return true;
     }
-
 
     /**
      * @return ModelFile[]

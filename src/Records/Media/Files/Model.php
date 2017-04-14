@@ -4,21 +4,26 @@ namespace ByTIC\Common\Records\Media\Files;
 
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
-use Nip_File_System as FileSystem;
+use Nip\Filesystem\File;
+use Nip\Filesystem\FileDisk;
+use Nip\Utility\Str;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ZipArchive;
-use function Nip\storage_path;
 
 /**
  * Class Model
  * @package ByTIC\Common\Records\Media\Files
+ *
+ * @method FileDisk getFilesystem()
  */
-class Model
+class Model extends File
 {
-
     /**
      * @var array
      */
-    protected $extensions = ["swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"];
+    protected $extensions = [
+        "swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"
+    ];
 
     /**
      * @var Record
@@ -26,148 +31,61 @@ class Model
     protected $model;
 
     /**
-     * @var
-     */
-    protected $name;
-
-    /**
-     * @var
-     */
-    protected $path;
-
-    /**
-     * @var string
-     */
-    protected $url;
-
-    /**
-     * @var
-     */
-    protected $size;
-
-    /**
-     * @var
+     * @var array
      */
     protected $errors;
 
     /**
-     * @param $upload
+     * @param UploadedFile $uploadedFile
      * @return bool
      */
-    public function upload($upload)
+    public function upload($uploadedFile)
     {
-        $error = FileSystem::instance()->getUploadError($upload, $this->getExtensions());
-        if (!$error) {
-            $this->setName($this->parseName($upload['name']));
+        if ($uploadedFile->isValid()) {
+            $this->setName(Str::slug($uploadedFile->getClientOriginalName()));
 
-            FileSystem::instance()->createDirectory(dirname($this->path));
-
-            if (!move_uploaded_file($upload["tmp_name"], $this->path)) {
-                return false;
-            }
-
-            chmod($this->path, 0777);
+            $this->getFilesystem()->putFileAs(
+                $this->getPath(),
+                $uploadedFile,
+                $this->getName()
+            );
 
             return true;
         } else {
-            $this->errors['upload'] = $error;
+            $this->errors['upload'] = $uploadedFile->getErrorMessage();
         }
 
         return false;
     }
 
     /**
-     * @return array
+     * Get File path with init check
+     *
+     * @return string
      */
-    public function getExtensions()
+    public function getPath()
     {
-        return $this->extensions;
-    }
-
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function parseName($name)
-    {
-        return str_replace(' ', '-', $name);
-    }
-
-    /**
-     * @param string|boolean $destination
-     * @return bool
-     */
-    public function unzip($destination = false)
-    {
-        if (!$destination) {
-            $destination = dirname($this->path);
+        if (!$this->path) {
+            $this->initPath();
         }
-
-        $archive = new ZipArchive();
-
-        if ($archive->open($this->path) === true) {
-            $archive->extractTo($destination);
-            $archive->close();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return $this
-     */
-    public function delete()
-    {
-        FileSystem::instance()->deleteFile($this->path);
-
-        return $this;
+        return parent::getPath();
     }
 
     /**
      * @return string
      */
-    public function getEmbedURL()
+    protected function initPath()
     {
-        $url = 'http://docs.google.com/gview';
-
-        $params['url'] = $this->getUrl();
-        $params['embedded'] = 'true';
-
-        return $url . '?' . http_build_query($params);
+        $this->setPath($this->getPathFolder() . $this->getName());
     }
 
     /**
      * @return string
      */
-    public function getUrl()
+    public function getPathFolder()
     {
-        return $this->url ? $this->url : $this->getUrlPath() . $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrlPath()
-    {
-        return $this->getRootUrlPath() . $this->getRoutePath();
-    }
-
-    /**
-     * @return string
-     */
-    public function getRootUrlPath()
-    {
-        return UPLOADS_URL;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoutePath()
-    {
-        return 'files/' . $this->getModelDirectoryName() . '/' . $this->getModel()->id . '/';
+        return '/files/'
+            . $this->getModelDirectoryName() . '/' . $this->getModel()->id . '/';
     }
 
     /**
@@ -198,98 +116,33 @@ class Model
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getExtension()
+    public function getExtensions()
     {
-        return FileSystem::instance()->getExtension($this->getPath());
+        return $this->extensions;
     }
 
     /**
-     * @return string
+     * @param string|boolean $destination
+     * @return bool
      */
-    public function getPath()
+    public function unzip($destination = false)
     {
-        return $this->path ? $this->path : $this->getDirPath() . $this->getName();
-    }
+        if (!$destination) {
+            $destination = dirname($this->path);
+        }
 
-    /**
-     * @return string
-     */
-    public function getDirPath()
-    {
-        return $this->getRootDirPath() . $this->getRoutePath();
-    }
+        $archive = new ZipArchive();
 
-    /**
-     * @return string
-     */
-    public function getRootDirPath()
-    {
-        return storage_path('app' . DIRECTORY_SEPARATOR . 'public');
-    }
+        if ($archive->open($this->path) === true) {
+            $archive->extractTo($destination);
+            $archive->close();
 
-    public function getName()
-    {
-        return $this->name;
-    }
+            return true;
+        }
 
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        $this->path = $this->getPath();
-        $this->url = $this->getUrl();
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getContentType()
-    {
-        $fInfo = finfo_open(FILEINFO_MIME_TYPE);
-
-        return finfo_file($fInfo, $this->getPath());
-    }
-
-    /**
-     * @return int
-     */
-    public function getTime()
-    {
-        return filemtime($this->path);
-    }
-
-    /**
-     * Converts Bytes to human readable format
-     *
-     * @param int $precision
-     * @return string
-     */
-    public function formatSize($precision = 2)
-    {
-        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
-
-        $bytes = max($this->getSize(), 0);
-        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-        $pow = min($pow, count($units) - 1);
-
-        $bytes /= pow(1024, $pow);
-
-        return round($bytes, $precision) . ' ' . $units[$pow];
-    }
-
-    /**
-     * @return int
-     */
-    public function getSize()
-    {
-        return filesize($this->path);
+        return false;
     }
 
     /**
