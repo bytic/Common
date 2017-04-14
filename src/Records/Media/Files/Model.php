@@ -26,11 +26,15 @@ class Model extends File
     ];
 
     /**
+     * The model instance
+     *
      * @var Record
      */
     protected $model;
 
     /**
+     * Errors array for this file
+     *
      * @var array
      */
     protected $errors;
