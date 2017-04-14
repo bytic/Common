@@ -6,6 +6,7 @@ use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
 use Nip_File_System as FileSystem;
 use ZipArchive;
+use function Nip\storage_path;
 
 /**
  * Class Model
@@ -134,7 +135,7 @@ class Model
         $params['url'] = $this->getUrl();
         $params['embedded'] = 'true';
 
-        return $url.'?'.http_build_query($params);
+        return $url . '?' . http_build_query($params);
     }
 
     /**
@@ -142,7 +143,39 @@ class Model
      */
     public function getUrl()
     {
-        return $this->url ? $this->url : $this->getUrlPath().$this->name;
+        return $this->url ? $this->url : $this->getUrlPath() . $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrlPath()
+    {
+        return $this->getRootUrlPath() . $this->getRoutePath();
+    }
+
+    /**
+     * @return string
+     */
+    public function getRootUrlPath()
+    {
+        return UPLOADS_URL;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoutePath()
+    {
+        return 'files/' . $this->getModelDirectoryName() . '/' . $this->getModel()->id . '/';
+    }
+
+    /**
+     * @return string
+     */
+    public function getModelDirectoryName()
+    {
+        return $this->getModel()->getManager()->getTable();
     }
 
     /**
@@ -177,7 +210,7 @@ class Model
      */
     public function getPath()
     {
-        return $this->path ? $this->path : $this->getDirPath().$this->getName();
+        return $this->path ? $this->path : $this->getDirPath() . $this->getName();
     }
 
     /**
@@ -185,31 +218,7 @@ class Model
      */
     public function getDirPath()
     {
-        return $this->getRootDirPath().$this->getRoutePath();
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrlPath()
-    {
-        return $this->getRootUrlPath().$this->getRoutePath();
-    }
-
-    /**
-     * @return string
-     */
-    public function getRoutePath()
-    {
-        return 'files/'.$this->getModelDirectoryName().'/'.$this->getModel()->id.'/';
-    }
-
-    /**
-     * @return string
-     */
-    public function getModelDirectoryName()
-    {
-        return $this->getModel()->getManager()->getTable();
+        return $this->getRootDirPath() . $this->getRoutePath();
     }
 
     /**
@@ -217,15 +226,7 @@ class Model
      */
     public function getRootDirPath()
     {
-        return UPLOADS_PATH;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRootUrlPath()
-    {
-        return UPLOADS_URL;
+        return storage_path('app' . DIRECTORY_SEPARATOR . 'public');
     }
 
     public function getName()
@@ -280,7 +281,7 @@ class Model
 
         $bytes /= pow(1024, $pow);
 
-        return round($bytes, $precision).' '.$units[$pow];
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
     /**
