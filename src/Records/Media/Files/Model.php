@@ -6,7 +6,6 @@ use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
 use Nip\Filesystem\File;
 use Nip\Filesystem\FileDisk;
-use Nip\Utility\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use ZipArchive;
 
@@ -40,16 +39,17 @@ class Model extends File
     protected $errors;
 
     /**
+     * Upload file from http
+     *
      * @param UploadedFile $uploadedFile
+     *
      * @return bool
      */
     public function upload($uploadedFile)
     {
         if ($uploadedFile->isValid()) {
-            $this->setName(Str::slug($uploadedFile->getClientOriginalName()));
-
             $this->getFilesystem()->putFileAs(
-                $this->getPath(),
+                dirname($this->getPath()),
                 $uploadedFile,
                 $this->getName()
             );
