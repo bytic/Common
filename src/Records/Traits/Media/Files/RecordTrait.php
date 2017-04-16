@@ -167,9 +167,8 @@ trait RecordTrait
      */
     public function addNewFileFromArray($data)
     {
-        $name = $data['basename'];
         $file = $this->getNewFile();
-        $file->setName($name);
+        $file->setPath($data['path']);
         $this->appendFile($file);
     }
 
