@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Records\Media\Images;
 
 use Nip\Filesystem\Image;
-use Nip\Records\Record as Record;
 
 /**
  * Class Model
@@ -11,15 +10,13 @@ use Nip\Records\Record as Record;
  */
 class Model extends Image
 {
+    use \ByTIC\Common\Records\Media\Traits\HasModels;
 
     public $basePath;
     public $baseURL;
     public $cropWidth;
     public $cropHeight;
-    /**
-     * @var Record
-     */
-    protected $_model;
+
     protected $_type;
     protected $_mediaType = 'images';
 
@@ -92,22 +89,6 @@ class Model extends Image
         parent::setName($name);
         $this->url = $this->getModel()->getImageURL($this->_type, $this->name);
         $this->path = $this->getModel()->getImagePath($this->_type, $this->name);
-    }
-
-    /**
-     * @return Record
-     */
-    public function getModel()
-    {
-        return $this->_model;
-    }
-
-    /**
-     * @param Record|\ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait $model
-     */
-    public function setModel(Record $model)
-    {
-        $this->_model = $model;
     }
 
     /**

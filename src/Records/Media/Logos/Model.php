@@ -7,6 +7,9 @@ use Nip_File_System;
 /**
  * Class Model
  * @package ByTIC\Common\Records\Media\Logos
+ *
+ * @method \ByTIC\Common\Records\Traits\Media\Logos\RecordTrait getModel()
+ *
  */
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
@@ -33,27 +36,14 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
     }
 
-    public function getDirectoryName()
+    /**
+     * Get file path folder
+     *
+     * @return string
+     */
+    public function getPathFolder()
     {
-        return $this->getModel()->getManager()->getController();
-    }
-
-    public function getPath()
-    {
-        if (!$this->path) {
-            $this->initPath();
-        }
-        return $this->path;
-    }
-
-    public function initPath()
-    {
-        $this->path = $this->getImagesRootPath() . $this->getDirectoryName() . '/' . $this->_type . '.png';
-    }
-
-    public function getRoutePath()
-    {
-        return 'images/' . $this->getDirectoryName() . '/' . $this->getModel()->id . '/logo-' . $this->_type . '/';
+        return $this->getModel()->getLogosPath() . '/logo-' . $this->_type . '/';
     }
 
     public function validate()

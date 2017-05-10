@@ -2,8 +2,6 @@
 
 namespace ByTIC\Common\Records\Media\Files;
 
-use ByTIC\Common\Records\Record;
-use ByTIC\Common\Records\Traits\Media\Files\RecordTrait;
 use Nip\Filesystem\File;
 use Nip\Filesystem\FileDisk;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,19 +16,15 @@ use ZipArchive;
  */
 class Model extends File
 {
+    use \ByTIC\Common\Records\Media\Traits\HasModels;
+    use \ByTIC\Common\Records\Media\Traits\HydratePath;
+
     /**
      * @var array
      */
     protected $extensions = [
         "swf", "pdf", "doc", "docx", "xls", "xlsx", "rtf", "ppt", "zip", "rar"
     ];
-
-    /**
-     * The model instance
-     *
-     * @var Record
-     */
-    protected $model;
 
     /**
      * Errors array for this file
@@ -61,61 +55,6 @@ class Model extends File
         }
 
         return false;
-    }
-
-    /**
-     * Get File path with init check
-     *
-     * @return string
-     */
-    public function getPath()
-    {
-        if (!$this->path) {
-            $this->initPath();
-        }
-        return parent::getPath();
-    }
-
-    /**
-     * Init Path
-     *
-     * @return string
-     */
-    protected function initPath()
-    {
-        $this->setPath($this->getPathFolder() . $this->getName());
-    }
-
-    /**
-     * Get file path folder
-     *
-     * @return string
-     */
-    public function getPathFolder()
-    {
-        return $this->getModel()->getFilesPath();
-    }
-
-    /**
-     * @return Record|RecordTrait
-     */
-    public function getModel()
-    {
-        return $this->model;
-    }
-
-    /**
-     * Set Model
-     *
-     * @param Record|RecordTrait $model
-     *
-     * @return $this
-     */
-    public function setModel(Record $model)
-    {
-        $this->model = $model;
-
-        return $this;
     }
 
     /**

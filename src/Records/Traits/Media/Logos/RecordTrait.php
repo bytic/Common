@@ -109,7 +109,9 @@ trait RecordTrait
         $logos = [];
         foreach ($types as $type) {
             $image = $this->getNewLogo($type);
-            $files = Nip_File_System::instance()->scanDirectory($image->getDirPath());
+            $files = Nip_File_System::instance()->scanDirectory(
+                $image->getRealPath()
+            );
             if ($files) {
                 foreach ($files as $file) {
                     $newImage = $this->getNewLogo($type);
@@ -230,5 +232,13 @@ trait RecordTrait
         $image = $this->getNewLogo($request['type']);
 
         return $image->delete(true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogosPath()
+    {
+        return '/images/' . $this->getManager()->getTable() . '/' . $this->id . '/';
     }
 }
