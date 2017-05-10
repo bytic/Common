@@ -4,9 +4,12 @@ namespace ByTIC\Common\Records\Media\Logos;
 
 use Nip_File_System;
 
+/**
+ * Class Model
+ * @package ByTIC\Common\Records\Media\Logos
+ */
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
-
     public $fHeight = false;
     public $fWidth = false;
 
@@ -15,21 +18,6 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         parent::setName($name);
         $this->url = $this->getUrlPath() . $this->name;
         $this->path = $this->getDirPath() . $this->name;
-    }
-
-    public function getDirRoot()
-    {
-        return dirname($this->getDirPath());
-    }
-
-    public function getDirPath()
-    {
-        return $this->getUploadRootPath() . $this->getRoutePath();
-    }
-
-    public function getUrlPath()
-    {
-        return $this->getUploadRootURL() . $this->getRoutePath();
     }
 
     public function getUrl()
@@ -43,6 +31,11 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
     public function initUrl()
     {
         $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
+    }
+
+    public function getDirectoryName()
+    {
+        return $this->getModel()->getManager()->getController();
     }
 
     public function getPath()
@@ -63,32 +56,13 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         return 'images/' . $this->getDirectoryName() . '/' . $this->getModel()->id . '/logo-' . $this->_type . '/';
     }
 
-    public function getDefaultName()
-    {
-        return 'logo';
-    }
-
-    public function getDirectoryName()
-    {
-        return $this->getModel()->getManager()->getController();
-    }
-
-    public function exists()
-    {
-        return is_file($this->getPath());
-    }
-
-    public function delete($bubble = false)
-    {
-        return Nip_File_System::instance()->removeDirectory($this->getDirPath());
-    }
-
     public function validate()
     {
         return true;
     }
 
-    public function  save() {
+    public function save()
+    {
         if (is_dir($this->getDirPath())) {
             Nip_File_System::instance()->emptyDirectory($this->getDirPath());
         }
@@ -97,6 +71,11 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
         $this->setBaseName($newName);
         $this->processSize();
         return parent::save();
+    }
+
+    public function getDefaultName()
+    {
+        return 'logo';
     }
 
     public function processSize()

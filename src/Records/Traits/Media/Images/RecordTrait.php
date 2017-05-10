@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Images;
 
-use Nip\HelperBroker;
 use Nip_File_System;
 
 /**
@@ -137,6 +136,10 @@ trait RecordTrait
         return $image->cropHeight;
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getImage($type = "default")
     {
         $this->findImage($type);
@@ -197,21 +200,34 @@ trait RecordTrait
         return $this->images;
     }
 
+    /**
+     * @param string $type
+     * @return string
+     */
     public function getGenericImage($type = "default")
     {
-        return HelperBroker::get('Url')->image($this->getManager()->getTable() . '/default-' . $type . '.jpg');
+        return asset('images/' . $this->getManager()->getTable() . '/default-' . $type . '.jpg');
     }
 
+    /**
+     * @return mixed
+     */
     public function deleteImages()
     {
         return Nip_File_System::instance()->removeDir($this->getImageBasePath());
     }
 
+    /**
+     * @return $this
+     */
     public function resetImages()
     {
         return Nip_File_System::instance()->emptyDirectory($this->getImageBasePath());
     }
 
+    /**
+     * @param $name
+     */
     public function deleteImage($name)
     {
         $images = $this->getNewImages();
@@ -284,6 +300,10 @@ trait RecordTrait
         return $images['default'];
     }
 
+    /**
+     * @param $request
+     * @return bool
+     */
     public function setDefaultImage($request)
     {
         $image = $request['image'];
@@ -299,6 +319,10 @@ trait RecordTrait
         return true;
     }
 
+    /**
+     * @param $request
+     * @return bool
+     */
     public function removeImage($request)
     {
         foreach ($this->_imageTypes as $type) {
@@ -312,6 +336,10 @@ trait RecordTrait
         return true;
     }
 
+    /**
+     * @param $image
+     * @return bool
+     */
     public function isDefaultImage($image)
     {
         if ($image instanceof Nip_File_Image) {

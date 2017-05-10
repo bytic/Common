@@ -118,7 +118,7 @@ trait RecordTrait
                     $logos[$type][] = $newImage;
                 }
             } else {
-//                    $logos[$type][] = $image;
+                $logos[$type][] = $image;
             }
         }
         $this->getRegistry()->set('logos', $logos);
@@ -136,6 +136,7 @@ trait RecordTrait
         $logo = new $class();
         /** @var LogoModel $logo */
         $logo->setModel($this);
+        $logo->setFilesystem($this->getFilesystemDisk());
 
         return $logo;
     }

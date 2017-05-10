@@ -2,51 +2,48 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Generic;
 
+use Nip\Filesystem\FileDisk;
+
+/**
+ * Trait RecordTrait
+ * @package ByTIC\Common\Records\Traits\Media\Generic
+ */
 trait RecordTrait
 {
-
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    public function getUploadPath()
+    /**
+     * Get the default files disk instance for current model
+     *
+     * @return FileDisk
+     */
+    public function getFilesystemDisk()
     {
-        return UPLOADS_PATH;
+        return app('filesystem')->disk($this->getFilesystemDiskName());
     }
 
-    public function getUploadURL()
+    /**
+     * @return string
+     */
+    public function getFilesystemDiskName()
     {
-        return UPLOADS_URL;
+        return 'public';
     }
 
-    public function getImageBasePath($type = false)
-    {
-        return $this->getUploadPath() . 'images/' . $this->getManager()->getTable() . '/' . $this->id . '/' . ($type ? $type . '/' : '');
-    }
-
-    public function getImageBaseURL($type = false)
-    {
-        return $this->getUploadURL() . 'images/' . $this->getManager()->getTable() . '/' . $this->id . '/' . ($type ? $type . '/' : '');
-    }
-
-    public function getImageURL($type, $image)
-    {
-        return $this->getImageBaseURL($type) . $image;
-    }
-
-    public function getImagePath($type, $image)
-    {
-        return $this->getImageBasePath($type) . $image;
-    }
-
+    /**
+     * @param $request
+     * @return array
+     */
     protected function getCropCoordinates($request)
     {
-        $return = array();
+        $return = [];
 
-        $return['x'] = (int) $request['x'];
-        $return['y'] = (int) $request['y'];
-        $return['width'] = (int) $request['width'];
-        $return['height'] = (int) $request['height'];
+        $return['x'] = (int)$request['x'];
+        $return['y'] = (int)$request['y'];
+        $return['width'] = (int)$request['width'];
+        $return['height'] = (int)$request['height'];
 
         return $return;
     }
-    
+
 }
