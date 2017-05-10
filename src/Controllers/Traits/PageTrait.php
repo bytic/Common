@@ -33,7 +33,7 @@ trait PageTrait
 
     protected function setBreadcrumbs()
     {
-        $this->getView()->Breadcrumbs()->addItem("Home", BASE_URL);
+        $this->getView()->Breadcrumbs()->addItem("Home", app('url')->to('/'));
     }
 
     /**
