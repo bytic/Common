@@ -20,62 +20,7 @@ trait RecordTrait
     protected $_logoTypes = [];
 
     /**
-     * @param string|null $type
-     * @return mixed
-     */
-    public function getLogos($type = null)
-    {
-        if (!$this->getRegistry()->exists('logos')) {
-            $this->initLogos();
-        }
-
-        $type = $this->checkType($type);
-        $logos = $this->getRegistry()->get('logos');
-
-        return $logos[$type];
-    }
-
-    public function initLogos()
-    {
-        $types = $this->getLogoTypes();
-        $logos = array();
-        foreach ($types as $type) {
-            $image = $this->getNewLogo($type);
-            $files = Nip_File_System::instance()->scanDirectory($image->getDirPath());
-            if ($files) {
-                foreach ($files as $file) {
-                    $newImage = $this->getNewLogo($type);
-                    $newImage->setName($file);
-
-                    $logos[$type][] = $newImage;
-                }
-            } else {
-//                    $logos[$type][] = $image;
-            }
-        }
-        $this->getRegistry()->set('logos', $logos);
-    }
-
-    public function initLogoTypes()
-    {
-        if (isset($this->logoTypes)) {
-            $this->_logoTypes = $this->logoTypes;
-        } else {
-            $this->_logoTypes = array();
-        }
-    }
-
-    public function getLogoTypes()
-    {
-        if (count($this->_logoTypes) < 1) {
-            $this->initLogoTypes();
-        }
-
-        return $this->_logoTypes;
-    }
-
-    /**
-     * @param string|null $type
+     * @param string|null $type Type name string
      * @return LogoModel
      */
     public function getLogo($type = null)
@@ -93,33 +38,90 @@ trait RecordTrait
     }
 
     /**
-     * @param string|null $type
-     * @return bool
+     * @param $type
+     * @return mixed|string
      */
-    public function hasLogo($type = null)
+    public function checkType($type)
     {
-        $type = $this->checkType($type);
-
-        $logos = $this->getLogos($type);
-
-        if (is_array($logos) && count($logos) > 0) {
-            return true;
+        if (in_array($type, $this->getLogoTypes())) {
+            return $type;
         }
 
-        return false;
+        return $this->getGenericLogoType();
+    }
+
+    /**
+     * @return array
+     */
+    public function getLogoTypes()
+    {
+        if (count($this->_logoTypes) < 1) {
+            $this->initLogoTypes();
+        }
+
+        return $this->_logoTypes;
+    }
+
+    /**
+     * Init Logo Types
+     */
+    public function initLogoTypes()
+    {
+        if (isset($this->logoTypes)) {
+            $this->_logoTypes = $this->logoTypes;
+        } else {
+            $this->_logoTypes = [];
+        }
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getGenericLogoType()
+    {
+        $types = $this->getLogoTypes();
+        if (is_array($types)) {
+            return reset($types);
+        }
+
+        return 'listing';
     }
 
     /**
      * @param string|null $type
-     * @return LogoModel
+     * @return mixed
      */
-    public function getGenericLogo($type = null)
+    public function getLogos($type = null)
     {
+        if (!$this->getRegistry()->has('logos')) {
+            $this->initLogos();
+        }
+
         $type = $this->checkType($type);
+        $logos = $this->getRegistry()->get('logos');
 
-        $image = $this->getNewLogo($type);
+        return $logos[$type];
+    }
 
-        return $image;
+    public function initLogos()
+    {
+        $types = $this->getLogoTypes();
+        $logos = [];
+        foreach ($types as $type) {
+            $image = $this->getNewLogo($type);
+            $files = Nip_File_System::instance()->scanDirectory($image->getDirPath());
+            if ($files) {
+                foreach ($files as $file) {
+                    $newImage = $this->getNewLogo($type);
+                    $newImage->setName($file);
+
+                    $logos[$type][] = $newImage;
+                }
+            } else {
+//                    $logos[$type][] = $image;
+            }
+        }
+        $this->getRegistry()->set('logos', $logos);
     }
 
     /**
@@ -147,19 +149,58 @@ trait RecordTrait
         $type = $this->checkType($type);
         $type = inflector()->camelize($type);
 
-        return $this->getManager()->getModel()."_Logos_".$type;
+        return $this->getManager()->getModel() . "_Logos_" . $type;
     }
 
+    /**
+     * @param string|null $type
+     * @return LogoModel
+     */
+    public function getGenericLogo($type = null)
+    {
+        $type = $this->checkType($type);
+
+        $image = $this->getNewLogo($type);
+
+        return $image;
+    }
+
+    /**
+     * @param string|null $type
+     * @return bool
+     */
+    public function hasLogo($type = null)
+    {
+        $type = $this->checkType($type);
+
+        $logos = $this->getLogos($type);
+
+        if (is_array($logos) && count($logos) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param null $type
+     * @param bool $file
+     * @return bool|LogoModel
+     */
     public function uploadLogo($type = null, $file = false)
     {
         $type = $this->checkType($type);
 
         $image = $this->getNewLogo($type);
         $file = $file ? $file : $_FILES['Filedata'];
-        $uploadError = Nip_File_System::instance()->getUploadError($file, $image->extensions);
+
+        $uploadError = Nip_File_System::instance()->getUploadError(
+            $file,
+            $image->extensions
+        );
 
         if ($uploadError) {
-            $this->errors['upload'] = 'Error Upload:'.$uploadError;
+            $this->errors['upload'] = 'Error Upload:' . $uploadError;
         } else {
             $image->setResourceFromUpload($file);
             if ($image->validate()) {
@@ -168,40 +209,25 @@ trait RecordTrait
                 }
                 $this->errors['upload'] = 'Error saving file';
             } else {
-                $error = is_array($image->errors) && count($image->errors) > 0 ? implode(', ',
-                    $image->errors) : 'Error validating file';
-                $this->errors['upload'] = 'Error validate:'.$error;
+                $error = is_array($image->errors) && count($image->errors) > 0
+                    ? implode(', ', $image->errors)
+                    : 'Error validating file';
+                $this->errors['upload'] = 'Error validate:' . $error;
             }
         }
 
         return false;
     }
 
+    /**
+     * @param $request
+     * @return $this|void
+     */
     public function removeLogo($request)
     {
-        $request = is_array($request) ? $request : array('type' => $request);
+        $request = is_array($request) ? $request : ['type' => $request];
         $image = $this->getNewLogo($request['type']);
 
         return $image->delete(true);
     }
-
-    public function checkType($type)
-    {
-        if (in_array($type, $this->getLogoTypes())) {
-            return $type;
-        }
-
-        return $this->getGenericLogoType();
-    }
-
-    public function getGenericLogoType()
-    {
-        $types = $this->getLogoTypes();
-        if (is_array($types)) {
-            return reset($types);
-        }
-
-        return 'listing';
-    }
-
 }
