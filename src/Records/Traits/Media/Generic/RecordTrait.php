@@ -72,8 +72,9 @@ trait RecordTrait
     {
         $type = $this->checkMediaType($media, $type);
         $type = inflector()->camelize($type);
+        $mediaName = inflector()->camelize(inflector()->pluralize($media));
 
-        return $this->getManager()->getModel() . '_' . ucfirst($media) . '_' . $type;
+        return $this->getManager()->getModel() . '_' . $mediaName . '_' . $type;
     }
 
     /**

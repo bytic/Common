@@ -14,7 +14,7 @@ use Nip_File_System;
  */
 trait RecordTrait
 {
-    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     protected $_logoTypes = [];
 
@@ -24,7 +24,7 @@ trait RecordTrait
      */
     public function getLogo($type = null)
     {
-        $type = $this->checkType($type);
+        $type = $this->checkMediaType('logo', $type);
 
         $logos = $this->getLogos($type);
         $logo = is_array($logos) ? reset($logos) : null;
@@ -46,7 +46,7 @@ trait RecordTrait
             $this->initLogos();
         }
 
-        $type = $this->checkType($type);
+        $type = $this->checkMediaType('logo', $type);
         $logos = $this->getRegistry()->get('logos');
 
         return $logos[$type];
@@ -106,15 +106,7 @@ trait RecordTrait
      */
     public function getNewLogo($type = null)
     {
-        $type = $this->checkType($type);
-        $class = $this->getLogoModelName($type);
-
-        $logo = new $class();
-        /** @var LogoModel $logo */
-        $logo->setModel($this);
-        $logo->setFilesystem($this->getFilesystemDisk());
-
-        return $logo;
+        return $this->getNewMediaFile('logo', $type);
     }
 
     /**
@@ -123,8 +115,7 @@ trait RecordTrait
      */
     public function getGenericLogo($type = null)
     {
-        $type = $this->checkType($type);
-
+        $type = $this->checkMediaType('logo', $type);
         $image = $this->getNewLogo($type);
 
         return $image;
@@ -149,7 +140,7 @@ trait RecordTrait
      */
     public function hasLogo($type = null)
     {
-        $type = $this->checkType($type);
+        $type = $this->checkMediaType('logo', $type);
 
         $logos = $this->getLogos($type);
 
@@ -167,7 +158,7 @@ trait RecordTrait
      */
     public function uploadLogo($type = null, $file = false)
     {
-        $type = $this->checkType($type);
+        $type = $this->checkMediaType('logo', $type);
 
         $image = $this->getNewLogo($type);
         $file = $file ? $file : $_FILES['Filedata'];
