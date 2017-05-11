@@ -16,12 +16,12 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
     public $fHeight = false;
     public $fWidth = false;
 
-    public function setName($name)
-    {
-        parent::setName($name);
-        $this->url = $this->getUrlPath() . $this->name;
-        $this->path = $this->getDirPath() . $this->name;
-    }
+//    public function setName($name)
+//    {
+//        parent::setName($name);
+//        $this->url = $this->getUrlPath() . $this->name;
+//        $this->path = $this->getDirPath() . $this->name;
+//    }
 
     public function getUrl()
     {

@@ -109,8 +109,9 @@ trait RecordTrait
         $logos = [];
         foreach ($types as $type) {
             $image = $this->getNewLogo($type);
-            $files = Nip_File_System::instance()->scanDirectory(
-                $image->getRealPath()
+
+            $files = $image->getFilesystem()->listContents(
+                $image->getPathFolder()
             );
             if ($files) {
                 foreach ($files as $file) {
