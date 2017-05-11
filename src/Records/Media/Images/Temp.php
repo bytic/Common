@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Records\Media\Images;
 
+/**
+ * Class Temp
+ * @package ByTIC\Common\Records\Media\Images
+ */
 class Temp extends \Nip_File_Image
 {
 

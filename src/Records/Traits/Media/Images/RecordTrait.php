@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Images;
 
+use ByTIC\Common\Records\Media\Images\Temp as ImageTemp;
 use Nip_File_System;
 
 /**
@@ -10,7 +11,7 @@ use Nip_File_System;
  */
 trait RecordTrait
 {
-    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
 
     public $images = [];
 
@@ -62,11 +63,11 @@ trait RecordTrait
     }
 
     /**
-     * @return Image_Temp
+     * @return ImageTemp
      */
     public function getTempImage()
     {
-        $class = get_class($this) . "_Image_Temp";
+        $class = get_class($this) . "_ImageTemp";
 
         $image = new $class();
         return $image;
@@ -93,7 +94,7 @@ trait RecordTrait
 
     /**
      * @param null $type
-     * @return Image_Temp|mixed
+     * @return ImageTemp|mixed
      */
     public function getImageByType($type = null)
     {
@@ -114,16 +115,7 @@ trait RecordTrait
      */
     public function getNewImage($type)
     {
-        $class = get_class($this) . "_Image_" . ucfirst($type);
-
-        $image = new $class();
-
-        $image->basePath = $this->getImageBasePath($type);
-        $image->baseURL = $this->getImageBaseURL($type);
-
-        $image->setModel($this);
-
-        return $image;
+        return $this->getNewMediaFile('image', $type);
     }
 
     /**
@@ -180,7 +172,11 @@ trait RecordTrait
         if (!$this->_imageCache[$type]) {
             $return = [];
 
-            $files = Nip_File_System::instance()->scanDirectory($this->getImageBasePath($type));
+            $image = $this->getNewImage($type);
+
+            $files = $image->getFilesystem()->listContents(
+                $image->getPathFolder()
+            );
 
             foreach ($files as $file) {
                 $image = $this->getNewImage($type);

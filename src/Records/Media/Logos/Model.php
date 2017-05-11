@@ -23,18 +23,18 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 //        $this->path = $this->getDirPath() . $this->name;
 //    }
 
-    public function getUrl()
-    {
-        if (!$this->url) {
-            $this->initUrl();
-        }
-        return $this->url;
-    }
-
-    public function initUrl()
-    {
-        $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
-    }
+//    public function getUrl()
+//    {
+//        if (!$this->url) {
+//            $this->initUrl();
+//        }
+//        return $this->url;
+//    }
+//
+//    public function initUrl()
+//    {
+//        $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
+//    }
 
     /**
      * Get file path folder

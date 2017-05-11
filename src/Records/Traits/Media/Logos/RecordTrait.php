@@ -14,8 +14,7 @@ use Nip_File_System;
  */
 trait RecordTrait
 {
-
-    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
 
     protected $_logoTypes = [];
 
@@ -35,56 +34,6 @@ trait RecordTrait
         }
 
         return $this->getGenericLogo($type);
-    }
-
-    /**
-     * @param $type
-     * @return mixed|string
-     */
-    public function checkType($type)
-    {
-        if (in_array($type, $this->getLogoTypes())) {
-            return $type;
-        }
-
-        return $this->getGenericLogoType();
-    }
-
-    /**
-     * @return array
-     */
-    public function getLogoTypes()
-    {
-        if (count($this->_logoTypes) < 1) {
-            $this->initLogoTypes();
-        }
-
-        return $this->_logoTypes;
-    }
-
-    /**
-     * Init Logo Types
-     */
-    public function initLogoTypes()
-    {
-        if (isset($this->logoTypes)) {
-            $this->_logoTypes = $this->logoTypes;
-        } else {
-            $this->_logoTypes = [];
-        }
-    }
-
-    /**
-     * @return mixed|string
-     */
-    public function getGenericLogoType()
-    {
-        $types = $this->getLogoTypes();
-        if (is_array($types)) {
-            return reset($types);
-        }
-
-        return 'listing';
     }
 
     /**
@@ -128,6 +77,30 @@ trait RecordTrait
     }
 
     /**
+     * @return array
+     */
+    public function getLogoTypes()
+    {
+        if (count($this->_logoTypes) < 1) {
+            $this->initLogoTypes();
+        }
+
+        return $this->_logoTypes;
+    }
+
+    /**
+     * Init Logo Types
+     */
+    public function initLogoTypes()
+    {
+        if (isset($this->logoTypes)) {
+            $this->_logoTypes = $this->logoTypes;
+        } else {
+            $this->_logoTypes = [];
+        }
+    }
+
+    /**
      * @param string $type
      * @return LogoModel
      */
@@ -146,18 +119,6 @@ trait RecordTrait
 
     /**
      * @param string|null $type
-     * @return string
-     */
-    public function getLogoModelName($type = null)
-    {
-        $type = $this->checkType($type);
-        $type = inflector()->camelize($type);
-
-        return $this->getManager()->getModel() . "_Logos_" . $type;
-    }
-
-    /**
-     * @param string|null $type
      * @return LogoModel
      */
     public function getGenericLogo($type = null)
@@ -167,6 +128,19 @@ trait RecordTrait
         $image = $this->getNewLogo($type);
 
         return $image;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getGenericLogoType()
+    {
+        $types = $this->getLogoTypes();
+        if (is_array($types)) {
+            return reset($types);
+        }
+
+        return 'listing';
     }
 
     /**
