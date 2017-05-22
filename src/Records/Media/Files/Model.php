@@ -19,6 +19,8 @@ class Model extends File
     use \ByTIC\Common\Records\Media\Traits\HasModels;
     use \ByTIC\Common\Records\Media\Traits\HydrateCollection;
 
+    protected $mediaCollection = 'files';
+
     /**
      * @var array
      */

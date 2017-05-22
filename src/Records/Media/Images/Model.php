@@ -19,7 +19,7 @@ class Model extends Image
     public $cropHeight;
 
     protected $_type;
-    protected $_mediaType = 'images';
+    protected $mediaCollection = 'images';
 
     /**
      * @return Model

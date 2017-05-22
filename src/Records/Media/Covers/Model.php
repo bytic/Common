@@ -8,7 +8,7 @@ namespace ByTIC\Common\Records\Media\Covers;
  */
 class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
-    protected $_mediaType = 'covers';
+    protected $mediaCollection = 'covers';
 
     /**
      * @param string $name

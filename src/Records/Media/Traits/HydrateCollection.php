@@ -12,10 +12,6 @@ namespace ByTIC\Common\Records\Media\Traits;
  */
 trait HydrateCollection
 {
-    /**
-     * @var null|string
-     */
-    protected $mediaCollection = null;
 
     /**
      * Get file path folder
@@ -32,7 +28,7 @@ trait HydrateCollection
      */
     protected function getCollectionPathFolder()
     {
-        $method = 'get' . $this->getMediaCollection() . 'path';
+        $method = 'get' . $this->getMediaCollection() . 'Path';
         return $this->getModel()->{$method}();
     }
 

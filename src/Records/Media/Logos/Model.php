@@ -15,6 +15,7 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
     public $fHeight = false;
     public $fWidth = false;
+    protected $mediaCollection = 'logos';
 
 //    public function setName($name)
 //    {
