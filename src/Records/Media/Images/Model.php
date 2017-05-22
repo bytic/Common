@@ -11,6 +11,7 @@ use Nip\Filesystem\Image;
 class Model extends Image
 {
     use \ByTIC\Common\Records\Media\Traits\HasModels;
+    use \ByTIC\Common\Records\Media\Traits\HydrateCollection;
 
     public $basePath;
     public $baseURL;

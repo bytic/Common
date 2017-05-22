@@ -17,7 +17,7 @@ use ZipArchive;
 class Model extends File
 {
     use \ByTIC\Common\Records\Media\Traits\HasModels;
-    use \ByTIC\Common\Records\Media\Traits\HydratePath;
+    use \ByTIC\Common\Records\Media\Traits\HydrateCollection;
 
     /**
      * @var array
