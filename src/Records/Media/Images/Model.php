@@ -11,6 +11,7 @@ use Nip\Filesystem\Image;
 class Model extends Image
 {
     use \ByTIC\Common\Records\Media\Traits\HasModels;
+    use \ByTIC\Common\Records\Media\Traits\HydrateCollection;
 
     public $basePath;
     public $baseURL;
@@ -18,7 +19,7 @@ class Model extends Image
     public $cropHeight;
 
     protected $_type;
-    protected $_mediaType = 'images';
+    protected $mediaCollection = 'images';
 
     /**
      * @return Model
@@ -81,15 +82,15 @@ class Model extends Image
         return $this;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        parent::setName($name);
-        $this->url = $this->getModel()->getImageURL($this->_type, $this->name);
-        $this->path = $this->getModel()->getImagePath($this->_type, $this->name);
-    }
+//    /**
+//     * @param string $name
+//     */
+//    public function setName($name)
+//    {
+//        parent::setName($name);
+//        $this->url = $this->getModel()->getImageURL($this->_type, $this->name);
+//        $this->path = $this->getModel()->getImagePath($this->_type, $this->name);
+//    }
 
     /**
      * @param Image $image

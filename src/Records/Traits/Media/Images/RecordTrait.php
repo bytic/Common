@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Records\Traits\Media\Images;
 
+use ByTIC\Common\Records\Media\Images\Model as ImageModel;
+use ByTIC\Common\Records\Media\Images\Temp as ImageTemp;
 use Nip_File_System;
 
 /**
@@ -11,6 +13,11 @@ use Nip_File_System;
 trait RecordTrait
 {
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+
+    /**
+     * @var ImageModel|null
+     */
+    public $image = null;
 
     public $images = [];
 
@@ -62,11 +69,11 @@ trait RecordTrait
     }
 
     /**
-     * @return Image_Temp
+     * @return ImageTemp
      */
     public function getTempImage()
     {
-        $class = get_class($this) . "_Image_Temp";
+        $class = get_class($this) . "_ImageTemp";
 
         $image = new $class();
         return $image;
@@ -93,7 +100,7 @@ trait RecordTrait
 
     /**
      * @param null $type
-     * @return Image_Temp|mixed
+     * @return ImageTemp|mixed
      */
     public function getImageByType($type = null)
     {
@@ -110,20 +117,11 @@ trait RecordTrait
 
     /**
      * @param $type
-     * @return mixed
+     * @return ImageModel
      */
     public function getNewImage($type)
     {
-        $class = get_class($this) . "_Image_" . ucfirst($type);
-
-        $image = new $class();
-
-        $image->basePath = $this->getImageBasePath($type);
-        $image->baseURL = $this->getImageBaseURL($type);
-
-        $image->setModel($this);
-
-        return $image;
+        return $this->getNewMediaFile('image', $type);
     }
 
     /**
@@ -145,7 +143,7 @@ trait RecordTrait
         $this->findImage($type);
 
         if ($this->image) {
-            return $this->image->url;
+            return $this->image->getUrl();
         }
 
         return $this->getGenericImage($type);
@@ -163,7 +161,7 @@ trait RecordTrait
                 $this->image = $this->images[$this->default_image];
             } else {
                 $this->image = reset($this->images);
-                $this->default_image = $this->image->name;
+                $this->default_image = $this->image->getName();
                 if (in_array('default_image', $this->getManager()->getFields())) {
                     $this->update();
                 }
@@ -180,16 +178,20 @@ trait RecordTrait
         if (!$this->_imageCache[$type]) {
             $return = [];
 
-            $files = Nip_File_System::instance()->scanDirectory($this->getImageBasePath($type));
+            $image = $this->getNewImage($type);
+
+            $files = $image->getFilesystem()->listContents(
+                $image->getPathFolder()
+            );
 
             foreach ($files as $file) {
                 $image = $this->getNewImage($type);
                 $image->setName($file);
 
                 if ($file == $this->default_image) {
-                    $return = [$image->name => $image] + $return;
+                    $return = [$image->getName() => $image] + $return;
                 } else {
-                    $return[$image->name] = $image;
+                    $return[$image->getName()] = $image;
                 }
             }
 
@@ -210,19 +212,23 @@ trait RecordTrait
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function deleteImages()
     {
-        return Nip_File_System::instance()->removeDir($this->getImageBasePath());
+        $image = $this->getNewImage(null);
+        $filesystem = $image->getFilesystem();
+        return $filesystem->deleteDir($image->getPathFolder());
     }
 
     /**
-     * @return $this
+     * @return bool
      */
     public function resetImages()
     {
-        return Nip_File_System::instance()->emptyDirectory($this->getImageBasePath());
+        $image = $this->getNewImage(null);
+        $filesystem = $image->getFilesystem();
+        return $filesystem->deleteDir($image->getPathFolder());
     }
 
     /**

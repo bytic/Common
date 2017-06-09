@@ -15,26 +15,27 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
     public $fHeight = false;
     public $fWidth = false;
+    protected $mediaCollection = 'logos';
 
-    public function setName($name)
-    {
-        parent::setName($name);
-        $this->url = $this->getUrlPath() . $this->name;
-        $this->path = $this->getDirPath() . $this->name;
-    }
+//    public function setName($name)
+//    {
+//        parent::setName($name);
+//        $this->url = $this->getUrlPath() . $this->name;
+//        $this->path = $this->getDirPath() . $this->name;
+//    }
 
-    public function getUrl()
-    {
-        if (!$this->url) {
-            $this->initUrl();
-        }
-        return $this->url;
-    }
-
-    public function initUrl()
-    {
-        $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
-    }
+//    public function getUrl()
+//    {
+//        if (!$this->url) {
+//            $this->initUrl();
+//        }
+//        return $this->url;
+//    }
+//
+//    public function initUrl()
+//    {
+//        $this->url = $this->getImagesRootURL() . $this->getDirectoryName() . '/' . $this->_type . '.png';
+//    }
 
     /**
      * Get file path folder
