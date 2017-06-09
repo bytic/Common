@@ -196,8 +196,13 @@ trait CrudModels
         }
 
         $url = $this->getAfterUrl('after-edit', $item->getURL());
-        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getControllerName());
-        $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
+        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getController());
+
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('update'),
+            $url,
+            'success',
+            $flashName);
     }
 
     /**
