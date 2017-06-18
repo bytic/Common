@@ -7,6 +7,7 @@ use ByTIC\Common\Payments\Models\Methods\Files\MobilpayFile;
 use ByTIC\Common\Payments\Models\Methods\Types\AbstractType;
 use ByTIC\Common\Payments\Models\Methods\Types\CreditCards;
 use ByTIC\Common\Records\Traits\HasTypes\RecordTrait as HasTypesRecordTrait;
+use ByTIC\MediaLibrary\HasMedia\HasMediaTrait;
 
 /**
  * Class MethodTrait
@@ -25,10 +26,7 @@ trait RecordTrait
 
     use \ByTIC\Common\Records\Traits\HasSerializedOptions\RecordTrait;
 
-    use \ByTIC\Common\Records\Traits\Media\Generic\RecordTrait;
-    use \ByTIC\Common\Records\Traits\Media\Files\RecordTrait {
-        getFileModelName as getFileModelNameAbstract;
-    }
+    use HasMediaTrait;
 
     /**
      * @param array $data
