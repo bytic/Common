@@ -2,222 +2,334 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Controllers\Traits\Models\HasModelLister;
+use ByTIC\Common\Records\Record as Record;
+use ByTIC\Common\Records\Records as RecordManager;
+use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecordTrait;
+use Nip\Request;
+use Nip\View;
+use Nip_Form_Model as Form;
+
+/**
+ * Class CrudModels
+ *
+ * @package ByTIC\Common\Controllers\Traits
+ *
+ * @method string getModel()
+ * @method RecordManager getModelManager()
+ * @method View getView()
+ * @method Request getRequest()
+ * @method Form getModelForm($model, $action = null)
+ * @method Record getModelFromRequest($key = false)
+ * @method string flashRedirect($message, $url, $type = 'success', $name = false)
+ */
 trait CrudModels
 {
-    protected $_urls = array();
+    use HasRecordPaginator;
+    use HasModelLister;
 
-    protected function beforeAction()
-    {
-        parent::beforeAction();
-        $this->getView()->section = inflector()->underscore($this->getModel());
-    }
+    protected $_urls = [];
+    protected $_flash = [];
 
-    protected function afterAction()
-    {
-        if (!$this->getView()->modelManager) {
-            $this->getView()->modelManager = $this->getModelManager();
-        }
-        parent::afterAction();
-    }
+    /**
+     * @deprecated variable
+     * @var null
+     */
+    protected $query = null;
 
-    protected function setClassBreadcrumbs($parent = false)
-    {
-        $this->getView()->Breadcrumbs()->addItem(
-            $this->getModelManager()->getLabel('title'),
-            $this->getModelManager()->getURL());
-        $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('title'));
-    }
+    /**
+     * @deprecated variable
+     * @var null
+     */
+    protected $filters = null;
 
-    protected function setItemBreadcrumbs($item = false)
-    {
-        $item = $item ? $item : $this->item;
-        $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
+    /**
+     * @deprecated variable
+     * @var null
+     */
+    protected $items = null;
 
-        $this->getView()->Meta()->prependTitle($item->getName());
-    }
+    /**
+     * @deprecated variable
+     * @var null
+     */
+    protected $item = null;
 
+    /**
+     * @deprecated variable
+     * @var null
+     */
+    protected $form = null;
 
+    /**
+     * Model index action / listing
+     *
+     * @return void
+     */
     public function index()
     {
-        $this->query = $this->query ? $this->query : $this->newIndexQuery();
-        $this->filters = $this->filters ? $this->filters : $this->getModelManager()->requestFilters($_GET);
-        $this->query = $this->getModelManager()->filter($this->query, $this->filters);
-
-        $this->paginator = $this->paginator ? $this->paginator : new \Nip_Record_Paginator();
-
-        $this->paginator->setPage(intval($_GET['page']));
-        $this->paginator->setItemsPerPage(50);
-        $this->paginator->paginate($this->query);
-
-        if ($this->items) {
-        } else {
-            $this->items = $this->getModelManager()->findByQuery($this->query);
-            $this->paginator->count();
-        }
-
-        $this->getView()->items = $this->items;
-        $this->getView()->filters = $this->filters;
-        $this->getView()->title = $this->getModelManager()->getLabel('title');
-
-        $this->getView()->Paginator()->setPaginator($this->paginator)->setURL($this->getModelManager()->getURL());
+        $this->doModelsListing();
     }
 
-    protected function newIndexQuery()
-    {
-        return $this->getModelManager()->paramsToQuery();
-    }
-
+    /**
+     * Add item method
+     *
+     * @return void
+     */
     public function add()
     {
-        $this->getView()->Breadcrumbs()->addItem($this->getModelManager()->getLabel('add'));
+        $record = $this->addNewModel();
+        $form = $this->addGetForm($record);
 
-        $this->item = $this->item ? $this->item : $this->newModel();
-
-        if (!$this->form) {
-            $this->form = $this->getModelForm($this->item);
-            $this->form->setAction($this->getModelManager()->getAddURL($_GET));
+        if ($form->execute()) {
+            $this->addRedirect($record);
         }
 
-        if ($_POST) {
-            if ($this->form->validate($_POST)) {
-                $this->form->process();
+        $this->getView()->set('item', $record);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $this->getModelManager()->getLabel('add'));
 
-                $this->addRedirect();
-            }
-        }
-
-        $this->getView()->item = $this->item;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->getModelManager()->getLabel('add');
+        $this->getView()->Breadcrumbs()
+            ->addItem($this->getModelManager()->getLabel('add'));
 
         $this->getView()->TinyMCE()->setEnabled();
-
         $this->getView()->section .= ".add";
     }
 
+    /**
+     * @return Record
+     */
+    public function addNewModel()
+    {
+        $item = $this->item ? $this->item : $this->newModel();
+
+        return $item;
+    }
+
+    /**
+     * @return \Nip\Records\AbstractModels\Record
+     */
     public function newModel()
     {
         return $this->getModelManager()->getNew();
     }
 
-    public function addRedirect()
+    /**
+     * @param Record $item
+     * @return mixed
+     */
+    public function addGetForm($item)
     {
-        $url = $this->_urls["after-add"] ? $this->_urls['after-add'] : $this->item->getURL();
-        $flashName = $this->_flash["after-add"] ? $this->_flash['after-add'] : $this->getView()->controller;
+        if ($this->form) {
+            $form = $this->form;
+        } else {
+            $form = $this->getModelForm($item);
+            $form->setAction($this->getModelManager()->getAddURL($_GET));
+        }
+
+        return $form;
+    }
+
+    /**
+     * @param Record $item
+     * @return mixed
+     */
+    public function addRedirect($item)
+    {
+        $url = $this->_urls["after-add"] ? $this->_urls['after-add'] : $item->getURL();
+        $flashName = $this->_flash["after-add"] ? $this->_flash['after-add'] : $this->getModelManager()->getController();
+
         return $this->flashRedirect($this->getModelManager()->getMessage('add'), $url, 'success', $flashName);
     }
 
     public function view()
     {
-        if (!$this->item) {
-            $this->item = $this->checkItem();
-        }
+        $record = $this->initExistingItem();
 
-        $this->clone = clone $this->item;
-        $this->form = $this->getModelForm($this->clone);
+        $clone = clone $record;
+        $form = $this->getModelForm($clone);
 
-        $this->processView();
+        $this->processForm($form);
 
-        $this->getView()->item = $this->item;
-        $this->getView()->clone = $this->clone;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->item->getName();
+        $this->getView()->set('item', $record);
+        $this->getView()->set('clone', $clone);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $record->getName());
 
-        $this->getView()->section .= ".view";
+        $this->getView()->append('section', ".view");
         $this->getView()->TinyMCE()->setEnabled();
 
         $this->setItemBreadcrumbs();
         $this->postView();
     }
 
-    public function edit()
+    /**
+     * @return Record|HasFilesRecordTrait
+     */
+    protected function initExistingItem()
     {
         if (!$this->item) {
-            $this->item = $this->checkItem();
+            $this->item = $this->getModelFromRequest();
         }
 
-        $this->clone = clone $this->item;
-        $this->form = $this->getModelForm($this->clone);
+        return $this->item;
+    }
 
-        $this->processView();
+    /**
+     * @param Form $form
+     */
+    protected function processForm($form)
+    {
+        if ($form->execute()) {
+            $this->viewRedirect($form->getModel());
+        }
+    }
 
-        $this->getView()->item = $this->item;
-        $this->getView()->clone = $this->clone;
-        $this->getView()->form = $this->form;
-        $this->getView()->title = $this->item->getName();
+    /**
+     * @param Record|boolean $item
+     */
+    protected function viewRedirect($item = null)
+    {
+        if ($item == null) {
+            $item = $this->item;
+            trigger_error('$item needed in viewRedirect', E_USER_DEPRECATED);
+        }
 
-        $this->getView()->section .= ".edit";
+        $url = $this->getAfterUrl('after-edit', $item->getURL());
+        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getController());
+
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('update'),
+            $url,
+            'success',
+            $flashName);
+    }
+
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return string
+     */
+    protected function getAfterUrl($key, $default = null)
+    {
+        return isset($this->_urls[$key]) && $this->_urls[$key] ? $this->_urls[$key] : $default;
+    }
+
+    /**
+     * @param string $key
+     * @param string|null $default
+     * @return string
+     */
+    protected function getAfterFlashName($key, $default = null)
+    {
+        return isset($this->_flash[$key]) && $this->_flash[$key] ? $this->_flash[$key] : $default;
+    }
+
+    /**
+     * @param bool|Record $item
+     */
+    protected function setItemBreadcrumbs($item = false)
+    {
+        $item = $item ? $item : $this->getModelFromRequest();
+        $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
+
+        $this->getView()->Meta()->prependTitle($item->getName());
+    }
+
+    protected function postView()
+    {
+        $this->setItemBreadcrumbs();
+    }
+
+    public function edit()
+    {
+        $record = $this->initExistingItem();
+
+        $clone = clone $record;
+        $form = $this->getModelForm($clone);
+
+        $this->processForm($form);
+
+        $this->getView()->set('item', $record);
+        $this->getView()->set('clone', $clone);
+        $this->getView()->set('form', $form);
+        $this->getView()->set('title', $record->getName());
+
+        $this->getView()->append('section', ".edit");
         $this->getView()->TinyMCE()->setEnabled();
 
         $this->setItemBreadcrumbs();
     }
 
-    public function processView()
-    {
-        if ($this->form->submited() && $this->form->validate()) {
-            $this->form->process();
-
-            return $this->viewRedirect();
-        }
-    }
-
-    public function viewRedirect()
-    {
-        $url = $this->_urls['after-edit'] ? $this->_urls['after-edit'] : $this->item->getURL() . "#details";
-        $flashName = $this->_flash["after-edit"] ? $this->_flash['after-edit'] : $this->getView()->controller;
-        $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
-    }
-
-    public function postView()
-    {
-        $this->setItemBreadcrumbs();
-    }
-
+    /**
+     * Duplicate item action
+     *
+     * @return void
+     */
     public function duplicate()
     {
-        $item = $this->item ? $this->item : $this->checkItem();
+        $record = $this->initExistingItem();
 
-        $item->duplicate();
+        $record->duplicate();
 
-        $url = $this->_urls["after-duplicate"] ? $this->_urls['after-duplicate'] : $this->getModelManager()->getURL();
-        $this->_flashName = $this->_flashName ? $this->_flashName : $this->getModelManager()->getController();
-        $this->flashRedirect($this->getModelManager()->getMessage('duplicate'), $url, 'success', $this->_flashName);
+        $url = $this->getAfterUrl(
+            "after-duplicate",
+            $this->getModelManager()->getURL()
+        );
+
+        $flashName = $this->getAfterFlashName(
+            "after-duplicate",
+            $this->getModelManager()->getController()
+        );
+
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('duplicate'),
+            $url,
+            'success',
+            $flashName
+        );
     }
 
     public function delete()
     {
-        $this->item = $this->item ? $this->item : $this->checkItem();
+        $item = $this->initExistingItem();
 
-        $this->item->delete();
+        $item->delete();
         $this->deleteRedirect();
     }
 
-    public function deleteRedirect()
+    protected function deleteRedirect()
     {
-        $url = $this->_urls["after-delete"] ? $this->_urls['after-delete'] : $this->getModelManager()->getURL();
-        $flashName = $this->_flash["after-delete"] ? $this->_flash['after-delete'] : $this->getModelManager()->getController();
-        $this->flashRedirect($this->getModelManager()->getMessage('delete'), $url, 'success', $flashName);        
+        $url = $this->getAfterUrl("after-delete", $this->getModelManager()->getURL());
+        $flashName = $this->getAfterFlashName("after-delete", $this->getModelManager()->getController());
+        $this->flashRedirect($this->getModelManager()->getMessage('delete'), $url, 'success', $flashName);
     }
 
     public function activate()
     {
-        $item = $this->checkItem();
+        $record = $this->initExistingItem();
 
-        $item->activate();
-        $this->flashRedirect($this->getModelManager()->getMessage('activate'), $item->getURL());
+        $record->activate();
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('activate'),
+            $this->item->getURL()
+        );
     }
 
     public function deactivate()
     {
-        $item = $this->checkItem();
+        $record = $this->initExistingItem();
 
-        $item->deactivate();
-        $this->flashRedirect($this->getModelManager()->getMessage('deactivate'), $item->getURL());
+        $record->deactivate();
+        $this->flashRedirect(
+            $this->getModelManager()->getMessage('deactivate'),
+            $this->item->getURL()
+        );
     }
 
     public function inplace()
     {
-        $item = $this->checkItem();
+        $item = $this->initExistingItem();
 
         $pk = $this->getModelManager()->getPrimaryKey();
 
@@ -228,29 +340,29 @@ trait CrudModels
         }
 
         if ($field) {
-            $item->getFromRequest($_POST, array($field));
+            $item->getFromRequest($_POST, [$field]);
             if ($item->validate()) {
                 $item->save();
-                $this->Async()->json(array(
+                $item->Async()->json([
                     "type" => "success",
                     "value" => $item->$field,
-                    "message" => $this->getModelManager()->getMessage("update")
-                ));
+                    "message" => $this->getModelManager()->getMessage("update"),
+                ]);
             }
         }
 
-        $this->Async()->json(array("type" => "error"));
+        $this->Async()->json(["type" => "error"]);
     }
 
     public function uploadFile()
     {
-        $item = $this->checkItem();
+        $record = $this->initExistingItem();
 
-        $file = $item->uploadFile($_FILES['Filedata']);
+        $file = $record->uploadFile($_FILES['Filedata']);
 
         if ($file) {
             $response['type'] = "success";
-            $response['url'] = $item->getFileURL($file);
+            $response['url'] = $record->getFileURL($file);
             $response['name'] = $file->getName();
             $response['extension'] = $file->getExtension();
             $response['size'] = \Nip_File_System::instance()->formatSize($file->getSize());
@@ -263,23 +375,36 @@ trait CrudModels
     }
 
     /**
-     * @param array $request
-     * @param string $key
-     * @return \Record
+     * @deprecated Use new processForm($form)
      */
-    protected function checkItem($request = false, $key = false)
+    protected function processView()
     {
-        $return = parent::checkItem($request, $key);
-        if ($return) {
-            if ($this->checkAccess($return) !== false) {
-                return $return;
-            }
-        }
-        $this->forward('access', 'error');
+        $this->processForm($this->form);
     }
 
-    protected function checkAccess($item)
+    protected function beforeAction()
     {
-        return true;
+        parent::beforeAction();
+        $this->getView()->set('section', inflector()->underscore($this->getModel()));
+    }
+
+    protected function afterAction()
+    {
+        if (!$this->getView()->has('modelManager')) {
+            $this->getView()->set('modelManager', $this->getModelManager());
+        }
+        parent::afterAction();
+    }
+
+    /**
+     * @param bool $parent
+     */
+    protected function setClassBreadcrumbs($parent = false)
+    {
+        $this->getView()->Breadcrumbs()->addItem(
+            $this->getModelManager()->getLabel('title'),
+            $this->getModelManager()->getURL()
+        );
+        $this->getView()->Meta()->prependTitle($this->getModelManager()->getLabel('title'));
     }
 }

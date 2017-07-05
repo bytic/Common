@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use Nip_Cache_Manager as CacheManager;
+use Nip\Cache\Manager as CacheManager;
 
 trait HasCacheManager
 {

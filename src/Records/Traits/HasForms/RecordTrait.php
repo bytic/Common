@@ -2,30 +2,52 @@
 
 namespace ByTIC\Common\Records\Traits\HasForms;
 
+use ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait as AbstractTrait;
+use Nip_Form_Model as Form;
+
+/**
+ * Class RecordTrait
+ *
+ * @package ByTIC\Common\Records\Traits\HasForms
+ *
+ * @method RecordsTrait getManager
+ */
 trait RecordTrait
 {
+    use AbstractTrait;
 
-    protected $_forms = array();
+    protected $forms = [];
 
     /**
-     * @param string $type
-     * @return \Nip\Form
+     * Get Form object by name
+     *
+     * @param string $type Form name
+     *
+     * @return Form
      */
-    public function getForm($type = NULL)
+    public function getForm($type = null)
     {
-        if (!$this->_forms[$type]) {
+        if (!isset($this->forms[$type])) {
             $form = $this->getManager()->newForm($type);
 
-            $this->_forms[$type] = $this->initForm($form);
+            $this->forms[$type] = $this->initForm($form);
         }
 
-        return $this->_forms[$type];
+        return $this->forms[$type];
     }
 
+    /**
+     * Init a form object for this model
+     *
+     * @param Form $form Form object
+     *
+     * @return Form
+     */
     public function initForm($form)
     {
+        /** @noinspection PhpParamsInspection */
         $form->setModel($this);
+
         return $form;
     }
-
 }

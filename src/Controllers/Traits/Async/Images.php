@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Images
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Images
 {
 
@@ -12,16 +16,22 @@ trait Images
         $image = $item->uploadImage();
 
         if (is_object($image)) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $image->url;
-            $this->_response['path'] = $image->name;
-            $this->_response['width'] = $item->getImageWidth("default");
-            $this->_response['height'] = $item->getImageHeight("default");
+            $response['type'] = 'success';
+            $response['url'] = $image->url;
+            $response['path'] = $image->name;
+            $response['width'] = $item->getImageWidth("default");
+            $response['height'] = $item->getImageHeight("default");
         }
 
-        $this->_response['message'] = $item->errors['upload'];
+        $response['message'] = $item->errors['upload'];
+        $this->setResponseValues($response);
     }
 
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
 
     public function cropImage()
     {
@@ -30,33 +40,29 @@ trait Images
         $image = $item->cropImages($_POST);
 
         if ($image) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $image->url;
-            $this->_response['name'] = $image->name;
+            $response['type'] = 'success';
+            $response['url'] = $image->url;
+            $response['name'] = $image->name;
         }
+        $this->setResponseValues($response);
     }
-
 
     public function setDefaultImage()
     {
         $item = $this->checkItem();
 
         if ($item->setDefaultImage($_POST)) {
-            $this->_response['type'] = 'success';
+            $response['type'] = 'success';
         }
     }
-
 
     public function removeImage()
     {
         $item = $this->checkItem();
 
         if ($item->removeImage($_POST)) {
-            $this->_response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
-
-    
-
-
 }

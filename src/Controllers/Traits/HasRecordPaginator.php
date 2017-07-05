@@ -2,27 +2,88 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Request;
+use Nip_Record_Paginator as RecordPaginator;
+
+/**
+ * Class HasRecordPaginator
+ *
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasRecordPaginator
 {
 
-    public $paginator = null;
+    /**
+     * Record Paginator Object
+     *
+     * @var null|RecordPaginator
+     */
+    protected $paginator = null;
 
-    public function getRPaginator()
+    /**
+     * Get Record Paginator Object
+     *
+     * @return RecordPaginator
+     */
+    public function getRecordPaginator()
     {
         if ($this->paginator === null) {
-            $this->initRPaginator();
+            $this->initRecordPaginator();
         }
         return $this->paginator;
     }
-    
-    public function initRPaginator()
+
+    /**
+     * Init Record Paginator Object
+     *
+     * @return void
+     */
+    public function initRecordPaginator()
     {
-        $this->paginator = $this->newRPaginator();
+        $this->setRecordPaginator($this->newRecordPaginator());
+        $this->prepareRecordPaginator();
     }
 
-    public function newRPaginator()
+    /**
+     * Set the Record Paginator
+     *
+     * @param RecordPaginator $paginator Record Paginator Object
+     *
+     * @return $this
+     */
+    public function setRecordPaginator($paginator)
+    {
+        $this->paginator = $paginator;
+
+        return $this;
+    }
+
+    /**
+     * Generates a new instance of Record Paginator
+     *
+     * @return RecordPaginator
+     */
+    public function newRecordPaginator()
     {
         return new \Nip_Record_Paginator();
     }
 
+    /**
+     * Prepare Record Paginator Object
+     *
+     * @return void
+     */
+    public function prepareRecordPaginator()
+    {
+        $page = $this->getRequest()->get('page', 1);
+        $this->getRecordPaginator()->setPage(intval($page));
+        $this->getRecordPaginator()->setItemsPerPage(50);
+    }
+
+    /**
+     * Returns the Request Object
+     *
+     * @return Request
+     */
+    public abstract function getRequest();
 }

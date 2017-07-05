@@ -2,99 +2,55 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
+use ByTIC\Common\Records\Properties\Statuses\Generic as GenericStatus;
 use Exception;
 
+/**
+ * Class RecordsTrait
+ * @package ByTIC\Common\Records\Traits\HasStatus
+ */
 trait RecordsTrait
 {
-    protected $_statuses = null;
-    protected $_statusesPath = null;
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
+    use \ByTIC\Common\Records\Traits\HasSmartProperties\RecordsTrait;
 
+    /**
+     * @param $name
+     * @return array
+     */
     public function getStatusProperty($name)
     {
-        $return = array();
-        $types = $this->getStatuses();
-
-        foreach ($types as $type) {
-            $return[] = $type->$name;
-        }
-
-        return $return;
+        return $this->getSmartPropertyValues('Status', $name);
     }
 
+    /**
+     * @return null|GenericStatus[]
+     */
     public function getStatuses()
     {
-        if ($this->_statuses == null) {
-            $this->initStatuses();
-        }
-        return $this->_statuses;
+        return $this->getSmartPropertyItems('Status');
     }
 
-    public function initStatuses()
-    {
-        $files = \Nip_File_System::instance()->scanDirectory($this->getStatusesDirectory());
-        $this->_statuses = array();
-        foreach ($files as $name) {
-            $name = str_replace('.php', '', $name);
-            if (!in_array($name, array('Abstract', 'Generic', 'AbstractStatus'))) {
-                $object = $this->newStatus($name);
-                $this->_statuses[$object->getName()] = $object;
-            }
-        }
-    }
-
+    /**
+     * @return null|string
+     */
     public function getStatusesDirectory()
     {
-        if ($this->_statusesPath == null) {
-            $this->initStatusesDirectory();
-        }
-        return $this->_statusesPath;
-    }
-
-    public function initStatusesDirectory()
-    {
-        $reflector = new \ReflectionObject($this);
-        $this->_statusesPath = dirname($reflector->getFilename()) . '/Statuses';
+        return $this->getSmartPropertyDefinition('Status')->getItemsDirectory();
     }
 
     /**
      * @param string $name
-     * @return \ByTIC\Common\Records\Statuses\Generic
+     * @return GenericStatus
+     * @throws Exception
      */
     public function getStatus($name = null)
     {
-        $statuses = $this->getStatuses();
-        if (!isset($statuses[$name])) {
-            throw new Exception('Bad status [' . $name . '] for [' . $this->getController() . ']');
-        }
-        return $statuses[$name];
+        return $this->getSmartPropertyItem('Status', $name);
     }
 
-    /**
-     * @param string $type
-     * @return \ByTIC\Common\Records\Statuses\Generic
-     */
-    public function newStatus($type = null)
+    protected function registerSmartProperties()
     {
-        $className = $this->getStatusClass($type);
-        $object = new $className();
-        $object->setManager($this);
-        return $object;
+        $this->registerSmartProperty('status');
     }
-
-    public function getStatusClass($type = null)
-    {
-        $type = $type ? $type : $this->getDefaultStatus();
-        return $this->getStatusRootNamespace() . inflector()->classify($this->getController()) . '\Statuses\\' . inflector()->classify($type);
-    }
-
-    public function getStatusRootNamespace()
-    {
-        return $this->getRootNamespace();
-    }
-
-    public function getDefaultStatus()
-    {
-        return 'in-progress';
-    }
-
 }

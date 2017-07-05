@@ -1,3 +1,4 @@
+namespace: ByTIC\Common\Tests
 actor: Tester
 paths:
     tests: tests

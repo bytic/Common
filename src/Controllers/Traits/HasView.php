@@ -2,21 +2,29 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Request;
+use Nip\View;
+
+/**
+ * Class HasView
+ *
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasView
 {
 
     /**
-     * @var \App_View
+     * @var View
      */
-    protected $_view;
+    protected $view;
 
     /**
      * @var string
      */
-    protected $_layout = 'default';
+    protected $layout = 'default';
 
     /**
-     * @return Nip_View
+     * @inheritdoc
      */
     public function loadView()
     {
@@ -24,91 +32,146 @@ trait HasView
     }
 
     /**
-     * @return \App_View
+     * @return View
      */
     public function getView()
     {
-        if (!$this->_view) {
-            $this->_view = $this->initView();
+        if (!$this->view) {
+            $this->view = $this->initView();
         }
-        return $this->_view;
+
+        return $this->view;
     }
 
     /**
-     * @return \App_View
+     * @param View $view
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+    }
+
+    /**
+     * Init view Object
+     *
+     * @return View
      */
     protected function initView()
     {
         $view = $this->getViewObject();
         $view = $this->populateView($view);
-        return $view;
-    }
 
-
-    /**
-     * @param \App_View $view
-     * @return \App_View
-     */
-    protected function populateView(\App_View $view)
-    {
-        $view->setBasePath(MODULES_PATH . $this->getRequest()->getModuleName() . '/views/');
-        $view = $this->initViewVars($view);
-        $view = $this->initViewContentBlocks($view);
-        return $view;
-    }
-
-
-    /**
-     * @return \App_View
-     */
-    protected function initViewVars(\App_View $view)
-    {
-        $view->controller = $this->controller = $this->getRequest()->controller;
-        $view->action = $this->action = $this->getRequest()->getActionName();
-        $view->options = $this->options;
-        return $view;
-    }
-
-    protected function initViewContentBlocks($view)
-    {
-        $view->setBlock('content', $this->getRequest()->getControllerName() . '/' . $this->getRequest()->getActionName());
         return $view;
     }
 
     /**
-     * @return \App_View
+     * @return View
      */
     protected function getViewObject()
     {
         return new \App_View();
     }
 
-    public function setView($view)
-    {
-        $this->_view = $view;
-    }
-
     /**
-     * @param string $layout
+     * @param View $view
+     * @return View
      */
-    public function setLayout($layout)
+    protected function populateView($view)
     {
-        $this->_layout = $layout;
+        $view = $this->initViewVars($view);
+        $view = $this->initViewContentBlocks($view);
+
+        return $view;
     }
 
     /**
+     * Init View variables
+     *
+     * @param View $view View Instance
+     *
+     * @return View
+     */
+    protected function initViewVars($view)
+    {
+        $view->setRequest($this->getRequest());
+        $view->set('controller', $this->getName());
+        $view->set('action', $this->getRequest()->getActionName());
+
+        return $view;
+    }
+
+    /**
+     * Returns request instance
+     *
+     * @return Request
+     */
+    abstract public function getRequest();
+
+    /**
+     * Returns controller name
+     *
      * @return string
      */
-    public function getLayout()
+    abstract public function getName();
+
+    /**
+     * Init View Content block
+     *
+     * @param View $view View instance
+     *
+     * @return View
+     */
+    protected function initViewContentBlocks($view)
     {
-        return $this->_layout;
+        $view->setBlock(
+            'content',
+            $this->getRequest()->getControllerName() . '/' . $this->getRequest()->getActionName()
+        );
+
+        return $view;
     }
 
     /**
+     * Return layout path
+     *
      * @return string
      */
     public function getLayoutPath()
     {
         return '/layouts/' . $this->getLayout();
+    }
+
+    /**
+     * Return layout name
+     *
+     * @return string
+     */
+    public function getLayout()
+    {
+        return $this->layout;
+    }
+
+    /**
+     * Set layout name
+     *
+     * @param string $layout Layout name
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
+
+    /**
+     * @param self $controller
+     * @param Request $newRequest
+     * @return static
+     */
+    protected function prepareCallController($controller, $newRequest)
+    {
+        $controller = parent::prepareCallController($controller, $newRequest);
+        $controller->setView($this->getView());
+
+        return $controller;
     }
 }

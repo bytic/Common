@@ -1,5 +1,5 @@
 {
-  "name": "ByTIC/Common",
+  "name": "bytic/common",
   "description": "Common Classes used by Nip Framework",
   "authors": [
     {
@@ -8,19 +8,28 @@
     }
   ],
   "autoload": {
-    "psr-4": {"ByTIC\\Common\\": "src/"}
+    "psr-4": {
+      "ByTIC\\Common\\Tests\\Page\\": "tests/_support/Page",
+      "ByTIC\\Common\\Tests\\Helper\\": "tests/_support/Helper",
+      "ByTIC\\Common\\": "src/"
+    }
   },
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/ByTIC/Framework.git"
+      "url": "https://github.com/ByTIC/framework.git"
     }
   ],
   "require": {
-    "php": ">=5.5.0",
-    "ByTIC/Framework": "dev-develop"
+    "php": "^7.0",
+    "bytic/framework": "dev-develop",
+    "bytic/request-detective": "dev-develop",
+    "bytic/medialibrary": "dev-release/0.9.0",
+    "setasign/fpdi-tcpdf": "^1.6",
+    "omnipay/common": "~2.5"
   },
   "require-dev": {
+    "squizlabs/php_codesniffer": "2.*",
     "codeception/codeception": "2.2.*",
     "codeception/mockery-module": "0.2.*"
   }

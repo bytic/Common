@@ -2,6 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+/**
+ * Class Covers
+ * @package ByTIC\Common\Controllers\Traits\Async
+ */
 trait Covers
 {
     
@@ -12,16 +16,22 @@ trait Covers
         $cover = $item->uploadCover();
 
         if (is_object($cover)) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $cover->url;
-            $this->_response['path'] = $cover->name;
-            $this->_response['width'] = $cover->cropWidth;
-            $this->_response['height'] = $cover->cropHeight;
+            $response['type'] = 'success';
+            $response['url'] = $cover->url;
+            $response['path'] = $cover->name;
+            $response['width'] = $cover->cropWidth;
+            $response['height'] = $cover->cropHeight;
         }
 
-        $this->_response['message'] = $item->errors['upload'];
+        $response['message'] = $item->errors['upload'];
+        $this->setResponseValues($response);
     }
 
+    /**
+     * @param $values
+     * @return void
+     */
+    abstract public function setResponseValues($values);
 
     public function cropCover()
     {
@@ -30,10 +40,11 @@ trait Covers
         $cover = $item->cropCovers($_POST);
 
         if ($cover) {
-            $this->_response['type'] = 'success';
-            $this->_response['url'] = $cover->url;
-            $this->_response['name'] = $cover->name;
+            $response['type'] = 'success';
+            $response['url'] = $cover->url;
+            $response['name'] = $cover->name;
         }
+        $this->setResponseValues($response);
     }
 
     public function setDefaultCover()
@@ -41,18 +52,18 @@ trait Covers
         $item = $this->checkItem();
 
         if ($item->setDefaultCover($_POST)) {
-            $this->_response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
-
 
     public function removeCover()
     {
         $item = $this->checkItem();
 
         if ($item->removeCover($_POST)) {
-            $this->_response['type'] = 'success';
+            $response['type'] = 'success';
         }
+        $this->setResponseValues($response);
     }
-
 }

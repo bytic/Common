@@ -2,26 +2,29 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
-use ByTIC\Common\Records\Statuses\Generic;
+use ByTIC\Common\Records\Properties\Statuses\Generic;
+use ByTIC\Common\Records\Traits\HasSmartProperties\RecordTrait as HasSmartPropertiesRecord;
+use Nip\Records\RecordManager;
 
 /**
  * Class RecordTrait
  * @package ByTIC\Common\Records\Traits\HasStatus
  *
  * @property string $status
+ * @method RecordManager|RecordsTrait getManager()
  *
- * @method \Nip_Records getManager
  */
 trait RecordTrait
 {
-    protected $_status;
+    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
+    use HasSmartPropertiesRecord;
 
+    /**
+     * @return Generic
+     */
     public function getStatus()
     {
-        if (!$this->_status) {
-            $this->_status = $this->getNewStatus($this->status);
-        }
-        return $this->_status;
+        return $this->getSmartProperty('Status');
     }
 
     /**
@@ -30,18 +33,15 @@ trait RecordTrait
      */
     public function getNewStatus($status)
     {
-        $object = clone $this->getManager()->getStatus($status);
-        $object->setItem($this);
-        return $object;
+        return $this->getNewSmartPropertyFromValue('Status', $status);
     }
 
-    public function setStatus($status = false)
+    /**
+     * @param bool $status
+     * @return bool|void
+     */
+    public function updateStatus($status = false)
     {
-        if (!empty($status)) {
-            $newStatus = $this->getNewStatus($status);
-            $return = $newStatus->update();
-            return $return;
-        }
-        return false;
+        return $this->updateSmartProperty('Status', $status);
     }
 }
