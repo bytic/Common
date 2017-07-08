@@ -14,16 +14,10 @@
       "ByTIC\\Common\\": "src/"
     }
   },
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/ByTIC/framework.git"
-    }
-  ],
   "require": {
     "php": "^7.0",
-    "bytic/framework": "dev-develop",
-    "bytic/request-detective": "dev-develop",
+    "bytic/framework": "^1.0",
+    "bytic/request-detective": "^1.0",
     "bytic/medialibrary": "dev-release/0.9.0",
     "setasign/fpdi-tcpdf": "^1.6",
     "omnipay/common": "~2.5"
