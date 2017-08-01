@@ -318,8 +318,8 @@ class Definition
         if ($managerDefaultValue && $this->hasItem($managerDefaultValue)) {
             $defaultValue = $managerDefaultValue;
         } else {
-            $items = $this->getItems();
-            $defaultValue = reset(array_keys($items));
+            $keys = array_keys($this->getItems());
+            $defaultValue = reset($keys);
         }
         $this->setDefaultValue($defaultValue);
     }

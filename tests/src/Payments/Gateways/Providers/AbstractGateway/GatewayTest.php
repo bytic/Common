@@ -16,7 +16,7 @@ use Mockery as m;
  * Class TraitsTest
  * @package ByTIC\Common\Tests\Unit\Payments\Providers\AbstractGateway
  */
-class GatewayTest extends AbstractTest
+abstract class GatewayTest extends AbstractTest
 {
     /**
      * @var GatewaysManager

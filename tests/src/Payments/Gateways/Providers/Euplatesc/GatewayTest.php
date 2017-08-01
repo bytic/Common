@@ -62,20 +62,20 @@ class GatewayTest extends AbstractGatewayTest
     public function testCompletePurchaseResponse()
     {
         $httpRequest = EuplatescData::getCompletePurchaseRequest();
-        $this->testGenericCompletePurchaseResponse('completePurchase', $httpRequest);
+        $this->checkGenericCompletePurchaseResponse('completePurchase', $httpRequest);
     }
 
     public function testServerCompletePurchaseAuthorizedResponse()
     {
         $httpRequest = EuplatescData::getServerCompletePurchaseRequest();
-        $this->testGenericCompletePurchaseResponse('serverCompletePurchase', $httpRequest);
+        $this->checkGenericCompletePurchaseResponse('serverCompletePurchase', $httpRequest);
     }
 
     /**
      * @param $type
      * @param $httpRequest
      */
-    protected function testGenericCompletePurchaseResponse($type, $httpRequest)
+    protected function checkGenericCompletePurchaseResponse($type, $httpRequest)
     {
         /** @var CompletePurchaseResponse $response */
         $response = $this->gatewayManager->detectItemFromHttpRequest(

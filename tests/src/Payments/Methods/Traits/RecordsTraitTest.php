@@ -30,8 +30,9 @@ class RecordsTraitTest extends AbstractTest
         static::assertInstanceOf(CreditCards::class, $type);
     }
 
-    protected function _before()
+    protected function setUp()
     {
+        parent::setUp();
         $this->traitObject = $this->getMockForTrait('ByTIC\Common\Payments\Models\Methods\Traits\RecordsTrait');
     }
 }
