@@ -23,6 +23,10 @@ class Gateway extends AbstractGateway
         return false;
     }
 
+    /**
+     * @param $donation
+     * @return mixed
+     */
     public function generatePaymentForm($donation)
     {
         $pClass = $this->getProviderClass();

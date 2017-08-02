@@ -2,11 +2,14 @@
 
 namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
+use APP_Hybrid_Auth;
 use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait;
 use ByTIC\Common\Controllers\Traits\HasModels;
 use Exception;
+use Hybrid_Endpoint;
 use Nip\Form\AbstractForm;
+use User_Logins;
 
 /**
  * Class UsersControllerTrait
