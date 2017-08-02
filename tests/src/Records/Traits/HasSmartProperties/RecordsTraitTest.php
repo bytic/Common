@@ -35,7 +35,8 @@ class RecordsTraitTest extends AbstractTest
         self::assertSame('Status', $statusDefinition->getName());
         self::assertSame('status', $statusDefinition->getField());
         self::assertSame('Statuses', $statusDefinition->getLabel());
-        self::assertStringEndsWith('Unit\Records\Traits\HasSmartProperties\Statuses',
+        self::assertStringEndsWith(
+            str_replace('/', DIRECTORY_SEPARATOR, 'Unit/Records/Traits/HasSmartProperties/Statuses'),
             $statusDefinition->getItemsDirectory()
         );
 

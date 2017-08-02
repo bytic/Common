@@ -27,7 +27,10 @@ class RecordsTraitTest extends AbstractTest
     public function testGetStatusesDirectory()
     {
         $directory = $this->object->getStatusesDirectory();
-        self::assertStringEndsWith('Unit\Records\Traits\HasStatus\Statuses', $directory);
+
+        self::assertStringEndsWith(
+            str_replace('/', DIRECTORY_SEPARATOR, 'Unit/Records/Traits/HasStatus/Statuses'),
+            $directory);
     }
 
     public function testGetStatuses()
