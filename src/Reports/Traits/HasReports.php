@@ -13,12 +13,16 @@ trait RecordHasReports
 {
     use RecordsTrait;
 
+    /**
+     * @param $name
+     * @param $params
+     */
     public function newReport($name, $params)
     {
-        return
+        return;
     }
 
-    private function getReportsModelManager
+    protected abstract function getReportsModelManager();
 
     /**
      * @param $name
