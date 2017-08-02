@@ -26,14 +26,14 @@ class Model extends Image
      */
     public function getSmall()
     {
-        return $this->getType("small");
+        return $this->getImageSize("small");
     }
 
     /**
      * @param $type
      * @return $this
      */
-    public function getType($type)
+    public function getImageSize($type)
     {
         if ($type == $this->_type) {
             return $this;
@@ -51,7 +51,7 @@ class Model extends Image
      */
     public function getMedium()
     {
-        return $this->getType("medium");
+        return $this->getImageSize("medium");
     }
 
     /**
@@ -59,7 +59,7 @@ class Model extends Image
      */
     public function getLarge()
     {
-        return $this->getType("large");
+        return $this->getImageSize("large");
     }
 
     /**
@@ -67,7 +67,7 @@ class Model extends Image
      */
     public function getFull()
     {
-        return $this->getType("full");
+        return $this->getImageSize("full");
     }
 
     /**
@@ -153,5 +153,4 @@ class Model extends Image
             return $this->getModel()->deleteImage($this->name);
         }
     }
-
 }

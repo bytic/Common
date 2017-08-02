@@ -3,6 +3,8 @@
 namespace ByTIC\Common\Records\Traits\HasTypes;
 
 use ByTIC\Common\Records\Properties\Types\Generic as GenericType;
+use function inflector;
+use Nip\Logger\Exception;
 
 /**
  * Class RecordsTrait
@@ -33,7 +35,7 @@ trait RecordsTrait
         $types = $this->getTypes();
 
         foreach ($types as $type) {
-            $return[] = $type->$name;
+            $return[] = $type->{$name};
         }
 
         return $return;
@@ -190,12 +192,17 @@ trait RecordsTrait
     /**
      * @param string $type
      * @return GenericType
+     * @throws Exception
      */
     public function getType($type = null)
     {
         $this->checkInitTypes();
 
-        return $this->types[$type];
+        if (isset($this->types[$type])) {
+            return $this->types[$type];
+        }
+
+        throw new Exception("Invalid type {$type} in [" . $this->getTable() . "]");
     }
 
     /**

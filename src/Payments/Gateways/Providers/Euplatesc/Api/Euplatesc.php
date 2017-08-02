@@ -4,7 +4,6 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Euplatesc;
 
 class Euplatesc
 {
-
     private $_mid = "";
     private $_key = "";
     private $_data = array();

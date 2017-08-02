@@ -8,7 +8,6 @@ namespace ByTIC\Common\Controllers\Traits\Async;
  */
 trait Covers
 {
-    
     public function uploadCover()
     {
         $item = $this->checkItem();

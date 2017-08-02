@@ -2,9 +2,12 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
+/**
+ * Class Epaybg
+ * @package ByTIC\Common\Payments\Gateways\Providers\Epaybg
+ */
 class Epaybg
 {
-
     protected $_paymentUrl = 'https://www.epay.bg/';
     protected $_paymentUrlTest = 'https://demo.epay.bg/';
     /**
@@ -104,7 +107,7 @@ class Epaybg
         return $this->_key;
     }
 
-    function setSandboxMode($sandboxMode = false)
+    public function setSandboxMode($sandboxMode = false)
     {
         switch ($sandboxMode) {
             case true:
@@ -120,5 +123,4 @@ class Epaybg
 
         return true;
     }
-
 }

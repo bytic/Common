@@ -17,17 +17,17 @@ trait RecordTrait
     /**
      * @return string
      */
-    public abstract function getFirstName();
+    abstract public function getFirstName();
 
     /**
      * @return string
      */
-    public abstract function getLastName();
+    abstract public function getLastName();
 
     /**
      * @return string
      */
-    public abstract function getEmail();
+    abstract public function getEmail();
 
     /**
      * @return string

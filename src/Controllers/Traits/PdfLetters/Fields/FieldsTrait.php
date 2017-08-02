@@ -86,4 +86,3 @@ trait FieldsTrait
      */
     abstract protected function getRequest();
 }
-

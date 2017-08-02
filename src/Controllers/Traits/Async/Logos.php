@@ -8,7 +8,6 @@ namespace ByTIC\Common\Controllers\Traits\Async;
  */
 trait Logos
 {
-
     public function uploadLogo()
     {
         $item = $this->checkItem();

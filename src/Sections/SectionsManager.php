@@ -47,7 +47,6 @@ class SectionsManager extends \Nip\Records\AbstractModels\RecordManager
      */
     public function initAll()
     {
-
         $colection = [];
         foreach ($data as $key => $row) {
             $colection[$key] = $this->getNewRecord($row);

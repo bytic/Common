@@ -11,7 +11,6 @@ use Administrators;
  */
 trait AuthenticationTrait
 {
-
     public function checkAuth()
     {
         if (!($this->getRequest()->getControllerName() == "login" && $this->getRequest()->getActionName() == "index")) {

@@ -10,16 +10,15 @@ use Nip\Request;
  */
 class Newrelic
 {
-
-    static $licence;
-    static $name;
+    public static $licence;
+    public static $name;
 
     /**
      * Get the App Name
      *
      * @return string
      */
-    static function getAppname()
+    public static function getAppname()
     {
         return self::$name;
     }
@@ -28,7 +27,7 @@ class Newrelic
      * @param $name
      * @param $licence
      */
-    static function init($name, $licence)
+    public static function init($name, $licence)
     {
         if (self::isLoaded()) {
             self::setAppname($name, $licence);
@@ -39,7 +38,7 @@ class Newrelic
     /**
      * @return bool
      */
-    static function isLoaded()
+    public static function isLoaded()
     {
         return extension_loaded('newrelic');
     }
@@ -50,7 +49,7 @@ class Newrelic
      * @param $name
      * @param $licence
      */
-    static function setAppname($name, $licence)
+    public static function setAppname($name, $licence)
     {
         self::$licence = $licence;
         self::$name = $name;
@@ -62,9 +61,8 @@ class Newrelic
     /**
      * @param Request $request
      */
-    static function nameTransactionFromRequest($request)
+    public static function nameTransactionFromRequest($request)
     {
-
         if (self::isLoaded()) {
             $name[] = $request->getModuleName();
             $name[] = $request->getControllerName();
@@ -73,7 +71,7 @@ class Newrelic
         }
     }
 
-    static function nameTransaction($name)
+    public static function nameTransaction($name)
     {
         if (self::isLoaded()) {
             newrelic_name_transaction($name);
@@ -85,7 +83,7 @@ class Newrelic
      *
      * @return string
      */
-    static function getLicence()
+    public static function getLicence()
     {
         return self::$licence;
     }

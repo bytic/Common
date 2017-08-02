@@ -13,7 +13,6 @@ use Nip_Form_Element_Select as SelectElement;
  */
 class Form extends AbstractForm
 {
-
     protected $files = [];
 
     public function initElements()

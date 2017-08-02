@@ -7,7 +7,6 @@ use User;
 
 trait HasUser
 {
-
     protected $_user;
 
     /**
@@ -37,5 +36,4 @@ trait HasUser
     {
         return $this->URL()->base();
     }
-
 }

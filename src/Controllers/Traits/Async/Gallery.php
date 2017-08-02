@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits\Async;
 
+use ByTIC\MediaLibrary\HasMedia\HasMediaTrait;
 use ImgPicker;
 use Nip\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -16,15 +17,18 @@ trait Gallery
 {
     public function uploadGallery()
     {
+        /** @var HasMediaTrait $item */
         $item = $this->checkItem();
 
-        $options = [
+        /** @var \ByTIC\MediaLibrary\Validation\Constraints\ImageConstraint $constraint */
+        $constraint = $item->getMediaRepository()->getCollection('images')->getConstraint();
 
+        $options = [
             // Upload directory path
-            'upload_dir' => TMP_PATH,
+            'upload_dir' => app('path.public') . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'tmp',
 
             // Upload directory url:
-            'upload_url' => TMP_URL,
+            'upload_url' => app('url')->to('/uploads/tmp'),
 
             // Accepted file types:
             'accept_file_types' => 'png|jpg|jpeg|gif',
@@ -39,8 +43,8 @@ trait Gallery
             // Image resolution restrictions (in px):
             'max_width' => null,
             'max_height' => null,
-            'min_width' => $item->getImageWidth(),
-            'min_height' => $item->getImageHeight(),
+            'min_width' => $constraint->minWidth,
+            'min_height' => $constraint->minHeight,
 
             /**
              *    Load callback

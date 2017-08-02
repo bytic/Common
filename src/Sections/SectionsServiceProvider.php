@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Sections;
 
-use Nip\Container\ServiceProvider\AbstractSignatureServiceProvider;
+use Nip\Container\ServiceProviders\Providers\AbstractSignatureServiceProvider;
 
 /**
  * Class MailServiceProvider

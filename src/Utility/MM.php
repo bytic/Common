@@ -55,5 +55,4 @@ class MM
     {
         return call_user_func([$class, 'instance']);
     }
-
 }

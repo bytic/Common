@@ -9,9 +9,13 @@
   ],
   "autoload": {
     "psr-4": {
-      "ByTIC\\Common\\Tests\\Page\\": "tests/_support/Page",
-      "ByTIC\\Common\\Tests\\Helper\\": "tests/_support/Helper",
       "ByTIC\\Common\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ByTIC\\Common\\Tests\\": "tests/src",
+      "ByTIC\\Common\\Tests\\Fixtures\\": "tests/fixtures"
     }
   },
   "require": {
@@ -20,11 +24,13 @@
     "bytic/request-detective": "^1.0",
     "bytic/medialibrary": "dev-release/0.9.0",
     "setasign/fpdi-tcpdf": "^1.6",
-    "omnipay/common": "~2.5"
+    "omnipay/common": "^2.5"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "2.*",
-    "codeception/codeception": "2.2.*",
-    "codeception/mockery-module": "0.2.*"
+    "squizlabs/php_codesniffer": "^3.0",
+    "phpunit/phpunit": "^6.2",
+    "mockery/mockery": "^0.9",
+    "symfony/dom-crawler": "^3.3",
+    "symfony/css-selector": "^3.3"
   }
 }

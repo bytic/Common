@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Records\Traits\Media\Files;
 
 use ByTIC\Common\Records\Media\Files\Model as ModelFile;
-use Nip\Filesystem\FileDisk;
 
 /**
  * Class RecordTrait
@@ -11,7 +10,6 @@ use Nip\Filesystem\FileDisk;
  */
 trait RecordTrait
 {
-
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     /**
@@ -58,24 +56,6 @@ trait RecordTrait
         $file->setModel($this);
         $file->setFilesystem($this->getFilesystemDisk());
         return $file;
-    }
-
-    /**
-     * Get the default files disk instance for current model
-     *
-     * @return FileDisk
-     */
-    public function getFilesystemDisk()
-    {
-        return app('filesystem')->disk($this->getFilesystemDiskName());
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilesystemDiskName()
-    {
-        return 'public';
     }
 
     /**

@@ -23,6 +23,10 @@ class Gateway extends AbstractGateway
         return false;
     }
 
+    /**
+     * @param $donation
+     * @return mixed
+     */
     public function generatePaymentForm($donation)
     {
         $pClass = $this->getProviderClass();
@@ -130,7 +134,6 @@ class Gateway extends AbstractGateway
 
                     # XXX if error for this invoice
                     # XXX $info_data .= "INVOICE=$invoice:STATUS=ERR\n";
-
                 }
             }
 
