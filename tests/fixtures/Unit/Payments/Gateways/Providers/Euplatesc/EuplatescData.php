@@ -16,8 +16,8 @@ class EuplatescData
     public static function getMethodOptions()
     {
         $data = 'a:2:{s:15:"payment_gateway";s:9:"euplatesc";s:9:"euplatesc";' .
-            'a:2:{s:3:"mid";s:11:"' . $_ENV['EUPLATESC_MID'] . '";' .
-            's:3:"key";s:40:"' . $_ENV['EUPLATESC_KEY'] . '";'
+            'a:2:{s:3:"mid";s:11:"' . env('EUPLATESC_MID') . '";' .
+            's:3:"key";s:40:"' . env('EUPLATESC_KEY') . '";'
             . '}}';
         return $data;
     }
