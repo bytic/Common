@@ -19,6 +19,7 @@ class PayuData
             'a:2:{s:8:"merchant";s:8:"' . getenv('PAYU_MERCHANT') . '";' .
             's:9:"secretKey";s:20:"' . getenv('PAYU_KEY') . '";'
             . '}}';
+        var_dump($data);
         return $data;
     }
 
