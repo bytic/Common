@@ -40,7 +40,7 @@ trait PdfLettersTrait
                 if ($letter->hasFile() && !$return) {
                     $return = $letter;
                 } else {
-//                    $item->delete();
+                    //                    $item->delete();
                 }
             }
         }

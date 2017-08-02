@@ -13,7 +13,6 @@ use Nip\Records\Record;
  */
 trait HasModelProcessedResponse
 {
-
     protected $modelResponseStatus = null;
 
     /**

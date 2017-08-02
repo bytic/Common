@@ -4,7 +4,6 @@ namespace ByTIC\Common\Security\ACL;
 
 class ACL
 {
-
     protected $_resources;
     protected $_roles;
     protected $_permissions;
@@ -207,5 +206,4 @@ class ACL
         }
         return $instance;
     }
-
 }

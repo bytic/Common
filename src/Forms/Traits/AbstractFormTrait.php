@@ -8,5 +8,4 @@ namespace ByTIC\Common\Forms\Traits;
  */
 trait AbstractFormTrait
 {
-
 }

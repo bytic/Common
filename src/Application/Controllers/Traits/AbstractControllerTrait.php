@@ -17,27 +17,27 @@ trait AbstractControllerTrait
     /**
      * @return Response
      */
-    public abstract function getResponse();
+    abstract public function getResponse();
 
     /**
      * @return Request
      */
-    public abstract function getRequest();
+    abstract public function getRequest();
 
     /**
      * @return View
      */
-    public abstract function getView();
+    abstract public function getView();
 
     /**
      * @return string
      */
-    public abstract function getAction();
+    abstract public function getAction();
 
     /**
      * @return Records
      */
-    public abstract function getModelManager();
+    abstract public function getModelManager();
 
     /**
      * @param $url

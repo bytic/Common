@@ -50,7 +50,6 @@ trait RegisterFormTrait
                 $password->addError($this->getModelMessage('password.match'));
             }
         }
-
     }
 
     public function process()
@@ -71,5 +70,4 @@ trait RegisterFormTrait
             ->_addModelFormMessage('no-password', 'password.empty')
             ->_addModelFormMessage('no-password_repeat', 'password_repeat.empty');
     }
-
 }

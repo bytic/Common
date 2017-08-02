@@ -6,7 +6,6 @@ use Nip_File_System;
 
 trait RecordTrait
 {
-
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     protected $_cover = [];
@@ -164,7 +163,6 @@ trait RecordTrait
 
     public function initCoversByType($type = "default")
     {
-
         $files = Nip_File_System::instance()->scanDirectory($this->getCoverBasePath($type));
         $return = array();
         foreach ($files as $file) {
@@ -212,7 +210,6 @@ trait RecordTrait
         }
 
         $this->cover[$type] = $cover;
-
     }
 
     public function hasCover($type = "default")

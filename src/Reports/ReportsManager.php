@@ -26,6 +26,4 @@ class ReportsManager
     {
         return $this->pushToDatabase($queue, $this->createPayload($job, $data));
     }
-
-
 }

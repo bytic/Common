@@ -20,5 +20,4 @@ class Permissions extends Records
         }
         return $instance;
     }
-
 }

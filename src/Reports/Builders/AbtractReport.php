@@ -8,7 +8,6 @@ namespace ByTIC\Common\Reports\Builders;
  * @package ByTIC\Common\Reports\Generator
  *
  */
-abstract class AbstractReport
+abstract class AbtractReport
 {
-
 }

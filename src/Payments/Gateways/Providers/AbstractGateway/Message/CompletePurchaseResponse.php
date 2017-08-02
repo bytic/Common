@@ -68,7 +68,7 @@ abstract class CompletePurchaseResponse extends AbstractResponse
     public function getTitle()
     {
         if ($this->hasModel()) {
-//            return $this->getModel()->getConfirmStatusTitle();
+            //            return $this->getModel()->getConfirmStatusTitle();
             return translator()->translate('payment-gateways.messages.confirm.'.$this->getMessageType().'.title');
         } else {
             return 'Error confirming payment';

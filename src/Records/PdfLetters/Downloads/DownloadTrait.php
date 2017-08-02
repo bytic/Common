@@ -8,5 +8,4 @@ namespace ByTIC\Common\Records\PdfLetters\Downloads;
  */
 trait DownloadTrait
 {
-
 }

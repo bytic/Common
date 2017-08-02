@@ -51,13 +51,13 @@ trait HasModels
 
     protected function dispatchAccessDeniedResponse()
     {
-//        ->getTrace()->add('Acces denied to item');
+        //        ->getTrace()->add('Acces denied to item');
         $this->getDispatcher()->forward("index", "access");
     }
 
     protected function dispatchNotFoundResponse()
     {
-//        ->getTrace()->add(
+        //        ->getTrace()->add(
 //            'No valid item [manager:'.get_class($this->getModelManager()).']'
 //        );
         $this->getDispatcher()->forward("index", "error");

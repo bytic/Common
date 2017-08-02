@@ -10,7 +10,6 @@ use Default_View;
  */
 trait HasViewTrait
 {
-
     protected $view = null;
 
     protected $layout = '/layouts/email';
@@ -42,7 +41,7 @@ trait HasViewTrait
 
     protected function compileView()
     {
-//        $this->getView()->title = $this->getEmail()->subject;
+        //        $this->getView()->title = $this->getEmail()->subject;
 //        $this->getView()->content = $this->getEmail()->body;
         $this->getView()->setBlock('content', '/emails/notifications');
         $this->getView()->set('content', $this->generateEmailContent());

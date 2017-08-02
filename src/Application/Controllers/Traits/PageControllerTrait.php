@@ -72,7 +72,7 @@ trait PageControllerTrait
      *
      * @return Config
      */
-    public abstract function getConfig();
+    abstract public function getConfig();
 
     /**
      * Prepare headers
@@ -115,7 +115,7 @@ trait PageControllerTrait
      *
      * @return string
      */
-    public abstract function getLayout();
+    abstract public function getLayout();
 
     protected function setClassBreadcrumbs()
     {

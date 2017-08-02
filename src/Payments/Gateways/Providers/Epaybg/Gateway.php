@@ -130,7 +130,6 @@ class Gateway extends AbstractGateway
 
                     # XXX if error for this invoice
                     # XXX $info_data .= "INVOICE=$invoice:STATUS=ERR\n";
-
                 }
             }
 

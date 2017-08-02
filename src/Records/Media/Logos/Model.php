@@ -73,5 +73,4 @@ abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
     {
         $this->resize($this->fWidth, $this->fHeight);
     }
-
 }

@@ -8,5 +8,4 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
  */
 class RedirectForm
 {
-
 }

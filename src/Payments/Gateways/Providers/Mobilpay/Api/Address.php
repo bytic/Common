@@ -43,7 +43,6 @@ class Address
      */
     public function __construct(DOMNode $elem = null)
     {
-
         if ($elem != null) {
             $this->loadFromXml($elem);
         }
@@ -54,7 +53,6 @@ class Address
      */
     protected function loadFromXml(DOMNode $elem)
     {
-
         $attr = $elem->attributes->getNamedItem('type');
         if ($attr != null) {
             $this->type = $attr->nodeValue;
@@ -117,7 +115,6 @@ class Address
 
     public function createXmlElement(DOMDocument $xmlDoc, $nodeName)
     {
-
         if (!($xmlDoc instanceof DOMDocument)) {
             throw new Exception('', self::ERROR_INVALID_PARAMETER);
         }
