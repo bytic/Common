@@ -18,7 +18,7 @@ class MobilpayData
         $data = 'a:2:{s:15:"payment_gateway";s:8:"mobilpay";s:8:"mobilpay";' .
             'a:4:{' .
             's:7:"sandbox";s:2:"no";' .
-            's:9:"signature";s:24:"' . $_ENV['MOBILPAY_SIGNATURE'] . '";' .
+            's:9:"signature";s:24:"' . getenv('MOBILPAY_SIGNATURE') . '";' .
             's:4:"file";s:10:"public.cer";' .
             's:11:"private-key";s:11:"private.key";'
             . '}}';
