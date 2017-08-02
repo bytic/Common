@@ -15,9 +15,29 @@ class MobilpayData
      */
     public static function getMethodOptions()
     {
-        return trim(file_get_contents(
-            TEST_FIXTURE_PATH . '\PaymentGateways\MobilpayOptions.serialized'
-        ));
+        $data = 'a:2:{s:15:"payment_gateway";s:8:"mobilpay";s:8:"mobilpay";' .
+            'a:4:{' .
+            's:7:"sandbox";s:2:"no";' .
+            's:9:"signature";s:24:"' . $_ENV['MOBILPAY_SIGNATURE'] . '";' .
+            's:4:"file";s:10:"public.cer";' .
+            's:11:"private-key";s:11:"private.key";'
+            . '}}';
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public static function buildCertificates()
+    {
+        $basePath = TEST_FIXTURE_PATH . DIRECTORY_SEPARATOR . 'PaymentGateways' . DIRECTORY_SEPARATOR;
+
+        if (!file_exists($basePath . 'private.key')) {
+            file_put_contents($basePath . 'private.key', gzinflate(base64_decode($_ENV['MOBILPAY_PRIVATE_KEY'])));
+        }
+        if (!file_exists($basePath . 'public.cer')) {
+            file_put_contents($basePath . 'public.cer', gzinflate(base64_decode($_ENV['MOBILPAY_PUBLIC_CER'])));
+        }
     }
 
     /**
