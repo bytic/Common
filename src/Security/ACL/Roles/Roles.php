@@ -2,6 +2,8 @@
 
 namespace ByTIC\Common\Security\ACL\Resources\Roles;
 
+use ByTIC\Common\Records\Records;
+
 class Roles extends Records
 {
 

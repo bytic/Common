@@ -2,13 +2,15 @@
 
 namespace ByTIC\Common\Security\Auth;
 
+use ByTIC\Common\Records\Records;
+
 class Auths extends Records
 {
 
-	/**
-	 * @return self
-	 */
-	public function getCurrent()
+    /**
+     * @return self
+     */
+    public function getCurrent()
     {
         $model = $this->getModel();
         if ($_SESSION[$model]) {

@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Reports;
 
-use Nip\Container\ServiceProvider\AbstractSignatureServiceProvider;
+use Nip\Container\ServiceProviders\Providers\AbstractSignatureServiceProvider;
 
 /**
  * Class ReportsServiceProvider
@@ -22,16 +22,6 @@ class ReportsServiceProvider extends AbstractSignatureServiceProvider
 
     protected function registerDispatcher()
     {
-        $dispatcher = self::newDispatcher();
-        $this->getContainer()->singleton('dispatcher', $dispatcher);
-    }
-
-    /**
-     * @return Dispatcher
-     */
-    public static function newDispatcher()
-    {
-        return new Dispatcher();
     }
 
     /**
