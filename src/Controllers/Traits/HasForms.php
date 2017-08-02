@@ -48,5 +48,4 @@ trait HasForms
     {
         return $model->getForm($action);
     }
-
 }

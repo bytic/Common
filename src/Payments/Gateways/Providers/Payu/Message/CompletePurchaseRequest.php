@@ -12,7 +12,6 @@ use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
  */
 class CompletePurchaseRequest extends AbstractRequest
 {
-
     public function initData()
     {
         parent::initData();

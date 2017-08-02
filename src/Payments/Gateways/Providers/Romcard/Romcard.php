@@ -4,7 +4,6 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
 
 class Romcard
 {
-
     protected $paymentUrl = 'https://www.secure11gw.ro/portal/cgi-bin/';
     protected $paymentUrlTest = 'https://www.activare3dsecure.ro/teste3d/cgi-bin/';
     /**
@@ -214,7 +213,7 @@ class Romcard
         return $return;
     }
 
-    function getPaymentURL()
+    public function getPaymentURL()
     {
         return $this->sandboxMode === true ? $this->paymentUrlTest : $this->paymentUrl;
     }
@@ -286,7 +285,7 @@ class Romcard
         die('');
     }
 
-    function setSandboxMode($sandboxMode = false)
+    public function setSandboxMode($sandboxMode = false)
     {
         switch ($sandboxMode) {
             case true:

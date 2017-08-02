@@ -110,5 +110,4 @@ trait RecordTrait
 
         return $return;
     }
-
 }

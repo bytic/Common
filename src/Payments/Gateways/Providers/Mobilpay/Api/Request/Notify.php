@@ -53,7 +53,6 @@ class Notify
 
     public function loadFromXml(DOMElement $elem)
     {
-
         $attr = $elem->attributes->getNamedItem('timestamp');
         if ($attr != null) {
             $this->timestamp = $attr->nodeValue;
@@ -179,11 +178,10 @@ class Notify
 
     public function _loadFromQueryString($queryString)
     {
-
         $parameters = explode('&', $queryString);
         $reqParams = [];
         foreach ($parameters as $item) {
-            list ($key, $value) = explode('=', $item);
+            list($key, $value) = explode('=', $item);
             $reqParams[$key] = urldecode($value);
         }
 
@@ -205,7 +203,6 @@ class Notify
 
     public function createXmlElement(DOMDocument $xmlDoc)
     {
-
         $xmlNotifyElem = $xmlDoc->createElement('mobilpay');
 
         $attr = $xmlDoc->createAttribute('timestamp');
@@ -222,7 +219,6 @@ class Notify
         $xmlNotifyElem->appendChild($elem);
 
         if ($this->customer instanceof Address) {
-
             $xmlNotifyElem->appendChild($this->customer->createXmlElement($xmlDoc, 'customer'));
         }
 

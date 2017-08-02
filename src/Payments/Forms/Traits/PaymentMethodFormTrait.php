@@ -167,7 +167,7 @@ trait PaymentMethodFormTrait
      * @param $name
      * @return FormElementAbstract
      */
-    public abstract function getElement($name);
+    abstract public function getElement($name);
 
     /**
      * @return array|null
@@ -182,7 +182,7 @@ trait PaymentMethodFormTrait
     /**
      * @return PaymentMethod
      */
-    public abstract function getModel();
+    abstract public function getModel();
 
     protected function saveToModelPaymentGateways()
     {

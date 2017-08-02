@@ -31,7 +31,6 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  */
 abstract class Gateway extends AbstractGateway
 {
-
     use NameWorksTrait;
 
     /**

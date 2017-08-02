@@ -88,5 +88,4 @@ class AbstractExport
     public function generateItemsData()
     {
     }
-
 }

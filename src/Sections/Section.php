@@ -4,7 +4,6 @@ namespace ByTIC\Common\Sections;
 
 class Section extends \Nip\Records\AbstractModels\Record
 {
-
     public function getName()
     {
         return $this->name;
@@ -48,5 +47,4 @@ class Section extends \Nip\Records\AbstractModels\Record
     {
         return $this->menu === true;
     }
-
 }

@@ -15,21 +15,24 @@ trait DbCacheTrait
      /**
      * @return Record
      */
-    public function findOne($primary) {
+    public function findOne($primary)
+    {
         if (!$this->_records) {
             $this->getAll();
         }
         return $this->_records[$primary];
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         if (!$this->_records) {
             $this->_records = $this->getCachedAll();
         }
         return $this->_records;
     }
     
-    public function getCachedAll() {
+    public function getCachedAll()
+    {
         $cacheManager = $this->getCacheManager();
         $itemsCache = $cacheManager->get('all');
         
@@ -43,7 +46,6 @@ trait DbCacheTrait
                 $item->writeData($itemCache);
                 $items->add($item);
             }
-            
         } else {
             // set cache
             $items = $this->findByParams();
@@ -52,7 +54,7 @@ trait DbCacheTrait
             foreach ($items as $key=>$item) {
                 $cacheData[$key] = $item->toArray();
             }
-            $cacheManager->saveData('all', $cacheData);            
+            $cacheManager->saveData('all', $cacheData);
         }
         
         return $items;
@@ -75,5 +77,4 @@ trait DbCacheTrait
 
         return $this->_cacheManager;
     }
-    
 }

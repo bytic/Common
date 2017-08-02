@@ -91,5 +91,4 @@ class Resource extends Record
     {
         return $this->getACL()->removePermissions(false, $this);
     }
-
 }

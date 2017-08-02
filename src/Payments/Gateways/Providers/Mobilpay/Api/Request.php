@@ -98,7 +98,7 @@ class Request
      */
     public $m_params = [];
 
-    static function buildQueryString($params)
+    public static function buildQueryString($params)
     {
         $crc_pairs = [];
         foreach ($params as $key => $value) {
@@ -108,9 +108,8 @@ class Request
         return implode('&', $crc_pairs);
     }
 
-    function Mobilpay_Payment_Request()
+    public function Mobilpay_Payment_Request()
     {
-
     }
 
     /**

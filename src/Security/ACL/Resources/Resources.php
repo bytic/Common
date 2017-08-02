@@ -6,7 +6,6 @@ use ByTIC\Common\Records\Records;
 
 class Resources extends Records
 {
-
     protected $_sortOn = "name";
 
     public function findAll()
@@ -63,5 +62,4 @@ class Resources extends Records
         }
         return $instance;
     }
-
 }

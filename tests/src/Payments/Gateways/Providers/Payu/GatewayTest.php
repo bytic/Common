@@ -15,10 +15,9 @@ use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayT
  */
 class GatewayTest extends AbstractGatewayTest
 {
-
     public function testPurchaseResponse()
     {
-//        Debug::debug($this->gateway->getParameters());
+        //        Debug::debug($this->gateway->getParameters());
         $request = $this->gateway->purchaseFromModel($this->purchase);
 //        Debug::debug($this->gateway->getParameters());
 //        Debug::debug($request->getParameters());

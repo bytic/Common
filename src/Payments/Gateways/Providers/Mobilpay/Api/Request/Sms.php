@@ -73,7 +73,7 @@ class Sms extends AbstractRequest
         $parameters = explode('&', $queryString);
         $reqParams = [];
         foreach ($parameters as $item) {
-            list ($key, $value) = explode('=', $item);
+            list($key, $value) = explode('=', $item);
             $reqParams[$key] = urldecode($value);
         }
 

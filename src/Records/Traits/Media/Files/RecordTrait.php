@@ -10,7 +10,6 @@ use ByTIC\Common\Records\Media\Files\Model as ModelFile;
  */
 trait RecordTrait
 {
-
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
     /**

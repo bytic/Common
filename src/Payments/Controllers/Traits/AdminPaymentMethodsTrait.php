@@ -14,7 +14,6 @@ use Nip\Request;
  */
 trait AdminPaymentMethodsTrait
 {
-
     public function deleteFile()
     {
         $item = $this->getModelFromRequest();

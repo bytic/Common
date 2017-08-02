@@ -39,5 +39,5 @@ trait CurrencyRecordsTrait
      * @param $id
      * @return Currency
      */
-    abstract function findOne($id);
+    abstract public function findOne($id);
 }

@@ -11,7 +11,6 @@ use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTra
  */
 trait RecordsTrait
 {
-
     use AbstractRecordsTrait;
 
     protected $formClassNameSlug = null;

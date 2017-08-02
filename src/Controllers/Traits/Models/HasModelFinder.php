@@ -281,6 +281,5 @@ trait HasModelFinder
      *
      * @return Records
      */
-    protected abstract function getModelManager();
-
+    abstract protected function getModelManager();
 }

@@ -40,7 +40,7 @@ class Gateway extends AbstractGateway
         $donor = $donation->getOrgDonor();
         $pClass->setData([
 //            'FIRST_NAME'	   => $donor->first_name,   // nume
-//            'LAST_NAME'	   => $donor->last_name,   // prenume            
+//            'LAST_NAME'	   => $donor->last_name,   // prenume
             'EMAIL' => $donor->email,   // email
         ]);
 
@@ -84,11 +84,11 @@ class Gateway extends AbstractGateway
             $pClass = $gateway->initProcesingClass();
 
             switch ($_REQUEST['TRTYPE']) {
-                case 21 :
-                case 24 :
+                case 21:
+                case 24:
                     $typeResponse = 'responseSale';
                     break;
-                case 0 :
+                case 0:
                 default:
                     $typeResponse = 'response';
                     break;
@@ -122,7 +122,6 @@ class Gateway extends AbstractGateway
                     $donation->gateway_error = $_REQUEST['MESSAGE'];
                 }
             }
-
         }
 
         return $donation;
