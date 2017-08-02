@@ -28,7 +28,7 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
             <exclude>
-                <directory>./src/locale/data</directory>
+                <directory>./src/Payments/Gateways/Providers/AbstractGateway/Message/Views/</directory>
             </exclude>
         </whitelist>
     </filter>

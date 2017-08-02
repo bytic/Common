@@ -11,6 +11,6 @@ if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . '.env')) {
     $dotenv->load();
 }
 
-\ByTIC\Common\Tests\Fixtures\Unit\Payments\Gateways\Providers\Mobilpay\MobilpayData::buildCertificates();
+//\ByTIC\Common\Tests\Fixtures\Unit\Payments\Gateways\Providers\Mobilpay\MobilpayData::buildCertificates();
 
 require dirname(__DIR__) . '/vendor/autoload.php';
