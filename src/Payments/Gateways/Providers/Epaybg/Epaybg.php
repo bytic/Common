@@ -107,7 +107,7 @@ class Epaybg
         return $this->_key;
     }
 
-    function setSandboxMode($sandboxMode = false)
+    public function setSandboxMode($sandboxMode = false)
     {
         switch ($sandboxMode) {
             case true:
@@ -123,5 +123,4 @@ class Epaybg
 
         return true;
     }
-
 }

@@ -9,7 +9,6 @@ use ByTIC\Common\Security\ACL\Resources\Roles\Role;
 
 class Permission extends Record
 {
-
     protected $_resource;
     protected $_role;
 
@@ -40,5 +39,4 @@ class Permission extends Record
         }
         return $this->_role;
     }
-
 }

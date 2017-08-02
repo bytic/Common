@@ -8,5 +8,4 @@ namespace ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message;
  */
 abstract class PurchaseResponse extends AbstractResponse
 {
-
 }

@@ -10,7 +10,6 @@ use ByTIC\Common\Records\Properties\Types\Generic;
  */
 abstract class AbstractType extends Generic
 {
-
     protected $message;
 
     /**

@@ -6,7 +6,6 @@ use ByTIC\Common\Records\Record;
 
 class Role extends Record
 {
-
     public function insert()
     {
         parent::insert();
@@ -93,5 +92,4 @@ class Role extends Record
 
         return true;
     }
-
 }

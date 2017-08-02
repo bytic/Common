@@ -65,5 +65,4 @@ trait AbstractUserTrait
         $gravatarURL = 'http://www.gravatar.com/avatar/' . $hash;
         return $type ? $gravatarURL : $gravatarURL;
     }
-
 }

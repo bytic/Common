@@ -6,7 +6,6 @@ use ByTIC\Common\Records\Records;
 
 class Roles extends Records
 {
-
     protected $_hasMany = array("Users");
 
     /**
@@ -22,5 +21,4 @@ class Roles extends Records
         }
         return $instance;
     }
-
 }

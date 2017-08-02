@@ -9,7 +9,7 @@ use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
  *
  * @package ByTIC\Common\Reports\Generator
  */
-trait RecordHasReports
+trait HasReports
 {
     use RecordsTrait;
 
@@ -22,7 +22,7 @@ trait RecordHasReports
         return;
     }
 
-    protected abstract function getReportsModelManager();
+    abstract protected function getReportsModelManager();
 
     /**
      * @param $name
@@ -32,5 +32,4 @@ trait RecordHasReports
     {
         return $name;
     }
-
 }

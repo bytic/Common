@@ -9,7 +9,6 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseReq
  */
 class PurchaseRequest extends AbstractPurchaseRequest
 {
-
     protected $liveEndpoint = 'https://secure.euplatesc.ro/tdsprocess/tranzactd.php';
     protected $testEndpoint = 'https://secure.euplatesc.ro/tdsprocess/tranzactd.php';
 

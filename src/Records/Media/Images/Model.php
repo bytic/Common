@@ -153,5 +153,4 @@ class Model extends Image
             return $this->getModel()->deleteImage($this->name);
         }
     }
-
 }

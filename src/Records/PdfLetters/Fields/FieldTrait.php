@@ -102,7 +102,7 @@ trait FieldTrait
     public function getColorArray()
     {
         if ($this->hasColor()) {
-            list ($red, $green, $blue) = explode(',', $this->color);
+            list($red, $green, $blue) = explode(',', $this->color);
             if ($red && $green && $blue) {
                 return [intval($red), intval($green), intval($blue)];
             }

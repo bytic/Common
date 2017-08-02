@@ -9,7 +9,6 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractFor
  */
 class Form extends AbstractForm
 {
-
     public function initElements()
     {
         $this->addInput('MERCH_NAME', 'MERCH_NAME');

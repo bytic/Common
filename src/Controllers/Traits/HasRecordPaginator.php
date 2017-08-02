@@ -85,5 +85,5 @@ trait HasRecordPaginator
      *
      * @return Request
      */
-    public abstract function getRequest();
+    abstract public function getRequest();
 }

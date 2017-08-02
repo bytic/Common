@@ -9,7 +9,6 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\PurchaseReq
  */
 class PurchaseRequest extends AbstractPurchaseRequest
 {
-
     protected $liveEndpoint = 'https://secure.payu.ro/order/lu.php';
     protected $testEndpoint = 'https://secure.payu.ro/order/lu.php';
 
@@ -93,7 +92,7 @@ class PurchaseRequest extends AbstractPurchaseRequest
 
         $items = $this->getItems();
         if (count($items)) {
-//            foreach ($items as $item) {
+            //            foreach ($items as $item) {
 //            }
         } elseif ($this->getAmount() > 0) {
             $name[] = $this->getOrderName();

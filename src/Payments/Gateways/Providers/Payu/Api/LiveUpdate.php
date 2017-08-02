@@ -42,7 +42,7 @@ class LiveUpdate
     /*
      * Class setup members.
      * Set up the next members with the class default values.
-     * 
+     *
      */
 
     /**
@@ -252,7 +252,7 @@ class LiveUpdate
      * @param        $language        string
      * @return        void
      */
-    function __construct()
+    public function __construct()
     {
     }
 
@@ -265,7 +265,7 @@ class LiveUpdate
      * @param        $liveUpdateURL - live update url address
      * @return        boolean
      */
-    function setLiveUpdateURL($liveUpdateURL = 'https://secure.epayment.ro/order/lu.php')
+    public function setLiveUpdateURL($liveUpdateURL = 'https://secure.epayment.ro/order/lu.php')
     {
         if (!is_string($liveUpdateURL)) {  //invalid data type
             return false;
@@ -291,7 +291,7 @@ class LiveUpdate
      * @param        $testMode - boolean
      * @return        boolean
      */
-    function setTestMode($testMode = false)
+    public function setTestMode($testMode = false)
     {
         switch ($testMode) {
             case true:
@@ -317,7 +317,7 @@ class LiveUpdate
      * @param        $language - string
      * @return        boolean
      */
-    function setLanguage($language = 'ro')
+    public function setLanguage($language = 'ro')
     {
         $language = trim(strtolower($language));
         switch ($language) {
@@ -341,7 +341,7 @@ class LiveUpdate
      * @param        $secretKey - string
      * @return        boolean
      */
-    function setSecretKey($secretKey)
+    public function setSecretKey($secretKey)
     {
         if (!is_string($secretKey)) {
             $this->secretKeyError = 'invalid type';
@@ -381,7 +381,7 @@ class LiveUpdate
      * @param        $merchant string: merchat identifier
      * @return        boolean
      */
-    function setMerchant($merchant)
+    public function setMerchant($merchant)
     {
         if (!is_string($merchant)) {
             return false;
@@ -403,7 +403,7 @@ class LiveUpdate
      * @param        $orderRef string
      * @return        boolean
      */
-    function setOrderRef($orderRef = '')
+    public function setOrderRef($orderRef = '')
     {
         if (settype($orderRef, "string")) {
             if (strlen($orderRef) <= 32) {
@@ -427,7 +427,7 @@ class LiveUpdate
      * @param        $orderDate string
      * @return        boolean
      */
-    function setOrderDate($orderDate = '')
+    public function setOrderDate($orderDate = '')
     {
         if (strtotime($orderDate) === -1) {
             $this->orderDate = null;
@@ -463,7 +463,7 @@ class LiveUpdate
      * @param        $orderPName array
      * @return        boolean
      */
-    function setOrderPName($orderPName)
+    public function setOrderPName($orderPName)
     {
         if (!is_array($orderPName)) {
             $this->orderPName = null;
@@ -499,7 +499,7 @@ class LiveUpdate
      * @param        $orderPGroup array
      * @return        boolean
      */
-    function setOrderPGroup($orderPGroup)
+    public function setOrderPGroup($orderPGroup)
     {
         if (!is_array($orderPGroup)) {
             $this->orderPGroup = null;
@@ -535,7 +535,7 @@ class LiveUpdate
      * @param        $orderPType array
      * @return        boolean
      */
-    function setOrderPType($orderPType)
+    public function setOrderPType($orderPType)
     {
         if (!is_array($orderPType)) {
             $this->orderPType = null;
@@ -571,7 +571,7 @@ class LiveUpdate
      * @param        $orderPCode array
      * @return        boolean
      */
-    function setOrderPCode($orderPCode)
+    public function setOrderPCode($orderPCode)
     {
         if (!is_array($orderPCode)) {
             $this->orderPCode = null;
@@ -607,7 +607,7 @@ class LiveUpdate
      * @param        $orderPInfo array
      * @return        boolean
      */
-    function setOrderPInfo($orderPInfo)
+    public function setOrderPInfo($orderPInfo)
     {
         if (!is_array($orderPInfo)) {
             $this->orderPInfo = null;
@@ -628,7 +628,7 @@ class LiveUpdate
      * @param        $orderPrice array
      * @return        boolean
      */
-    function setOrderPrice($orderPrice)
+    public function setOrderPrice($orderPrice)
     {
         if (!is_array($orderPrice)) {
             $this->orderPrice = null;
@@ -663,7 +663,7 @@ class LiveUpdate
      * @param        $orderQty array
      * @return        boolean
      */
-    function setOrderQTY($orderQty)
+    public function setOrderQTY($orderQty)
     {
         if (!is_array($orderQty)) {
             $this->orderQty = null;
@@ -698,7 +698,7 @@ class LiveUpdate
      * @param        $orderVAT array
      * @return        boolean
      */
-    function setOrderVAT($orderVAT)
+    public function setOrderVAT($orderVAT)
     {
         if (!is_array($orderVAT)) {
             $this->orderVAT = null;
@@ -734,7 +734,7 @@ class LiveUpdate
      * @param        $orderVer array
      * @return        boolean
      */
-    function setOrderVer($orderVer)
+    public function setOrderVer($orderVer)
     {
         if (!is_array($orderVer)) {
             $this->orderVer = null;
@@ -774,7 +774,7 @@ class LiveUpdate
      * @param        $orderShipping float
      * @return        boolean
      */
-    function setOrderShipping($orderShipping = 0)
+    public function setOrderShipping($orderShipping = 0)
     {
         if (is_numeric($orderShipping) && $orderShipping >= 0) {
             $this->orderShipping = $orderShipping;
@@ -800,7 +800,7 @@ class LiveUpdate
      * @param        $pricesCurrency string[3]
      * @return        true
      */
-    function setCurrency($pricesCurrency = 'RON')
+    public function setCurrency($pricesCurrency = 'RON')
     {
         $pricesCurrency = strtoupper(trim($pricesCurrency));
         switch ($pricesCurrency) {
@@ -841,7 +841,7 @@ class LiveUpdate
      * @param        $pricesCurrency string[3]
      * @return        true
      */
-    function setPricesCurrency($pricesCurrency = 'RON')
+    public function setPricesCurrency($pricesCurrency = 'RON')
     {
         $pricesCurrency = strtoupper(trim($pricesCurrency));
         switch ($pricesCurrency) {
@@ -882,7 +882,7 @@ class LiveUpdate
      * @param        $discount float
      * @return        boolean
      */
-    function setDiscount($discount = 0)
+    public function setDiscount($discount = 0)
     {
         if (is_numeric($discount) && $discount >= 0) {
             $this->discount = $discount;
@@ -901,7 +901,7 @@ class LiveUpdate
      * @param        $destinationCity string
      * @return        boolean
      */
-    function setDestinationCity($destinationCity)
+    public function setDestinationCity($destinationCity)
     {
         $destinationCity = trim($destinationCity);
         if (is_string($destinationCity) && strlen($destinationCity) > 0) {
@@ -921,7 +921,7 @@ class LiveUpdate
      * @param        $destinationState string
      * @return        boolean
      */
-    function setDestinationState($destinationState)
+    public function setDestinationState($destinationState)
     {
         $destinationState = trim($destinationState);
         if (is_string($destinationState) && strlen($destinationState) > 0) {
@@ -941,7 +941,7 @@ class LiveUpdate
      * @param        $destinationCountry integer
      * @return        boolean
      */
-    function setDestinationCountry($destinationCountry)
+    public function setDestinationCountry($destinationCountry)
     {
         if (settype($destinationCountry, "string")) {
             if (strlen($destinationCountry) == 2) {
@@ -962,7 +962,7 @@ class LiveUpdate
      * @param        $payMethod string
      * @return        boolean
      */
-    function setPayMethod($payMethod)
+    public function setPayMethod($payMethod)
     {
         $payMethod = strtoupper($payMethod);
         switch ($payMethod) {
@@ -1012,7 +1012,7 @@ class LiveUpdate
      * @access        public
      * @param        $billing array
      */
-    function setBilling($billing)
+    public function setBilling($billing)
     {
         foreach ($billing as $key => $val) {
             $this->billing[$key] = $val;
@@ -1028,9 +1028,8 @@ class LiveUpdate
      * @access        public
      * @param        $delivery array
      */
-    function setDelivery($delivery)
+    public function setDelivery($delivery)
     {
-
         while (is_array($delivery) && list($key, $val) = each($delivery)) {
             $$key = $val;
             switch ($key) {
@@ -1075,7 +1074,7 @@ class LiveUpdate
      * @access        public
      * @return        string
      */
-    function getLiveUpdateHTML()
+    public function getLiveUpdateHTML()
     {
         $htmlCode = "";
 
@@ -1147,7 +1146,7 @@ class LiveUpdate
                 $htmlCode .= $this->createHiddenField('order_pname', $this->orderPName);
             }
 
-            //add order pcode	
+            //add order pcode
             if (is_null($this->orderPGroup)) {
                 $htmlCode = "<!-- EPAYMENT ERROR: Invalid order group input. -->";
             } elseif (!empty($this->orderPGroup)) {
@@ -1331,7 +1330,7 @@ class LiveUpdate
      * @param        $isArray    bool    specifies if it should generate an array or not
      * @return        string    output html code
      */
-    function createHiddenField($fieldName, $fieldValue, $isArray = true)
+    public function createHiddenField($fieldName, $fieldValue, $isArray = true)
     {
         $fieldName = strtoupper($fieldName);
         $retval = "";
@@ -1359,7 +1358,7 @@ class LiveUpdate
      * @param        @data string the source string that will be converted into hmac hash
      * @return        string hmac hash
      */
-    function hmac($data)
+    public function hmac($data)
     {
         $key = $this->secretKey;
 
@@ -1385,7 +1384,7 @@ class LiveUpdate
      * @access        private
      * @return        string
      */
-    function getHmacString()
+    public function getHmacString()
     {
         $retval = "";
         $retval .= $this->expandString($this->merchant);
@@ -1445,7 +1444,7 @@ class LiveUpdate
      * @param        $string string
      * @return        string
      */
-    function expandString($string)
+    public function expandString($string)
     {
         $retval = "";
         //$string = htmlspecialchars($string);
@@ -1464,7 +1463,7 @@ class LiveUpdate
      * @param        $array array
      * @return        string
      */
-    function expandArray($array)
+    public function expandArray($array)
     {
         $retval = "";
         for ($i = 0; $i < count($array); $i++) {

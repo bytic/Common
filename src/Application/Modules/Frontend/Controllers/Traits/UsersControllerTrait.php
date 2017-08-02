@@ -42,7 +42,6 @@ trait UsersControllerTrait
 
         $this->getView()->Meta()
             ->prependTitle($this->getModelManager()->getLabel('login-title'));
-
     }
 
     /**
@@ -275,7 +274,6 @@ trait UsersControllerTrait
         }
 
         $this->setLoginMeta('setProfilePicture');
-
     }
 
     public function logout()

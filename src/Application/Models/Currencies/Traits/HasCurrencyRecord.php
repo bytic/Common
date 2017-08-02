@@ -11,7 +11,6 @@ use ByTIC\Common\Application\Models\Currencies\Traits\CurrencyRecordTrait as Cur
  */
 trait HasCurrencyRecord
 {
-
     protected $currencyObject;
 
     /**

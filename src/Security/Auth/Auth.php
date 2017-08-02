@@ -7,7 +7,6 @@ use Nip\Database\Query\Select as SelectQuery;
 
 class Auth extends Record
 {
-
     protected $_authenticated = false;
 
     public function authenticate($request = array())
@@ -89,5 +88,4 @@ class Auth extends Record
     {
         return $this->getManager()->getModel();
     }
-
 }

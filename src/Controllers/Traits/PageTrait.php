@@ -29,7 +29,7 @@ trait PageTrait
     /**
      * @return View
      */
-    public abstract function getView();
+    abstract public function getView();
 
     protected function setBreadcrumbs()
     {
@@ -39,5 +39,5 @@ trait PageTrait
     /**
      * @return View
      */
-    protected abstract function getViewObject();
+    abstract protected function getViewObject();
 }

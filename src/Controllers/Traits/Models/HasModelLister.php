@@ -86,5 +86,4 @@ trait HasModelLister
     protected function indexPrepareItems($items)
     {
     }
-
 }

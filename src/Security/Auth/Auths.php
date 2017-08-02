@@ -25,5 +25,4 @@ class Auths extends Records
 
         return $this->_current;
     }
-
 }
