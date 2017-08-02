@@ -2,9 +2,12 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Epaybg;
 
+/**
+ * Class Epaybg
+ * @package ByTIC\Common\Payments\Gateways\Providers\Epaybg
+ */
 class Epaybg
 {
-
     protected $_paymentUrl = 'https://www.epay.bg/';
     protected $_paymentUrlTest = 'https://demo.epay.bg/';
     /**
