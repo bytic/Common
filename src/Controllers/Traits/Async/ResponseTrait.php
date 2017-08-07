@@ -88,6 +88,7 @@ trait ResponseTrait
     protected function outputJSON()
     {
         $this->setResponse(new JsonResponse($this->response_values));
+        $this->getResponse()->send();
     }
 
     protected function outputTXT()
