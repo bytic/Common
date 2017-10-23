@@ -22,8 +22,6 @@
     "php": "^7.0",
     "bytic/framework": "^1.0",
     "bytic/request-detective": "^1.0",
-    "bytic/medialibrary": "dev-release/0.9.0",
-    "setasign/fpdi-tcpdf": "^1.6",
     "omnipay/common": "^2.5"
   },
   "require-dev": {
@@ -31,6 +29,8 @@
     "phpunit/phpunit": "^6.2",
     "mockery/mockery": "^0.9",
     "symfony/dom-crawler": "^3.3",
-    "symfony/css-selector": "^3.3"
+    "symfony/css-selector": "^3.3",
+    "bytic/medialibrary": "^0.9",
+    "setasign/fpdi-tcpdf": "^1.6"
   }
 }
