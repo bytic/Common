@@ -116,7 +116,7 @@ trait FieldTrait
      */
     protected function pdfPrepareFont($pdf)
     {
-        $pdf->SetFont('Helvetica', '', $this->size, '', true);
+        $pdf->SetFont('freesans', '', $this->size, '', true);
     }
 
     /**
