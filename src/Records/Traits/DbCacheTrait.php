@@ -12,9 +12,9 @@ trait DbCacheTrait
     protected $_records = null;
     protected $_localCache;
 
-     /**
-     * @return Record
-     */
+    /**
+    * @return Record
+    */
     public function findOne($primary)
     {
         if (!$this->_records) {
