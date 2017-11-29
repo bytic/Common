@@ -2,8 +2,8 @@
 
 namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
-use Administrator;
-use Administrators;
+use ByTIC\Common\Records\Record;
+use function Nip\recordManager;
 
 /**
  * Class AuthenticationTrait
@@ -19,11 +19,12 @@ trait AuthenticationTrait
     }
 
     /**
-     * @return Administrator
+     * @return Record
+     * @throws \Nip\AutoLoader\Exception
      */
     protected function initUser()
     {
-        return Administrators::instance()->getCurrent();
+        return recordManager('Administrators')->getCurrent();
     }
 
     protected function getNonAuthRedirectURL()
