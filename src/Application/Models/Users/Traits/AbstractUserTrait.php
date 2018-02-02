@@ -58,11 +58,4 @@ trait AbstractUserTrait
         $this->modified = date(DATE_DB);
         return parent::update();
     }
-
-    public function getImage($type = 'default')
-    {
-        $hash = md5(strtolower(trim($this->email)));
-        $gravatarURL = 'http://www.gravatar.com/avatar/' . $hash;
-        return $type ? $gravatarURL : $gravatarURL;
-    }
 }
