@@ -15,14 +15,16 @@ trait AbstractControllerTrait
 {
 
     /**
+     * @param bool $autoInit
      * @return Response
      */
-    abstract public function getResponse();
+    abstract public function getResponse($autoInit = false);
 
     /**
+     * @param bool $autoInit
      * @return Request
      */
-    abstract public function getRequest();
+    abstract public function getRequest($autoInit = false);
 
     /**
      * @return View
