@@ -2,11 +2,7 @@
 
 namespace ByTIC\Common\Payments\Controllers\Traits;
 
-use ByTIC\Common\Payments\Models\Methods\Traits\RecordsTrait;
-use ByTIC\Common\Payments\Models\Methods\Traits\RecordTrait;
-use ByTIC\Common\Records\Record;
-use ByTIC\Common\Records\Records;
-use Nip\Request;
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 
 /**
  * Class AdminPaymentMethodsTrait
@@ -14,6 +10,7 @@ use Nip\Request;
  */
 trait AdminPaymentMethodsTrait
 {
+    use AbstractControllerTrait;
 
     public function deleteFile()
     {
@@ -50,29 +47,4 @@ trait AdminPaymentMethodsTrait
 
         parent::delete();
     }
-
-    /**
-     * @param bool $key
-     * @return Record|RecordTrait
-     */
-    abstract protected function getModelFromRequest($key = false);
-
-    /**
-     * @return Records|RecordsTrait
-     */
-    abstract protected function getModelManager();
-
-    /**
-     * @return Request
-     */
-    abstract protected function getRequest();
-
-    /**
-     * @param $message
-     * @param $url
-     * @param string $type
-     * @param bool $name
-     * @return mixed
-     */
-    abstract protected function flashRedirect($message, $url, $type = 'success', $name = false);
 }

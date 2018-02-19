@@ -2,12 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\PdfLetters\Fields;
 
-use ByTIC\Common\Records\PdfLetters\Fields\FieldsTrait as FieldsRecordsTrait;
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Records\PdfLetters\Fields\FieldTrait;
 use ByTIC\Common\Records\PdfLetters\PdfLetterTrait;
-use ByTIC\Common\Records\Records;
 use Nip\Records\Record;
-use Nip\Request;
 
 /**
  * Class FieldsTrait
@@ -15,6 +13,7 @@ use Nip\Request;
  */
 trait FieldsTrait
 {
+    use AbstractControllerTrait;
 
     /**
      * @var PdfLetterTrait
@@ -64,11 +63,6 @@ trait FieldsTrait
     }
 
     /**
-     * @return Records|FieldsRecordsTrait
-     */
-    abstract protected function getModelManager();
-
-    /**
      * @param bool $key
      * @return FieldTrait|Record
      */
@@ -80,10 +74,5 @@ trait FieldsTrait
      * @return mixed
      */
     abstract protected function checkForeignModelFromRequest($name, $key = false);
-
-    /**
-     * @return Request
-     */
-    abstract protected function getRequest();
 }
 

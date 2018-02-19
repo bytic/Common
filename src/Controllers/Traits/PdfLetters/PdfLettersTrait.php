@@ -2,11 +2,10 @@
 
 namespace ByTIC\Common\Controllers\Traits\PdfLetters;
 
-use ByTIC\Common\Records\PdfLetters\PdfLettersTrait as PdfLettersRecordTrait;
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Records\PdfLetters\PdfLetterTrait;
 use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Records;
-use Nip\Request;
 
 /**
  * Class PdfLettersTrait
@@ -14,6 +13,7 @@ use Nip\Request;
  */
 trait PdfLettersTrait
 {
+    use AbstractControllerTrait;
 
     /**
      * @var string
@@ -221,29 +221,4 @@ trait PdfLettersTrait
 
         $this->setClassBreadcrumbs();
     }
-
-    /**
-     * @param bool $key
-     * @return PdfLetterTrait|Record
-     */
-    abstract protected function getModelFromRequest($key = false);
-
-    /**
-     * @return Records|PdfLettersRecordTrait
-     */
-    abstract protected function getModelManager();
-
-    /**
-     * @return Request
-     */
-    abstract protected function getRequest();
-
-    /**
-     * @param $message
-     * @param $url
-     * @param string $type
-     * @param bool $name
-     * @return mixed
-     */
-    abstract protected function flashRedirect($message, $url, $type = 'success', $name = false);
 }

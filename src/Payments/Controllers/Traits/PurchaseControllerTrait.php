@@ -2,13 +2,11 @@
 
 namespace ByTIC\Common\Payments\Controllers\Traits;
 
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Payments\Gateways\Manager as GatewaysManager;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Payments\Models\Purchase\Traits\IsPurchasableModelTrait;
-use ByTIC\Common\Records\Record;
-use Nip\Records\RecordManager;
-use Nip\Request;
 
 /**
  * Class PurchaseControllerTrait
@@ -18,6 +16,7 @@ use Nip\Request;
  */
 trait PurchaseControllerTrait
 {
+    use AbstractControllerTrait;
 
     public function redirectToPayment()
     {
@@ -70,6 +69,7 @@ trait PurchaseControllerTrait
         if (($response instanceof CompletePurchaseResponse) === false) {
             $this->dispatchAccessDeniedResponse();
         }
+
         return $response;
     }
 
@@ -102,6 +102,7 @@ trait PurchaseControllerTrait
         if (($response instanceof ServerCompletePurchaseResponse) === false) {
             $this->dispatchAccessDeniedResponse();
         }
+
         return $response;
     }
 
@@ -111,21 +112,5 @@ trait PurchaseControllerTrait
      */
     abstract protected function ipnProcessResponse($response);
 
-    /**
-     * @return RecordManager
-     */
-    protected abstract function getModelManager();
-
-    /**
-     * @return Request
-     */
-    abstract protected function getRequest();
-
     abstract protected function dispatchAccessDeniedResponse();
-
-    /**
-     * @param bool|array $key
-     * @return Record|IsPurchasableModelTrait
-     */
-    abstract protected function getModelFromRequest($key = false);
 }
