@@ -15,28 +15,46 @@ trait PageControllerTrait
     use HasForms;
     use AbstractControllerTrait;
 
+    /**
+     * @inheritdoc
+     */
     protected function beforeAction()
     {
         parent::beforeAction();
         $this->setBreadcrumbs();
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function setBreadcrumbs()
     {
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function afterAction()
     {
         $this->setMeta();
         $this->prepareResponseHeaders();
         $this->afterActionViewVariables();
 
-        $content = $this->getView()->load('/layouts/'.$this->getLayout(), [], true);
+        $content = $this->getView()->load(
+            '/layouts/'.$this->getLayout(),
+            [],
+            true
+        );
         $this->getResponse()->setContent($content);
 
         parent::afterAction();
     }
 
+    /**
+     * Set meta information
+     *
+     * @return void
+     */
     protected function setMeta()
     {
 //        $tagline = Options::instance()->website_tagline->value;
@@ -51,10 +69,17 @@ trait PageControllerTrait
     }
 
     /**
+     * Return Config Object
+     *
      * @return Config
      */
-    public abstract function getConfig();
+    abstract public function getConfig();
 
+    /**
+     * Prepare headers
+     *
+     * @return void
+     */
     protected function prepareResponseHeaders()
     {
         $this->getResponse()->headers->set('Content-Type', 'text/html');
@@ -73,7 +98,7 @@ trait PageControllerTrait
     {
         $this->getView()->set('forms', $this->getForms());
         $this->getView()->set('_config', $this->getConfig());
-        $this->getView()->set('_stage', app('kernel')->getStaging()->getStage());
+        $this->getView()->set('_stage', config('env'));
 
         $this->getView()->set('layout', $this->getLayout());
         $this->getView()->set('_layout', $this->getLayout());
@@ -85,6 +110,13 @@ trait PageControllerTrait
         $this->getView()->set('user', $this->_getUser());
         $this->getView()->set('_user', $this->_getUser());
     }
+
+    /**
+     * Get Layout Name
+     *
+     * @return string
+     */
+    abstract public function getLayout();
 
     protected function setClassBreadcrumbs()
     {

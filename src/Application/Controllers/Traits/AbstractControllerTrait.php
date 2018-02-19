@@ -15,27 +15,45 @@ trait AbstractControllerTrait
 {
 
     /**
+     * @param bool $autoInit
      * @return Response
      */
-    public abstract function getResponse();
+    abstract public function getResponse($autoInit = false);
 
     /**
+     * @param bool $autoInit
      * @return Request
      */
-    public abstract function getRequest();
+    abstract public function getRequest($autoInit = false);
 
     /**
      * @return View
      */
-    public abstract function getView();
+    abstract public function getView();
 
     /**
      * @return string
      */
-    public abstract function getAction();
+    abstract public function getAction();
 
     /**
      * @return Records
      */
-    public abstract function getModelManager();
+    abstract public function getModelManager();
+
+    /**
+     * @param $url
+     * @param null $code
+     * @return mixed
+     */
+    abstract protected function redirect($url, $code = null);
+
+    /**
+     * @param $message
+     * @param $url
+     * @param string $type
+     * @param bool $name
+     * @return mixed
+     */
+    abstract protected function flashRedirect($message, $url, $type = 'success', $name = false);
 }
