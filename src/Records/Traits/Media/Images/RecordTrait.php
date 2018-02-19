@@ -5,15 +5,19 @@ namespace ByTIC\Common\Records\Traits\Media\Images;
 use Nip\HelperBroker;
 use Nip_File_System;
 
+/**
+ * Trait RecordTrait
+ * @package ByTIC\Common\Records\Traits\Media\Images
+ */
 trait RecordTrait
 {
 
     use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
 
-    public $images = array();
+    public $images = [];
 
-    protected $_imageCache = array();
-    protected $_imageTypes = array('full', 'default');
+    protected $_imageCache = [];
+    protected $_imageTypes = ['full', 'default'];
 
     /**
      * Uploads image to temporary directory
@@ -113,7 +117,7 @@ trait RecordTrait
 
     public function getNewImages()
     {
-        $return = array();
+        $return = [];
 
         foreach ($this->_imageTypes as $type) {
             $return[$type] = $this->getNewImage($type);
@@ -122,9 +126,13 @@ trait RecordTrait
         return $return;
     }
 
+    /**
+     * @param string $type
+     * @return array
+     */
     public function findImages($type = "default")
     {
-        if (!$this->_imageCache[$type]) {
+        if (!isset($this->_imageCache[$type])) {
             $return = array();
 
             $files = Nip_File_System::instance()->scanDirectory($this->getImageBasePath($type));
@@ -147,6 +155,9 @@ trait RecordTrait
         return $this->images;
     }
 
+    /**
+     * @param string $type
+     */
     public function findImage($type = "default")
     {
         $this->findImages($type);
@@ -175,16 +186,26 @@ trait RecordTrait
         return $this->getGenericImage($type);
     }
 
+    /**
+     * @param string $type
+     * @return mixed
+     */
     public function getGenericImage($type = "default")
     {
         return HelperBroker::get('Url')->image($this->getManager()->getTable() . '/default-' . $type . '.jpg');
     }
 
+    /**
+     * @return mixed
+     */
     public function deleteImages()
     {
         return Nip_File_System::instance()->removeDir($this->getImageBasePath());
     }
 
+    /**
+     * @return $this
+     */
     public function resetImages()
     {
         return Nip_File_System::instance()->emptyDirectory($this->getImageBasePath());
