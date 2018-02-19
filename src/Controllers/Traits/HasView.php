@@ -90,7 +90,7 @@ trait HasView
         $view->setRequest($this->getRequest());
         $view->set('controller', $this->getName());
         $view->set('action', $this->getRequest()->getActionName());
-        $view->set('options', $this->options);
+        $view->set('options', (isset($this->options) ? $this->options : null));
 
         return $view;
     }
