@@ -8,7 +8,6 @@ use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecordTrait;
 use Nip\Request;
 use Nip\View;
 use Nip_Form_Model as Form;
-use Nip_Record_Paginator as RecordPaginator;
 
 /**
  * Class CrudModels
@@ -31,15 +30,15 @@ trait CrudModels
 
     public function index()
     {
-        $query = $this->query ? $this->query : $this->newIndexQuery();
-        $filters = $this->filters ? $this->filters : $this->getRequestFilters();
+        $query = isset($this->query) ? $this->query : $this->newIndexQuery();
+        $filters = isset($this->filters) ? $this->filters : $this->getRequestFilters();
         $query = $this->getModelManager()->filter($query, $filters);
 
         $this->prepareRecordPaginator();
         $paginator = $this->getRecordPaginator();
         $paginator->paginate($query);
 
-        if ($this->items) {
+        if (isset($this->items)) {
             $items = $this->items;
         } else {
             $items = $this->getModelManager()->findByQuery($query);
@@ -68,7 +67,7 @@ trait CrudModels
 
         $this->getView()->Breadcrumbs()->addItem($this->getModelManager()->getLabel('add'));
         $this->getView()->TinyMCE()->setEnabled();
-        $this->getView()->section .= ".add";
+        $this->getView()->append('section', '.add');
     }
 
     /**
@@ -76,7 +75,7 @@ trait CrudModels
      */
     public function addNewModel()
     {
-        $item = $this->item ? $this->item : $this->newModel();
+        $item = isset($this->item) ? $this->item : $this->newModel();
 
         return $item;
     }
@@ -95,7 +94,7 @@ trait CrudModels
      */
     public function addGetForm($item)
     {
-        if ($this->form) {
+        if (isset($this->form)) {
             $form = $this->form;
         } else {
             $form = $this->getModelForm($item);
@@ -267,7 +266,7 @@ trait CrudModels
      */
     protected function initExistingItem()
     {
-        if (!$this->item) {
+        if (!isset($this->item)) {
             $this->item = $this->getModelFromRequest();
         }
 
