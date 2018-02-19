@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Application\Controllers\Traits;
 
 use ByTIC\Common\Records\Records;
+use Nip\Config\Config;
 use Nip\Http\Response\Response;
 use Nip\Request;
 use Nip\View;
@@ -25,6 +26,13 @@ trait AbstractControllerTrait
      * @return Request
      */
     abstract public function getRequest($autoInit = false);
+
+    /**
+     * Return Config Object
+     *
+     * @return Config
+     */
+    abstract public function getConfig();
 
     /**
      * @return View

@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Application\Controllers\Traits;
 
 use ByTIC\Common\Controllers\Traits\HasForms;
-use Nip\Config\Config;
 use Nip\Html\Head\Entities\Favicon;
 
 /**
@@ -69,20 +68,13 @@ trait PageControllerTrait
     }
 
     /**
-     * Return Config Object
-     *
-     * @return Config
-     */
-    abstract public function getConfig();
-
-    /**
      * Prepare headers
      *
      * @return void
      */
     protected function prepareResponseHeaders()
     {
-        $this->getResponse()->headers->set('Content-Type', 'text/html');
+        $this->getResponse(true)->headers->set('Content-Type', 'text/html');
         $this->getResponse()->setCharset('utf-8');
 
 
@@ -98,7 +90,7 @@ trait PageControllerTrait
     {
         $this->getView()->set('forms', $this->getForms());
         $this->getView()->set('_config', $this->getConfig());
-        $this->getView()->set('_stage', config('env'));
+//        $this->getView()->set('_stage', config('env'));
 
         $this->getView()->set('layout', $this->getLayout());
         $this->getView()->set('_layout', $this->getLayout());
