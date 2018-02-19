@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use Nip\Request;
 use Nip\View;
 
@@ -11,6 +12,7 @@ use Nip\View;
  */
 trait HasView
 {
+    use AbstractControllerTrait;
 
     /**
      * @var View
@@ -80,11 +82,6 @@ trait HasView
     }
 
     /**
-     * @return Request
-     */
-    abstract public function getRequest();
-
-    /**
      * @param View $view
      * @return View
      */
@@ -97,11 +94,6 @@ trait HasView
 
         return $view;
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getName();
 
     /**
      * @param View $view
