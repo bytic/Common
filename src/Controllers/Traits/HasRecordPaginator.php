@@ -2,17 +2,26 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use Nip\Request;
 use Nip_Record_Paginator as RecordPaginator;
 
+/**
+ * Class HasRecordPaginator
+ *
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasRecordPaginator
 {
-
     /**
+     * Record Paginator Object
+     *
      * @var null|RecordPaginator
      */
     protected $paginator = null;
 
     /**
+     * Get Record Paginator Object
+     *
      * @return RecordPaginator
      */
     public function getRecordPaginator()
@@ -20,23 +29,26 @@ trait HasRecordPaginator
         if ($this->paginator === null) {
             $this->initRecordPaginator();
         }
+
         return $this->paginator;
     }
 
+    /**
+     * Init Record Paginator Object
+     *
+     * @return void
+     */
     public function initRecordPaginator()
     {
         $this->setRecordPaginator($this->newRecordPaginator());
         $this->prepareRecordPaginator();
     }
 
-    public function prepareRecordPaginator()
-    {
-        $this->getRecordPaginator()->setPage(intval($_GET['page']));
-        $this->getRecordPaginator()->setItemsPerPage(50);
-    }
-
     /**
-     * @param RecordPaginator $paginator
+     * Set the Record Paginator
+     *
+     * @param RecordPaginator $paginator Record Paginator Object
+     *
      * @return $this
      */
     public function setRecordPaginator($paginator)
@@ -47,6 +59,8 @@ trait HasRecordPaginator
     }
 
     /**
+     * Generates a new instance of Record Paginator
+     *
      * @return RecordPaginator
      */
     public function newRecordPaginator()
@@ -54,4 +68,22 @@ trait HasRecordPaginator
         return new \Nip_Record_Paginator();
     }
 
+    /**
+     * Prepare Record Paginator Object
+     *
+     * @return void
+     */
+    public function prepareRecordPaginator()
+    {
+        $page = $this->getRequest()->get('page', 1);
+        $this->getRecordPaginator()->setPage(intval($page));
+        $this->getRecordPaginator()->setItemsPerPage(50);
+    }
+
+    /**
+     * Returns the Request Object
+     *
+     * @return Request
+     */
+    abstract public function getRequest();
 }
