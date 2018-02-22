@@ -2,9 +2,9 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use ByTIC\Common\Records\Record as Record;
-use ByTIC\Common\Records\Records as RecordManager;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as HasFilesRecordTrait;
+use Nip\Records\AbstractModels\Record;
+use Nip\Records\AbstractModels\RecordManager;
 use Nip\Request;
 use Nip\View;
 use Nip_Form_Model as Form;
@@ -98,7 +98,7 @@ trait CrudModels
             $form = $this->form;
         } else {
             $form = $this->getModelForm($item);
-            $form->setAction($this->getModelManager()->getAddURL($_GET));
+            $form->setAction($this->getModelManager()->compileURL('add', $_GET));
         }
 
         return $form;
@@ -294,7 +294,7 @@ trait CrudModels
         }
 
         $url = $this->getAfterUrl('after-edit', $item->getURL());
-        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getControllerName());
+        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getController());
         $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
     }
 
