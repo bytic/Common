@@ -23,7 +23,7 @@ trait RecordTrait
      */
     public function getForm($type = null)
     {
-        if (!$this->forms[$type]) {
+        if (!isset($this->forms[$type])) {
             $form = $this->getManager()->newForm($type);
 
             $this->forms[$type] = $this->initForm($form);
