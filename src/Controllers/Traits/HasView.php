@@ -38,7 +38,7 @@ trait HasView
      */
     public function getView()
     {
-        if (!$this->view) {
+        if ( ! $this->view) {
             $this->view = $this->initView();
         }
 
@@ -76,6 +76,7 @@ trait HasView
 
     /**
      * @param View $view
+     *
      * @return View
      */
     protected function populateView($view)
@@ -95,9 +96,12 @@ trait HasView
      */
     protected function initViewVars($view)
     {
-        $view->setRequest($this->getRequest());
         $view->set('controller', $this->getName());
-        $view->set('action', $this->getRequest()->getActionName());
+        $view->set('action', $this->getAction());
+
+        if (method_exists($view,'setRequest')) {
+            $view->setRequest($this->getRequest());
+        }
 
         return $view;
     }
@@ -160,6 +164,7 @@ trait HasView
     /**
      * @param self $controller
      * @param Request $newRequest
+     *
      * @return static
      */
     protected function prepareCallController($controller, $newRequest)
