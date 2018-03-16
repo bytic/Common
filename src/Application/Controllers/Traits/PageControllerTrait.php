@@ -81,7 +81,7 @@ trait PageControllerTrait
      */
     protected function prepareResponseHeaders()
     {
-        $this->getResponse()->headers->set('Content-Type', 'text/html');
+        $this->getResponse(true)->headers->set('Content-Type', 'text/html');
         $this->getResponse()->setCharset('utf-8');
 
 
