@@ -18,7 +18,7 @@
     "php": ">=5.5.0",
     "bytic/framework": "^0.9",
     "bytic/request-detective": "^1.0",
-    "setasign/fpdi-tcpdf": "1.6.*",
+    "setasign/fpdi-tcpdf": "^2.0",
     "omnipay/common": "~2.5"
   },
   "require-dev": {
