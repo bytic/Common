@@ -2,7 +2,8 @@
 
 namespace ByTIC\Common\Records\Emails\Builder;
 
-use Default_View;
+use Default_View as DefaultView;
+use Nip\View\ViewInterface;
 
 /**
  * Class HasViewTrait
@@ -10,6 +11,9 @@ use Default_View;
  */
 trait HasViewTrait
 {
+    /**
+     * @var null|ViewInterface
+     */
     protected $view = null;
 
     protected $layout = '/layouts/email';
@@ -41,7 +45,7 @@ trait HasViewTrait
 
     protected function compileView()
     {
-        //        $this->getView()->title = $this->getEmail()->subject;
+//        $this->getView()->title = $this->getEmail()->subject;
 //        $this->getView()->content = $this->getEmail()->body;
         $this->getView()->setBlock('content', '/emails/notifications');
         $this->getView()->set('content', $this->generateEmailContent());
@@ -49,7 +53,7 @@ trait HasViewTrait
     }
 
     /**
-     * @return Default_View
+     * @return ViewInterface
      */
     public function getView()
     {
@@ -66,11 +70,19 @@ trait HasViewTrait
     }
 
     /**
-     * @return Default_View
+     * @param ViewInterface $view
+     */
+    public function setView($view)
+    {
+        $this->view = $view;
+    }
+
+    /**
+     * @return DefaultView
      */
     public function newView()
     {
-        return Default_View::instance();
+        return new DefaultView();
     }
 
     /**
