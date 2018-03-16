@@ -7,8 +7,8 @@ use ByTIC\Common\Records\Record;
 use ByTIC\Common\Records\Records;
 use ByTIC\Common\Records\Traits\Media\Files\RecordTrait as MediaFileRecordTrait;
 use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as MediaGenericRecordTrait;
-use FPDI;
 use Nip_File_System;
+use setasign\Fpdi;
 use TCPDF;
 
 /**
@@ -123,8 +123,8 @@ trait PdfLetterTrait
      */
     public function generateNewPdfObj()
     {
-        /** @var FPDI|TCPDF $pdf */
-        $pdf = new FPDI('L');
+        /** @var Fpdi|TCPDF $pdf */
+        $pdf = new Fpdi\TcpdfFpdi('L');
         $pdf->setPrintHeader(false);
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor(app('config')->get('SITE.name'));
