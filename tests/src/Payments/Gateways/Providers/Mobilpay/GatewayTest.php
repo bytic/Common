@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Mobilpay;
+namespace ByTIC\Common\Tests\Payments\Gateways\Providers\Mobilpay;
 
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Gateway;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\CompletePurchaseResponse;
@@ -9,12 +9,12 @@ use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\PurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\Gateways\Providers\Mobilpay\MobilpayData;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PaymentMethod;
-use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
+use ByTIC\Common\Tests\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
 use Mockery as m;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Providers\Mobilpay
+ * @package ByTIC\Common\Tests\Payments\Providers\Mobilpay
  */
 class GatewayTest extends AbstractGatewayTest
 {

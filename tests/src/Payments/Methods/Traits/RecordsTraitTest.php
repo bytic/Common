@@ -1,14 +1,14 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Methods\Traits;
+namespace ByTIC\Common\Tests\Payments\Methods\Traits;
 
 use ByTIC\Common\Payments\Models\Methods\Traits\RecordsTrait;
 use ByTIC\Common\Payments\Models\Methods\Types\CreditCards;
-use ByTIC\Common\Tests\Unit\AbstractTest;
+use ByTIC\Common\Tests\AbstractTest;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Methods
+ * @package ByTIC\Common\Tests\Payments\Methods
  */
 class RecordsTraitTest extends AbstractTest
 {

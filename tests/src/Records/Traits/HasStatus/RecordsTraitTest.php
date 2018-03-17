@@ -1,15 +1,15 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Records\Traits\HasStatus;
+namespace ByTIC\Common\Tests\Records\Traits\HasStatus;
 
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Records;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Statuses\Allocated;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Statuses\Applicant;
-use ByTIC\Common\Tests\Unit\AbstractTest;
+use ByTIC\Common\Tests\AbstractTest;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Methods
+ * @package ByTIC\Common\Tests\Payments\Methods
  */
 class RecordsTraitTest extends AbstractTest
 {

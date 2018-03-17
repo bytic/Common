@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit;
+namespace ByTIC\Common\Tests;
 
 use PHPUnit\Framework\TestCase;
 
