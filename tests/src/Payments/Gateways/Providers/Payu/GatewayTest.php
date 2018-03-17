@@ -1,17 +1,17 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Payu;
+namespace ByTIC\Common\Tests\Payments\Gateways\Providers\Payu;
 
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\PurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Payu\Message\ServerCompletePurchaseResponse;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\Gateways\Providers\Payu\PayuData;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PaymentMethod;
-use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
+use ByTIC\Common\Tests\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Providers\Payu
+ * @package ByTIC\Common\Tests\Payments\Providers\Payu
  */
 class GatewayTest extends AbstractGatewayTest
 {

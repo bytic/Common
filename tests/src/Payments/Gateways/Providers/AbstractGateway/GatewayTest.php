@@ -1,6 +1,6 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway;
+namespace ByTIC\Common\Tests\Payments\Gateways\Providers\AbstractGateway;
 
 use ByTIC\Common\Payments\Gateways\Manager as GatewaysManager;
 use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway;
@@ -9,12 +9,12 @@ use ByTIC\Common\Tests\Fixtures\Unit\Payments\BillingRecord;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PaymentMethod;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PurchasableRecord;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PurchasableRecordManager;
-use ByTIC\Common\Tests\Unit\AbstractTest;
+use ByTIC\Common\Tests\AbstractTest;
 use Mockery as m;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Providers\AbstractGateway
+ * @package ByTIC\Common\Tests\Payments\Providers\AbstractGateway
  */
 abstract class GatewayTest extends AbstractTest
 {

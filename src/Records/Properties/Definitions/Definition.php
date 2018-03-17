@@ -43,16 +43,17 @@ class Definition
 
     /**
      * @param $name
+     *
      * @return Property
      * @throws Exception
      */
     public function getItem($name)
     {
         $items = $this->getItems();
-        if (!$this->hasItem($name)) {
+        if ( ! $this->hasItem($name)) {
             throw new Exception(
-                'Bad Item ['.$name.'] for smart property 
-                ['.$this->getManager()->getController().']['.$this->getName().']');
+                'Bad Item [' . $name . '] for smart property 
+                [' . $this->getManager()->getController() . '][' . $this->getName() . ']');
         }
 
         return $items[$name];
@@ -72,11 +73,11 @@ class Definition
 
     public function initItems()
     {
-        $names = $this->getItemsNames();
+        $names       = $this->getItemsNames();
         $this->items = [];
         foreach ($names as $name) {
-            if (!$this->isAbstractItemName($name)) {
-                $object = $this->newStatus($name);
+            if ( ! $this->isAbstractItemName($name)) {
+                $object                          = $this->newStatus($name);
                 $this->items[$object->getName()] = $object;
             }
         }
@@ -97,7 +98,7 @@ class Definition
      */
     protected function getItemsNamesFromManager()
     {
-        $methodName = 'get'.$this->getName().'Names';
+        $methodName = 'get' . $this->getName() . 'Names';
         if (method_exists($this->getManager(), $methodName)) {
             return $this->getManager()->$methodName();
         }
@@ -168,9 +169,13 @@ class Definition
      */
     protected function getItemsNamesFromFiles()
     {
-        $files = FileSystem::instance()->scanDirectory($this->getItemsDirectory());
-        foreach ($files as &$name) {
-            $name = str_replace('.php', '', $name);
+        $files = scandir($this->getItemsDirectory());
+        foreach ($files as $key=>&$name) {
+            if (in_array($name, ['.', '..'])) {
+                unset($files[$key]);
+            } else {
+                $name = str_replace('.php', '', $name);
+            }
         }
 
         return $files;
@@ -198,12 +203,12 @@ class Definition
      */
     public function generateItemsDirectory()
     {
-        $methodName = 'get'.$this->getName().'ItemsDirectory';
+        $methodName = 'get' . $this->getName() . 'ItemsDirectory';
         if (method_exists($this->getManager(), $methodName)) {
             return $this->getManager()->$methodName();
         }
 
-        return $this->generateManagerDirectory().DIRECTORY_SEPARATOR.$this->generatePropertyDirectory();
+        return $this->generateManagerDirectory() . DIRECTORY_SEPARATOR . $this->generatePropertyDirectory();
     }
 
     /**
@@ -252,6 +257,7 @@ class Definition
 
     /**
      * @param string $name
+     *
      * @return bool
      */
     public function isAbstractItemName($name)
@@ -268,12 +274,13 @@ class Definition
 
     /**
      * @param string $type
+     *
      * @return Property
      */
     public function newStatus($type = null)
     {
         $className = $this->getItemClass($type);
-        $object = new $className();
+        $object    = new $className();
         /** @var Property $object */
         $object->setManager($this->getManager());
         $object->setField($this->getField());
@@ -283,13 +290,14 @@ class Definition
 
     /**
      * @param null $type
+     *
      * @return string
      */
     public function getItemClass($type = null)
     {
         $type = $type ? $type : $this->getDefaultValue();
 
-        return $this->getPropertyItemsRootNamespace().inflector()->classify($type);
+        return $this->getPropertyItemsRootNamespace() . inflector()->classify($type);
     }
 
     /**
@@ -318,7 +326,7 @@ class Definition
         if ($managerDefaultValue && $this->hasItem($managerDefaultValue)) {
             $defaultValue = $managerDefaultValue;
         } else {
-            $keys = array_keys($this->getItems());
+            $keys         = array_keys($this->getItems());
             $defaultValue = reset($keys);
         }
         $this->setDefaultValue($defaultValue);
@@ -329,7 +337,7 @@ class Definition
      */
     protected function getDefaultValueFromManager()
     {
-        $method = 'getDefault'.$this->getName();
+        $method = 'getDefault' . $this->getName();
         if (method_exists($this->getManager(), $method)) {
             return $this->getManager()->{$method}();
         }
@@ -339,6 +347,7 @@ class Definition
 
     /**
      * @param $name
+     *
      * @return bool
      */
     public function hasItem($name)
@@ -353,24 +362,26 @@ class Definition
      */
     protected function getPropertyItemsRootNamespace()
     {
-        $method = 'get'.$this->getName().'ItemsRootNamespace';
+        $method = 'get' . $this->getName() . 'ItemsRootNamespace';
         if (method_exists($this->getManager(), $method)) {
             return $this->getManager()->{$method}();
         }
-        return $this->getManager()->getModelNamespace().$this->getLabel().'\\';
+
+        return $this->getManager()->getModelNamespace() . $this->getLabel() . '\\';
     }
 
     /**
      * @param $name
+     *
      * @return array
      */
     public function getValues($name)
     {
         $return = [];
-        $items = $this->getItems();
+        $items  = $this->getItems();
 
         foreach ($items as $type) {
-            $method = 'get'.ucfirst($name);
+            $method = 'get' . ucfirst($name);
             if (method_exists($type, $method)) {
                 $return[] = $type->$method();
             } else {

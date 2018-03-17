@@ -1,12 +1,12 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Mobilpay\Message;
+namespace ByTIC\Common\Tests\Payments\Gateways\Providers\Mobilpay\Message;
 
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request\Card;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Api\Request\Notify;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\ServerCompletePurchaseRequest;
 use ByTIC\Common\Payments\Gateways\Providers\Mobilpay\Message\ServerCompletePurchaseResponse;
-use ByTIC\Common\Tests\Unit\AbstractTest;
+use ByTIC\Common\Tests\AbstractTest;
 use Guzzle\Http\Client;
 use Nip\Request;
 

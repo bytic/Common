@@ -1,17 +1,17 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\Euplatesc;
+namespace ByTIC\Common\Tests\Payments\Gateways\Providers\Euplatesc;
 
 use ByTIC\Common\Payments\Gateways\Providers\Euplatesc\Message\CompletePurchaseResponse;
 use ByTIC\Common\Payments\Gateways\Providers\Euplatesc\Message\PurchaseResponse;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\Gateways\Providers\Euplatesc\EuplatescData;
 use ByTIC\Common\Tests\Fixtures\Unit\Payments\PaymentMethod;
-use ByTIC\Common\Tests\Unit\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
+use ByTIC\Common\Tests\Payments\Gateways\Providers\AbstractGateway\GatewayTest as AbstractGatewayTest;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Providers\Euplatesc
+ * @package ByTIC\Common\Tests\Payments\Providers\Euplatesc
  */
 class GatewayTest extends AbstractGatewayTest
 {

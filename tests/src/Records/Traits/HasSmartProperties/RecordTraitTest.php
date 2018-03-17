@@ -1,15 +1,15 @@
 <?php
 
-namespace ByTIC\Common\Tests\Unit\Records\Traits\HasSmartProperties;
+namespace ByTIC\Common\Tests\Records\Traits\HasSmartProperties;
 
 use ByTIC\Common\Records\Properties\AbstractProperty\Generic;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasSmartProperties\Record;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasSmartProperties\Records;
-use ByTIC\Common\Tests\Unit\AbstractTest;
+use ByTIC\Common\Tests\AbstractTest;
 
 /**
  * Class TraitsTest
- * @package ByTIC\Common\Tests\Unit\Payments\Methods
+ * @package ByTIC\Common\Tests\Payments\Methods
  */
 class RecordTraitTest extends AbstractTest
 {

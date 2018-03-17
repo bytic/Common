@@ -4,6 +4,7 @@ namespace ByTIC\Common\Records\Traits\HasTypes;
 
 use ByTIC\Common\Records\Properties\Types\Generic as GenericType;
 use function inflector;
+use League\Flysystem\Adapter\Local as LocalAdapter;
 use Nip\Logger\Exception;
 
 /**
@@ -86,13 +87,14 @@ trait RecordsTrait
      */
     protected function generateTypesNames()
     {
-        $files = \Nip_File_System::instance()->scanDirectory(
-            $this->getTypesDirectory(),
-            true,
+        $localAdapter = new LocalAdapter($this->getTypesDirectory());
+        $files = $localAdapter->listContents(
+            '/',
             true
         );
         $names = [];
-        foreach ($files as $name) {
+        foreach ($files as $file) {
+            $name = $file['path'];
             $name = $this->generateTypeNameFromPath($name);
             if ($this->checkValidTypeName($name)) {
                 $names[] = $name;
