@@ -9,6 +9,7 @@ use Nip_Record_Paginator as RecordPaginator;
  * Class HasRecordPaginator
  *
  * @package ByTIC\Common\Controllers\Traits
+ * @method Request getRequest()
  */
 trait HasRecordPaginator
 {
@@ -79,11 +80,4 @@ trait HasRecordPaginator
         $this->getRecordPaginator()->setPage(intval($page));
         $this->getRecordPaginator()->setItemsPerPage(50);
     }
-
-    /**
-     * Returns the Request Object
-     *
-     * @return Request
-     */
-    abstract public function getRequest();
 }
