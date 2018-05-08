@@ -136,7 +136,7 @@ class PurchaseRequest extends AbstractPurchaseRequest
         $data['BILL_ZIPCODE'] = $card->getPostcode();
         $data['BILL_CITY'] = $card->getCity();
         $data['BILL_STATE'] = $card->getState();
-        $data['BILL_COUNTRYCODE'] = $card->getCountry();
+        $data['BILL_COUNTRYCODE'] = Helper::generateCountryCode($card->getCountry());
     }
 
     /**

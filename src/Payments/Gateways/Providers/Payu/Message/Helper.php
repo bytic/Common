@@ -9,7 +9,6 @@ namespace ByTIC\Common\Payments\Gateways\Providers\Payu\Message;
 class Helper
 {
 
-
     /**
      * @param array $array
      * @return string
@@ -55,5 +54,18 @@ class Helper
         $k_opad = $key ^ $opad;
 
         return md5($k_opad . pack("H*", md5($k_ipad . $data)));
+    }
+
+    /**
+     * @param $country
+     * @return string
+     */
+    public static function generateCountryCode($country)
+    {
+        $transformation = [
+            'romania' => 'RO',
+        ];
+
+        return strtr(strtolower($country), $transformation);
     }
 }
