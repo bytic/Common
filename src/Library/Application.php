@@ -68,12 +68,6 @@ abstract class Application extends NipApplication
         $translator->setDefaultLanguage($stageConfig->get('LOCALE.language_default'));
     }
 
-    public function preHandleRequest()
-    {
-        parent::preHandleRequest();
-        register_shutdown_function('__shutdown');
-    }
-
     /**
      * @param Request $request
      * @param Response $response
