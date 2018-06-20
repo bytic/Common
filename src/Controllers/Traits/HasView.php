@@ -38,7 +38,7 @@ trait HasView
      */
     public function getView()
     {
-        if ( ! $this->view) {
+        if (! $this->view) {
             $this->view = $this->initView();
         }
 
@@ -99,7 +99,7 @@ trait HasView
         $view->set('controller', $this->getName());
         $view->set('action', $this->getAction());
 
-        if (method_exists($view,'setRequest')) {
+        if (method_exists($view, 'setRequest')) {
             $view->setRequest($this->getRequest());
         }
 
