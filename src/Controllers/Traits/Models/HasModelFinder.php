@@ -127,7 +127,7 @@ trait HasModelFinder
      * @param $item
      * @return bool
      */
-    protected function checkItemResult($item)
+    public function checkItemResult($item)
     {
         $manager = $this->getModelManager();
         $class = $manager->getModel();
