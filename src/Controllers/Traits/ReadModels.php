@@ -3,7 +3,6 @@
 namespace ByTIC\Common\Controllers\Traits;
 
 use ByTIC\Common\Controllers\Traits\Models\HasModelLister;
-use Nip\Database\Query\Select as SelectQuery;
 use Nip\Records\Record;
 use Nip\Request;
 use Nip\View;
@@ -70,7 +69,7 @@ trait ReadModels
     /**
      * @param bool $parent
      */
-    protected function setClassBreadcrumbs($parent = false)
+    public function setClassBreadcrumbs($parent = false)
     {
         $this->getView()->Breadcrumbs()->addItem(
             $this->getModelManager()->getLabel('title'),
@@ -82,7 +81,7 @@ trait ReadModels
     /**
      * @param bool|Record $item
      */
-    protected function setItemBreadcrumbs($item = false)
+    public function setItemBreadcrumbs($item = false)
     {
         $item = $item ? $item : $this->item;
         $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
