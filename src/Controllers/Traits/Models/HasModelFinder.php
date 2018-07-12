@@ -19,7 +19,7 @@ trait HasModelFinder
      * @param bool $key
      * @return Record|null
      */
-    protected function getModelFromRequest($key = false)
+    public function getModelFromRequest($key = false)
     {
         $requestKey = 'model-' . $this->getModelManager()->getTable();
         if ($this->getRequest()->attributes->has($requestKey) === false) {
