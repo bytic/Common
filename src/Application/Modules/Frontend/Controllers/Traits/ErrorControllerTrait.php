@@ -28,7 +28,7 @@ trait ErrorControllerTrait
         $errorType = $this->getRequest()->get('error_type');
         switch ($errorType) {
             case 404:
-                $this->getResponse()->setStatusCode(404);
+                $this->getResponse(true)->setStatusCode(404);
                 break;
         }
     }
