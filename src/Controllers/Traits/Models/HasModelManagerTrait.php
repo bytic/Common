@@ -4,6 +4,7 @@ namespace ByTIC\Common\Controllers\Traits\Models;
 
 use Nip\Logger\Exception;
 use Nip\Records\AbstractModels\RecordManager;
+use Nip\Records\Locator\ModelLocator;
 
 /**
  * Class HasManagerTrait
@@ -19,6 +20,7 @@ trait HasModelManagerTrait
      * Set the model manager in view
      *
      * @return void
+     * @throws Exception
      */
     protected function initViewModelManager()
     {
@@ -31,6 +33,7 @@ trait HasModelManagerTrait
      * Get Records Model Manager
      *
      * @return RecordManager
+     * @throws Exception
      */
     protected function getModelManager()
     {
@@ -105,17 +108,8 @@ trait HasModelManagerTrait
     protected function generateModelName()
     {
         $name = str_replace(["async-", "modal-"], '', $this->getName());
-        $class = inflector()->classify($name);
-        $elements = explode("_", $class);
-        if ($this->isNamespaced()) {
-            $model = $this->getModelNamespace();
-            $elements[] = end($elements);
-            $model .= implode('\\', $elements);
-        } else {
-            $model = implode("_", $elements);
-        }
-
-        return $model;
+        $manager = ModelLocator::get($name);
+        return get_class($manager);
     }
 
     /**

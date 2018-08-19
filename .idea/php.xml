@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <PhpCSConfiguration standards="MySource;PEAR;PHPCS;PSR1;PSR2;Squiz;Zend" tool_path="H:/wamp/wamp64/bin/php/php5.6.25/phpcs" />
+    </phpcs_settings>
+  </component>
   <component name="PhpIncludePathManager">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/html2text/html2text" />
@@ -98,6 +103,17 @@
       <path value="$PROJECT_DIR$/vendor/bytic/profiler" />
       <path value="$PROJECT_DIR$/vendor/bytic/helpers" />
       <path value="$PROJECT_DIR$/vendor/bytic/cache" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/cache" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/profiler" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/filesystem" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/helpers" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/pipeline" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/locale" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/translation" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/application" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/locale-detector" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/mail" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
