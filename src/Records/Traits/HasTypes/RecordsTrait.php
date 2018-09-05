@@ -94,12 +94,15 @@ trait RecordsTrait
         );
         $names = [];
         foreach ($files as $file) {
-            $name = $file['path'];
-            $name = $this->generateTypeNameFromPath($name);
-            if ($this->checkValidTypeName($name)) {
-                $names[] = $name;
+            if ($file['type'] == 'file') {
+                $name = $file['path'];
+                $name = $this->generateTypeNameFromPath($name);
+                if ($this->checkValidTypeName($name)) {
+                    $names[] = $name;
+                }
             }
         }
+
         return $names;
     }
 
@@ -130,12 +133,16 @@ trait RecordsTrait
         if (in_array($name, ['Abstract', 'AbstractType', 'Generic'])) {
             return false;
         }
-        if (strpos($name, '\AbstractType') !== false) {
+        if (
+            strpos($name, '\AbstractType') !== false ||
+            strpos($name, '/AbstractType') !== false
+        ) {
             return false;
         }
         if (strpos($name, 'Trait') !== false) {
             return false;
         }
+
         return true;
     }
 
