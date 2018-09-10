@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Tests\Unit\Records\Traits\HasSmartProperties;
 
-use ByTIC\Common\Records\Properties\Definitions\Definition;
+use \ByTIC\Models\SmartProperties\Properties\Definitions\Definition;
 use ByTIC\Common\Tests\Data\Unit\Records\Traits\HasSmartProperties\Records;
 use ByTIC\Common\Tests\Data\Unit\Records\Traits\HasSmartProperties\RegistrationStatuses\FreeConfirmed;
 use ByTIC\Common\Tests\Data\Unit\Records\Traits\HasSmartProperties\RegistrationStatuses\Unpaid;

@@ -8,8 +8,8 @@ use ByTIC\Common\Records\Traits\HasStatus\RecordsTrait;
 /**
  * Class Generic
  * @package ByTIC\Common\Records\Statuses
- *
  * @method RecordsTrait getManager
+ * @deprecated Use \ByTIC\Models\SmartProperties\Properties\Statuses\Generic
  */
 abstract class Generic extends GenericProperty
 {
