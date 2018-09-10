@@ -3,9 +3,9 @@
 namespace ByTIC\Common\Records\Traits\HasTypes;
 
 use ByTIC\Common\Records\Properties\Types\Generic as GenericType;
-use function inflector;
 use League\Flysystem\Adapter\Local as LocalAdapter;
 use Nip\Logger\Exception;
+use function inflector;
 
 /**
  * Class RecordsTrait
@@ -117,8 +117,9 @@ trait RecordsTrait
     {
         $name = str_replace($this->getTypesDirectory(), '', $path);
         $name = str_replace('.php', '', $name);
-        $name = trim($name, DIRECTORY_SEPARATOR);
-        return str_replace(DIRECTORY_SEPARATOR, '\\', $name);
+        $name = trim($name, '\/');
+
+        return str_replace(['/', '\\'], '\\', $name);
     }
 
     /**
