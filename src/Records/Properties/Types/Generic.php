@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Records\Properties\Types;
 
 use ByTIC\Common\Records\Properties\AbstractProperty\Generic as GenericProperty;
+use ReflectionClass;
 
 /**
  * Class Generic
@@ -17,5 +18,21 @@ abstract class Generic extends GenericProperty
     protected function getLabelSlug()
     {
         return 'types';
+    }
+
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
+    protected function generateNameFromClass()
+    {
+        if ($this->hasManager()) {
+            $namespaceTypes = $this->getManager()->getTypeNamespace();
+            $name = (new ReflectionClass($this))->getName();
+
+            return str_replace($namespaceTypes, '', $name);
+        }
+
+        return parent::generateNameFromClass();
     }
 }

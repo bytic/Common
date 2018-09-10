@@ -2,10 +2,8 @@
 
 namespace ByTIC\Common\Records\Properties\AbstractProperty;
 
-use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
-use ByTIC\Common\Records\Traits\I18n\RecordsTrait as RecordsTranslated;
+use ByTIC\Common\Records\Properties\AbstractProperty\Traits\HasManagerTrait;
 use Nip\Records\Record as Record;
-use Nip\Records\RecordManager as Records;
 use ReflectionClass;
 
 /**
@@ -14,6 +12,8 @@ use ReflectionClass;
  */
 abstract class Generic
 {
+    use HasManagerTrait;
+
     protected $name = null;
 
     protected $label = null;
@@ -26,11 +26,6 @@ abstract class Generic
     protected $item;
 
     /**
-     * @var null|Records|RecordsTranslated
-     */
-    protected $manager;
-
-    /**
      * @var null|string
      */
     protected $field;
@@ -41,7 +36,7 @@ abstract class Generic
      */
     public function __get($name)
     {
-        $method = 'get' . ucfirst($name);
+        $method = 'get'.ucfirst($name);
         if (method_exists($this, $method)) {
             return $this->$method();
         }
@@ -55,10 +50,10 @@ abstract class Generic
      */
     public function getLabelHTML($short = false)
     {
-        return '<span class="' . $this->getLabelClasses() . '" rel="tooltip" title="' . $this->getLabel() . '"  
-        style="' . $this->getColorCSS() . '">
-            ' . $this->getIconHTML() . '
-            ' . $this->getLabel($short) . '
+        return '<span class="'.$this->getLabelClasses().'" rel="tooltip" title="'.$this->getLabel().'"  
+        style="'.$this->getColorCSS().'">
+            '.$this->getIconHTML().'
+            '.$this->getLabel($short).'
         </span>';
     }
 
@@ -69,7 +64,7 @@ abstract class Generic
      */
     public function getLabelClasses()
     {
-        return 'label label-' . $this->getColorClass();
+        return 'label label-'.$this->getColorClass();
     }
 
     /**
@@ -106,26 +101,7 @@ abstract class Generic
      */
     protected function generateLabel()
     {
-        return $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName());
-    }
-
-    /**
-     * @return Records|RecordsTranslated
-     */
-    public function getManager()
-    {
-        return $this->manager;
-    }
-
-    /**
-     * @param Records|RecordsTrait $manager
-     * @return $this
-     */
-    public function setManager($manager)
-    {
-        $this->manager = $manager;
-
-        return $this;
+        return $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName());
     }
 
     /**
@@ -155,10 +131,19 @@ abstract class Generic
      */
     public function generateName()
     {
-        $name = (new ReflectionClass($this))->getShortName();
+        $name = $this->generateNameFromClass();
         $name = inflector()->unclassify($name);
 
         return $name;
+    }
+
+    /**
+     * @return string
+     * @throws \ReflectionException
+     */
+    protected function generateNameFromClass()
+    {
+        return (new ReflectionClass($this))->getShortName();
     }
 
     /**
@@ -174,7 +159,7 @@ abstract class Generic
      */
     protected function generateLabelShort()
     {
-        return $this->getManager()->translate($this->getLabelSlug() . '.' . $this->getName() . '.short');
+        return $this->getManager()->translate($this->getLabelSlug().'.'.$this->getName().'.short');
     }
 
     /**
@@ -184,10 +169,10 @@ abstract class Generic
     {
         $css = [];
         if ($this->getBGColor()) {
-            $css[] = 'background-color: ' . $this->getBGColor();
+            $css[] = 'background-color: '.$this->getBGColor();
         }
         if ($this->getFGColor()) {
-            $css[] = 'color: ' . $this->getFGColor();
+            $css[] = 'color: '.$this->getFGColor();
         }
 
         return implode(';', $css);
@@ -217,7 +202,7 @@ abstract class Generic
         $icon = $this->getIcon();
         $return = '';
         if ($icon) {
-            $return .= '<span class="glyphicon glyphicon-white ' . $icon . '"></span> ';
+            $return .= '<span class="glyphicon glyphicon-white '.$icon.'"></span> ';
         }
 
         return $return;

@@ -42,6 +42,7 @@ trait RecordTrait
     /**
      * @param $type
      * @return mixed
+     * @throws \Nip\Logger\Exception
      */
     public function getNewType($type)
     {
@@ -62,6 +63,7 @@ trait RecordTrait
     /**
      * @param GenericType $type
      * @return bool
+     * @throws \Nip\Logger\Exception
      */
     public function updateType($type = null)
     {
@@ -75,6 +77,7 @@ trait RecordTrait
     /**
      * @param GenericType $type
      * @return bool|RecordTrait
+     * @throws \Nip\Logger\Exception
      */
     public function setType($type = null)
     {
