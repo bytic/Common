@@ -114,6 +114,7 @@
       <path value="$PROJECT_DIR$/vendor/ByTIC/application" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/locale-detector" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/mail" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/models-smart-properties" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

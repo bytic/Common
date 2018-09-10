@@ -9,39 +9,10 @@ use Nip\Records\RecordManager;
 /**
  * Class RecordTrait
  * @package ByTIC\Common\Records\Traits\HasStatus
- *
- * @property string $status
- * @method RecordManager|RecordsTrait getManager()
+ * @deprecated Use ByTIC\Models\SmartProperties\RecordsTraits\HasStatus\RecordTrait
  *
  */
 trait RecordTrait
 {
-    use \ByTIC\Common\Records\Traits\AbstractTrait\RecordTrait;
-    use HasSmartPropertiesRecord;
-
-    /**
-     * @return Generic
-     */
-    public function getStatus()
-    {
-        return $this->getSmartProperty('Status');
-    }
-
-    /**
-     * @param $status
-     * @return Generic
-     */
-    public function getNewStatus($status)
-    {
-        return $this->getNewSmartPropertyFromValue('Status', $status);
-    }
-
-    /**
-     * @param bool $status
-     * @return bool|void
-     */
-    public function updateStatus($status = false)
-    {
-        return $this->updateSmartProperty('Status', $status);
-    }
+    use \ByTIC\Models\SmartProperties\RecordsTraits\HasStatus\RecordTrait;
 }

@@ -8,6 +8,7 @@ use ReflectionClass;
 /**
  * Class Generic
  * @package ByTIC\Common\Records\Types
+ * @deprecated Use \ByTIC\Models\SmartProperties\Properties\Types\Generic
  */
 abstract class Generic extends GenericProperty
 {
