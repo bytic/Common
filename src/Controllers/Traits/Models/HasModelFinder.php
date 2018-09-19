@@ -178,6 +178,7 @@ trait HasModelFinder
      */
     protected function getRequestKeyFromString($name)
     {
+        $name = strtolower($name);
         return 'model-' . $name;
     }
 
