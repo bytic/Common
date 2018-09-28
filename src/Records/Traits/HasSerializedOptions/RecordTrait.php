@@ -45,10 +45,10 @@ trait RecordTrait
      * @param $name
      * @return mixed
      */
-    public function getOption($name)
+    public function getOption($name, $default = null)
     {
         $this->checkOptions();
-        return $this->optionsArray[$name];
+        return isset($this->optionsArray[$name]) ? $this->optionsArray[$name] : $default;
     }
 
     /**
