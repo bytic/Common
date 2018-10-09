@@ -2,28 +2,57 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use Users;
-use User;
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUsersTrait as Users;
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait as User;
+use Nip\Records\Locator\ModelLocator;
 
+/**
+ * Trait HasUser
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasUser
 {
-
-    protected $_user;
+    protected $user;
 
     /**
      * @return User
      */
     protected function _getUser()
     {
-        if (!$this->_user) {
-            $this->_user = $this->initUser();
+        if (!$this->user) {
+            $this->initUser();
         }
-        return $this->_user;
+
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     protected function initUser()
     {
-        return Users::instance()->getCurrent();
+        $this->setUser($this->generateUser());
+    }
+
+    /**
+     * @return \Nip\Records\Record|User
+     */
+    protected function generateUser()
+    {
+        return $this->getUserManager()->getCurrent();
+    }
+
+    /**
+     * @return \Nip\Records\RecordManager|Users
+     */
+    protected function getUserManager()
+    {
+        return ModelLocator::get('users');
     }
 
     protected function _checkUser()
@@ -37,5 +66,4 @@ trait HasUser
     {
         return $this->URL()->base();
     }
-
 }
