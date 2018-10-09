@@ -1,0 +1,9 @@
+diff a/.idea/codeStyles/codeStyleConfig.xml b/.idea/codeStyles/codeStyleConfig.xml	(rejected hunks)
+@@ -1,5 +1,5 @@
+ <component name="ProjectCodeStyleConfiguration">
+   <state>
+-    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Default (1)" />
++    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+   </state>
+ </component>
+\ No newline at end of file

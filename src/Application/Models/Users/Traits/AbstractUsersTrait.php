@@ -2,15 +2,13 @@
 
 namespace ByTIC\Common\Application\Models\Users\Traits;
 
-use ByTIC\Common\Application\Models\Users\Traits\Authentication\AuthenticationUsersTrait;
-use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
-
 /**
  * Class AbstractUsersTrait
  * @package ByTIC\Common\Records\Users\AbstractUser
+ *
+ * @deprecated Use ByTIC\Auth\Models\Users\Traits\AbstractUsersTrait
  */
 trait AbstractUsersTrait
 {
-    use AbstractRecordsTrait;
-    use AuthenticationUsersTrait;
+    use \ByTIC\Auth\Models\Users\Traits\AbstractUsersTrait;
 }
