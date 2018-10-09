@@ -2,22 +2,27 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
-use Users;
-use User;
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUsersTrait as Users;
+use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait as User;
 
+/**
+ * Trait HasUser
+ * @package ByTIC\Common\Controllers\Traits
+ */
 trait HasUser
 {
-    protected $_user;
+    protected $user;
 
     /**
      * @return User
      */
     protected function _getUser()
     {
-        if (!$this->_user) {
-            $this->_user = $this->initUser();
+        if ( ! $this->user) {
+            $this->user = $this->initUser();
         }
-        return $this->_user;
+
+        return $this->user;
     }
 
     protected function initUser()
@@ -27,7 +32,7 @@ trait HasUser
 
     protected function _checkUser()
     {
-        if (!$this->_getUser()->authenticated()) {
+        if ( ! $this->_getUser()->authenticated()) {
             $this->redirect($this->getNonAuthRedirectURL());
         }
     }
