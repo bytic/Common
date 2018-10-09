@@ -4,6 +4,7 @@ namespace ByTIC\Common\Controllers\Traits;
 
 use ByTIC\Common\Application\Models\Users\Traits\AbstractUsersTrait as Users;
 use ByTIC\Common\Application\Models\Users\Traits\AbstractUserTrait as User;
+use Nip\Records\Locator\ModelLocator;
 
 /**
  * Trait HasUser
@@ -18,21 +19,45 @@ trait HasUser
      */
     protected function _getUser()
     {
-        if ( ! $this->user) {
-            $this->user = $this->initUser();
+        if (!$this->user) {
+            $this->initUser();
         }
 
         return $this->user;
     }
 
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
     protected function initUser()
     {
-        return Users::instance()->getCurrent();
+        $this->setUser($this->generateUser());
+    }
+
+    /**
+     * @return \Nip\Records\Record|User
+     */
+    protected function generateUser()
+    {
+        return $this->getUserManager()->getCurrent();
+    }
+
+    /**
+     * @return \Nip\Records\RecordManager|Users
+     */
+    protected function getUserManager()
+    {
+        return ModelLocator::get('users');
     }
 
     protected function _checkUser()
     {
-        if ( ! $this->_getUser()->authenticated()) {
+        if (!$this->_getUser()->authenticated()) {
             $this->redirect($this->getNonAuthRedirectURL());
         }
     }
