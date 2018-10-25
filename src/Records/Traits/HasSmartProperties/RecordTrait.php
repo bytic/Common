@@ -108,14 +108,14 @@ trait RecordTrait
     /**
      * @param $name
      * @param $value
-     * @return bool|void
+     * @return bool
      */
     public function updateSmartProperty($name, $value)
     {
         if (!empty($value)) {
             $newStatus = $this->getNewSmartPropertyFromValue($name, $value);
-            $return = $newStatus->update();
             $this->setSmartProperty($name, $newStatus);
+            $return = $newStatus->update();
             return $return;
         }
 
