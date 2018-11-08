@@ -25,6 +25,9 @@ trait AuthenticationTrait
         return ModelLocator::get('administrators');
     }
 
+    /**
+     * @return mixed
+     */
     protected function getNonAuthRedirectURL()
     {
         return $this->Url()->get('admin.login');

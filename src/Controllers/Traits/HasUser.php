@@ -12,14 +12,14 @@ use Nip\Records\Locator\ModelLocator;
  */
 trait HasUser
 {
-    protected $user;
+    protected $user = null;
 
     /**
      * @return User
      */
     protected function _getUser()
     {
-        if (!$this->user) {
+        if ($this->user === null) {
             $this->initUser();
         }
 
