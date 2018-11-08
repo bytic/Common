@@ -4,6 +4,7 @@ namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
 use Administrator;
 use Administrators;
+use Nip\Records\Locator\ModelLocator;
 
 /**
  * Class AuthenticationTrait
@@ -20,13 +21,16 @@ trait AuthenticationTrait
     }
 
     /**
-     * @return Administrator
+     * @return \Nip\Records\RecordManager|Users
      */
-    protected function initUser()
+    protected function getUserManager()
     {
-        return Administrators::instance()->getCurrent();
+        return ModelLocator::get('administrators');
     }
 
+    /**
+     * @return mixed
+     */
     protected function getNonAuthRedirectURL()
     {
         return $this->Url()->get('admin.login');
