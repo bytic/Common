@@ -120,6 +120,11 @@
       <path value="$PROJECT_DIR$/vendor/bytic/google-analytics" />
       <path value="$PROJECT_DIR$/vendor/bytic/autoloader" />
       <path value="$PROJECT_DIR$/vendor/bytic/auth" />
+      <path value="$PROJECT_DIR$/vendor/http-interop/http-middleware" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/google-analytics" />
+      <path value="$PROJECT_DIR$/vendor/codeception/codeception" />
+      <path value="$PROJECT_DIR$/vendor/symfony/contracts" />
+      <path value="$PROJECT_DIR$/vendor/ralouphie/getallheaders" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
