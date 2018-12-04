@@ -7,6 +7,8 @@
       <sourceFolder url="file://$MODULE_DIR$/tests/fixtures" isTestSource="true" packagePrefix="ByTIC\Common\Tests\Fixtures\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/application" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/auth" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/autoloader" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/collections" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/config" />
@@ -18,15 +20,21 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/debugbar" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/dispatcher" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/filesystem" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/flash" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/form" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/framework" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/google-analytics" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/helpers" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/http" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/inflector" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/locale" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/locale-detector" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/logger" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/mail" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/medialibrary" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/models-smart-properties" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/orm" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/pipeline" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/profiler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/request-detective" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/router" />
@@ -34,13 +42,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/translation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/utility" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/view" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/auth" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/autoloader" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/locale" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/locale-detector" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/logger" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/medialibrary" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/pipeline" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
@@ -75,6 +76,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/php-token-stream" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpunit/phpunit-mock-objects" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
