@@ -8,6 +8,7 @@ use ByTIC\Common\Records\Traits\Media\Generic\RecordTrait as MediaRecordTrait;
 use Nip\Mail\Mailer;
 use Nip\Mail\Message;
 use Nip\Mail\Models\Mailable\RecordTrait as MailableRecordTrait;
+use Nip\Mail\Models\MergeTags\RecordTrait as MergeTagsRecordTrait;
 use Nip\Records\Record;
 use Nip_File_System;
 use Swift_Attachment;
@@ -41,11 +42,7 @@ trait EmailTrait
     use MediaRecordTrait;
     use FilesRecordTrait;
     use MailableRecordTrait;
-
-    /**
-     * @var array
-     */
-    protected $mergeTags = null;
+    use MergeTagsRecordTrait;
 
     public function populateFromConfig()
     {
@@ -92,32 +89,6 @@ trait EmailTrait
     }
 
     /**
-     * @return array|null
-     */
-    public function getMergeTags()
-    {
-        if ($this->mergeTags === null) {
-            $this->initMergeTags();
-        }
-
-        return $this->mergeTags;
-    }
-
-    /**
-     * @param array $mergeTags
-     */
-    public function setMergeTags($mergeTags)
-    {
-        $this->mergeTags = $mergeTags;
-    }
-
-    protected function initMergeTags()
-    {
-        $mergeTags = unserialize($this->vars);
-        $this->setMergeTags($mergeTags);
-    }
-
-    /**
      * @return string
      */
     public function getSubject()
@@ -160,7 +131,7 @@ trait EmailTrait
      */
     public function insert()
     {
-        $this->vars = serialize($this->mergeTags);
+        $this->saveMergeTagsToDbField();
         $this->created = date(DATE_DB);
 
         return parent::insert();
