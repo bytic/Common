@@ -17,15 +17,13 @@
   "require": {
     "php": ">=5.5.0",
     "bytic/framework": "^0.9",
-    "bytic/request-detective": "^1.0",
+    "bytic/mail-module": "^0.9",
     "bytic/models-smart-properties": "^0.9",
     "setasign/fpdi-tcpdf": "^2.0",
     "omnipay/common": "^2.5",
     "ext-json": "*"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.0",
-    "codeception/codeception": "2.2.*",
-    "codeception/mockery-module": "0.2.*"
+    "bytic/codeception": "^1.0"
   }
 }
