@@ -28,13 +28,14 @@
     "bytic/auth": "^1.0",
     "bytic/framework": "^1.0",
     "bytic/document-generator": "^1.0",
+    "bytic/mail-module": "^1.0",
     "bytic/models-smart-properties": "^1.0",
     "bytic/newrelic": "^1.0",
     "omnipay/common": "^2.5",
     "ext-json": "*"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.0",
+    "bytic/codeception": "^1.0",
     "phpunit/phpunit": "^6.2",
     "mockery/mockery": "^1.0",
     "symfony/dom-crawler": "^3.3",

@@ -2,13 +2,13 @@
 
 namespace ByTIC\Common\Records\Emails;
 
-use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait;
-
 /**
  * Class RecordsTrait
  * @package ByTIC\Common\Records\Emails
+ *
+ * @deprecated Use \Nip\MailModule\Models\EmailsTable\EmailsTrait
  */
 trait EmailsTrait
 {
-    use RecordsTrait;
+    use \Nip\MailModule\Models\EmailsTable\EmailsTrait;
 }
