@@ -3,6 +3,7 @@
 namespace ByTIC\Common\Library;
 
 use Nip\Application\Application as NipApplication;
+use Nip\Config\Config;
 use Nip\Http\Response\Response;
 use Nip\Request;
 
@@ -16,6 +17,24 @@ abstract class Application extends NipApplication
     {
         parent::setupConfig();
         app('config')->mergeFile(CONFIG_PATH . 'general.ini');
+
+        $config = new Config([
+            'filesystems' => [
+                'disks' => [
+                    'local' => [
+                        'driver' => 'local',
+                        'root' => UPLOADS_PATH,
+                    ],
+                    'public' => [
+                        'driver' => 'local',
+                        'root' => UPLOADS_PATH,
+                        'url' => UPLOADS_URL,
+                        'visibility' => 'public',
+                    ]
+                ]
+            ]
+        ]);
+        app('config')->merge($config);
     }
 
     public function setupAutoLoaderCache()
