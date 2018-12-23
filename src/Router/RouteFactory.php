@@ -55,10 +55,20 @@ class RouteFactory extends NipRouteFactory
      */
     public static function generateModuleDefaultErrorRoutes($collection, $class)
     {
+        self::generateModuleErrorRoutes($collection, $class, 'default');
+    }
+
+    /**
+     * @param RouteCollection $collection
+     * @param $class
+     * @param string $module
+     */
+    public static function generateModuleErrorRoutes($collection, $class, $module = 'default')
+    {
         foreach (['403', '404', '500'] as $code) {
             self::generateLiteralRoute(
                 $collection,
-                "default.error." . $code, $class, '', '/' . $code,
+                $module . ".error." . $code, $class, '', '/' . $code,
                 ["controller" => "error", "action" => "index", "error_type" => $code]
             );
         }
