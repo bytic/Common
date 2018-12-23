@@ -3,4 +3,5 @@
 tests/.env
 tests/_output/*
 
+/composer.lock
 vendor/*
