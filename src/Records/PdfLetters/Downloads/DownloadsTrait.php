@@ -2,14 +2,13 @@
 
 namespace ByTIC\Common\Records\PdfLetters\Downloads;
 
-use ByTIC\Common\Records\Traits\AbstractTrait\RecordsTrait as AbstractRecordsTrait;
-
-
 /**
  * Class DownloadsTrait
  * @package ByTIC\Common\Records\PdfLetters\Downloads
+ *
+ * @deprecated Use \ByTIC\DocumentGenerator\PdfLetters\Downloads\DownloadsTrait
  */
 trait DownloadsTrait
 {
-    use AbstractRecordsTrait;
+    use \ByTIC\DocumentGenerator\PdfLetters\Downloads\DownloadsTrait;
 }
