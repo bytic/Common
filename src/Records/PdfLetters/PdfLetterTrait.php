@@ -10,5 +10,5 @@ namespace ByTIC\Common\Records\PdfLetters;
  */
 trait PdfLetterTrait
 {
-    use \ByTIC\DocumentGenerator\PdfLetters\PdfLettersTrait;
+    use \ByTIC\DocumentGenerator\PdfLetters\PdfLetterTrait;
 }
