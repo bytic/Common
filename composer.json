@@ -22,9 +22,8 @@
     "php": "^7.0",
     "bytic/framework": "^1.0",
     "bytic/auth": "^1.0",
-    "bytic/request-detective": "^1.0",
+    "bytic/document-generator": "^1.0",
     "bytic/models-smart-properties": "^1.0",
-    "setasign/fpdi-tcpdf": "^2.0",
     "omnipay/common": "^2.5",
     "ext-json": "*"
   },

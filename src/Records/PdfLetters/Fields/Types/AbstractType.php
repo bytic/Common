@@ -9,38 +9,8 @@ use ByTIC\Common\Records\Properties\Types\Generic;
  * Class AbstractType
  * @package ByTIC\Common\Records\PdfLetters\Fields\Types
  *
- * @method FieldTrait getItem()
+ * @deprecated Use \ByTIC\DocumentGenerator\PdfLetters\Fields\Types\AbstractType;
  */
-abstract class AbstractType extends Generic
+abstract class AbstractType extends \ByTIC\DocumentGenerator\PdfLetters\Fields\Types\AbstractType
 {
-
-    /**
-     * @param $model
-     * @return null
-     */
-    public function getValue($model)
-    {
-        return null;
-    }
-
-    /**
-     * @return string
-     */
-    public function providesTags()
-    {
-        return $this->getName();
-    }
-
-    /**
-     * @return string
-     */
-    abstract public function getCategory();
-
-    /**
-     * @return mixed
-     */
-    protected function getFieldName()
-    {
-        return $this->getItem()->field;
-    }
 }
