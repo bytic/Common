@@ -24,6 +24,7 @@
     "bytic/auth": "^1.0",
     "bytic/document-generator": "^1.0",
     "bytic/models-smart-properties": "^1.0",
+    "bytic/newrelic": "^1.0",
     "omnipay/common": "^2.5",
     "ext-json": "*"
   },

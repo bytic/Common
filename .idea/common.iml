@@ -32,11 +32,13 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/mail" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/medialibrary" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/models-smart-properties" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/newrelic" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/orm" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/pipeline" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/profiler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/request-detective" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/router" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/session" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/staging" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/translation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ByTIC/utility" />
@@ -102,7 +104,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dom-crawler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/event-dispatcher" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/filesystem" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/finder" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-foundation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-kernel" />
