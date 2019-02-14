@@ -14,13 +14,19 @@
       "ByTIC\\Common\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "ByTIC\\Common\\Tests\\": "tests/src",
+      "ByTIC\\Common\\Tests\\Fixtures\\": "tests/fixtures"
+    }
+  },
   "require": {
     "php": ">=5.5.0",
     "bytic/framework": "^0.9",
     "bytic/mail-module": "^0.9",
     "bytic/document-generator": "^0.9",
     "bytic/models-smart-properties": "^0.9",
-    "setasign/fpdi-tcpdf": "^2.0",
+    "bytic/newrelic": "^1.0",
     "omnipay/common": "^2.5",
     "ext-json": "*"
   },
