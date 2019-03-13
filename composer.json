@@ -9,8 +9,13 @@
   ],
   "autoload": {
     "psr-4": {
+      "ByTIC\\Common\\Tests\\Page\\": "tests/_support/Page",
+      "ByTIC\\Common\\Tests\\Helper\\": "tests/_support/Helper",
       "ByTIC\\Common\\": "src/"
-    }
+    },
+    "classmap": [
+      "legacy"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -20,8 +25,8 @@
   },
   "require": {
     "php": "^7.0",
-    "bytic/framework": "^1.0",
     "bytic/auth": "^1.0",
+    "bytic/framework": "^1.0",
     "bytic/document-generator": "^1.0",
     "bytic/models-smart-properties": "^1.0",
     "bytic/newrelic": "^1.0",

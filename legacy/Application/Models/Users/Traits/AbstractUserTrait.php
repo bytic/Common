@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Application\Models\Users\Traits;
 
-use ByTIC\Common\Records\Traits\HasForms\RecordTrait as HasForms;
 
 /**
  * Class AbstractUserTrait
@@ -13,7 +12,4 @@ use ByTIC\Common\Records\Traits\HasForms\RecordTrait as HasForms;
 trait AbstractUserTrait
 {
     use \ByTIC\Auth\Models\Users\Traits\AbstractUserTrait;
-    use HasForms;
-
-    protected $logoTypes = ['listing'];
 }

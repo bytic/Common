@@ -6,7 +6,7 @@ namespace ByTIC\Common\Application\Models\Users\Traits\Authentication;
  * Class AuthenticationUsersTrait
  * @package ByTIC\Common\Records\Users\Authentication
  *
- * @deprecated Use ByTIC\Auth\Models\Users\Traits\Authentication\AuthenticationUsersTrait
+ * @deprecated use \ByTIC\Auth\Models\Users\Traits\Authentication\AuthenticationUsersTrait;
  */
 trait AuthenticationUsersTrait
 {
