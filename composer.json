@@ -12,7 +12,10 @@
       "ByTIC\\Common\\Tests\\Page\\": "tests/_support/Page",
       "ByTIC\\Common\\Tests\\Helper\\": "tests/_support/Helper",
       "ByTIC\\Common\\": "src/"
-    }
+    },
+    "classmap": [
+      "legacy"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -22,6 +25,7 @@
   },
   "require": {
     "php": ">=5.5.0",
+    "bytic/auth": "^0.9",
     "bytic/framework": "^0.9",
     "bytic/mail-module": "^0.9",
     "bytic/document-generator": "^0.9",
