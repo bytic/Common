@@ -31,7 +31,7 @@ class Record extends NipRecord
     /**
      * @inheritdoc
      */
-    public function __call($name, $arguments = [])
+    public function __call($name, $arguments)
     {
         /** @noinspection PhpAssignmentInConditionInspection */
         if ($return = $this->isCallUrl($name, $arguments)) {
