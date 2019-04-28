@@ -7,6 +7,8 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Gateway as Abstract
 /**
  * Class Gateway
  * @package ByTIC\Common\Payments\Gateways\Providers\Romcard
+ *
+ * @deprecated use \ByTIC\Payments
  */
 class Gateway extends AbstractGateway
 {

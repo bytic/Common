@@ -7,6 +7,7 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\RedirectForm as Abs
 /**
  * Class RedirectForm
  * @package ByTIC\Common\Payments\Gateways\Providers\Payu
+ * @deprecated use \ByTIC\Payments
  */
 class RedirectForm extends AbstractRedirectForm
 {
