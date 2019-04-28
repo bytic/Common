@@ -2,6 +2,12 @@
 
 namespace ByTIC\Common\Payments\Gateways\Providers\Romcard;
 
+/**
+ * Class Romcard
+ * @package ByTIC\Common\Payments\Gateways\Providers\Romcard
+ *
+ * @deprecated use \ByTIC\Payments
+ */
 class Romcard
 {
     protected $paymentUrl = 'https://www.secure11gw.ro/portal/cgi-bin/';

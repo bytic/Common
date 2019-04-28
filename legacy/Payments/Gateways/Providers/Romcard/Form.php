@@ -6,6 +6,7 @@ use ByTIC\Common\Payments\Gateways\Providers\AbstractGateway\Form as AbstractFor
 
 /**
  * Class Form
+ * @deprecated use \ByTIC\Payments
  */
 class Form extends AbstractForm
 {
