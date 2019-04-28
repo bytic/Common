@@ -2,7 +2,8 @@
 
 namespace ByTIC\Common\Library;
 
-use Nip\Application as NipApplication;
+use Nip\Application\Application as NipApplication;
+use Nip\Config\Config;
 use Nip\Http\Response\Response;
 use Nip\Request;
 
@@ -12,7 +13,6 @@ use Nip\Request;
  */
 abstract class Application extends NipApplication
 {
-
     /**
      * @inheritdoc
      */

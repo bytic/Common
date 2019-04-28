@@ -175,7 +175,7 @@ trait RecordTrait
      */
     public function findImages($type = "default")
     {
-        if (!$this->_imageCache[$type]) {
+        if (!isset($this->_imageCache[$type])) {
             $return = [];
 
             $image = $this->getNewImage($type);

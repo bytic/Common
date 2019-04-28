@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Payments\Models\Methods\Types;
 
-use ByTIC\Common\Records\Properties\Types\Generic;
+use \ByTIC\Models\SmartProperties\Properties\Types\Generic;
 
 /**
  * Class AbstractType

@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Controllers\Traits;
 
+use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
 use Nip\Request;
 use Nip_Record_Paginator as RecordPaginator;
 
@@ -13,7 +14,7 @@ use Nip_Record_Paginator as RecordPaginator;
  */
 trait HasRecordPaginator
 {
-
+    use AbstractControllerTrait;
     /**
      * Record Paginator Object
      *
@@ -31,6 +32,7 @@ trait HasRecordPaginator
         if ($this->paginator === null) {
             $this->initRecordPaginator();
         }
+
         return $this->paginator;
     }
 

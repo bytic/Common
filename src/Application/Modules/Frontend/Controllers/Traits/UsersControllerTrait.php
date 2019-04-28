@@ -291,8 +291,8 @@ trait UsersControllerTrait
 
         $this->_checkAuth();
 
-        $this->getView()->StyleSheets()->add('users');
-        $this->getView()->StyleSheets()->add('homepage');
+        $this->getView()->Stylesheets()->add('users');
+        $this->getView()->Stylesheets()->add('homepage');
     }
 
     protected function _checkAuth()

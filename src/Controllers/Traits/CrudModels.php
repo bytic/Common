@@ -93,7 +93,7 @@ trait CrudModels
             ->addItem($this->getModelManager()->getLabel('add'));
 
         $this->getView()->TinyMCE()->setEnabled();
-        $this->getView()->section .= ".add";
+        $this->getView()->append('section', '.add');
     }
 
     /**
@@ -101,7 +101,7 @@ trait CrudModels
      */
     public function addNewModel()
     {
-        $item = $this->item ? $this->item : $this->newModel();
+        $item = isset($this->item) ? $this->item : $this->newModel();
 
         return $item;
     }
@@ -120,11 +120,11 @@ trait CrudModels
      */
     public function addGetForm($item)
     {
-        if ($this->form) {
+        if (isset($this->form)) {
             $form = $this->form;
         } else {
             $form = $this->getModelForm($item);
-            $form->setAction($this->getModelManager()->getAddURL($_GET));
+            $form->setAction($this->getModelManager()->compileURL('add', $_GET));
         }
 
         return $form;
