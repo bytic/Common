@@ -91,7 +91,6 @@ class ServerCompletePurchaseResponse extends AbstractResponse
      */
     public function getContent()
     {
-        header('Content-type: application/xml');
         $content = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
         if ($this->getCodeType() == 0) {
