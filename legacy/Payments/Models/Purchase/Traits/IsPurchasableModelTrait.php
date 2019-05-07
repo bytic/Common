@@ -11,8 +11,9 @@ use ByTIC\Common\Records\Records;
 use Exception;
 
 /**
- * Class MethodTrait
+ * Class IsPurchasableModelTrait
  * @package ByTIC\Common\Payments\Traits
+ * @deprecated use \ByTIC\Payments\Models\Purchase\Traits\IsPurchasableModelTrait
  *
  * @property int $id
  * @property string $status_notes

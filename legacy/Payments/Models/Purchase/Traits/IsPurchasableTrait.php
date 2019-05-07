@@ -5,6 +5,7 @@ namespace ByTIC\Common\Payments\Models\Purchase\Traits;
 /**
  * Class MethodTrait
  * @package ByTIC\Common\Payments\Traits
+ * @deprecated Use \ByTIC\Payments\Models\Purchase\Traits
  */
 trait IsPurchasableTrait
 {

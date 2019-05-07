@@ -37,4 +37,12 @@ class CompletePurchaseRequest extends AbstractRequest
     {
         return $this->hasGet('orderId');
     }
+
+    /**
+     * @return mixed
+     */
+    public function isValidNotification()
+    {
+        return $this->hasGet('orderId');
+    }
 }

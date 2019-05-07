@@ -165,4 +165,12 @@ class ServerCompletePurchaseRequest extends AbstractRequest
     {
         return $this->hasPOST('env_key', 'data');
     }
+
+    /**
+     * @return mixed
+     */
+    public function isValidNotification()
+    {
+        return $this->hasPOST('env_key', 'data');
+    }
 }
