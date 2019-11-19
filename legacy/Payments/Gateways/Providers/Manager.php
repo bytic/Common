@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 /**
  * Class Payment_Gateways
+ * @deprecated use ByTIC\Payments\Gateways\Manager;
  */
 class Manager
 {
