@@ -52,6 +52,7 @@ trait Images
         $item = $this->checkItem();
 
         if ($item->setDefaultImage($_POST)) {
+            $item->update();
             $response['type'] = 'success';
         }
     }
