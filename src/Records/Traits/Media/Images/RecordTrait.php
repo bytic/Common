@@ -312,6 +312,15 @@ trait RecordTrait
      */
     public function setDefaultImage($request)
     {
+        if (empty($request)) {
+            return;
+        }
+        if (is_string($request)) {
+            $request = ['image' => $request];
+        }
+        if (!isset($request['image'])) {
+            return false;
+        }
         $image = $request['image'];
         $files = Nip_File_System::instance()->scanDirectory($this->getImageBasePath(), true);
 
@@ -319,8 +328,7 @@ trait RecordTrait
             return false;
         }
 
-        $this->default_image = $image;
-        $this->update();
+        $this->setDataValue('default_image', $image);
 
         return true;
     }

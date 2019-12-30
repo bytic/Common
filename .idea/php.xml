@@ -148,12 +148,28 @@
       <path value="$PROJECT_DIR$/vendor/codeception/codeception" />
       <path value="$PROJECT_DIR$/vendor/codeception/stub" />
       <path value="$PROJECT_DIR$/vendor/codeception/mockery-module" />
+      <path value="$PROJECT_DIR$/vendor/kylekatarnls/update-helper" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/persistent-data" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/mvc" />
+      <path value="$PROJECT_DIR$/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/money" />
+      <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-twispay" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-euplatesc" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-mobilpay" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-common" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-romcard" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-payu" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-librapay" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/payments" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-util" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php56" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />
   <component name="PhpUnit">
     <phpunit_settings>
-      <PhpUnitSettings load_method="CUSTOM_LOADER" bootstrap_file_path="$PROJECT_DIR$/tests/bootstrap.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" phpunit_phar_path="" use_bootstrap_file="true" use_configuration_file="true" />
+      <PhpUnitSettings bootstrap_file_path="$PROJECT_DIR$/tests/bootstrap.php" configuration_file_path="$PROJECT_DIR$/phpunit.xml.dist" custom_loader_path="$PROJECT_DIR$/vendor/autoload.php" phpunit_phar_path="" use_bootstrap_file="true" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>
