@@ -102,23 +102,23 @@ abstract class Application extends NipApplication
         require_once(ROOT_PATH . 'config.php');
     }
 
-    public function initLanguages()
-    {
-        $stageConfig = $this->getStaging()->getStage()->getConfig();
-        $availableLanguages = explode(',', $stageConfig->get('LOCALE.languages'));
-        $availableLanguages = is_array($availableLanguages) ? $availableLanguages : ['ro'];
-
-        $translator = $this->getTranslator();
-
-        $backend = new \Nip\I18n\Translator\Backend\File();
-        $translator->setBackend($backend);
-
-        foreach ($availableLanguages as $language) {
-            $backend->addLanguage($language, LANGUAGES_PATH . $language . DS);
-        }
-
-        $translator->setDefaultLanguage($stageConfig->get('LOCALE.language_default'));
-    }
+//    public function initLanguages()
+//    {
+//        $stageConfig = $this->getStaging()->getStage()->getConfig();
+//        $availableLanguages = explode(',', $stageConfig->get('LOCALE.languages'));
+//        $availableLanguages = is_array($availableLanguages) ? $availableLanguages : ['ro'];
+//
+//        $translator = $this->getTranslator();
+//
+//        $backend = new \Nip\I18n\Translator\Backend\File();
+//        $translator->setBackend($backend);
+//
+//        foreach ($availableLanguages as $language) {
+//            $backend->addLanguage($language, LANGUAGES_PATH . $language . DS);
+//        }
+//
+//        $translator->setDefaultLanguage($stageConfig->get('LOCALE.language_default'));
+//    }
 
     /**
      * @param Request $request
