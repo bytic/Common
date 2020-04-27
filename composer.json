@@ -24,23 +24,19 @@
     }
   },
   "require": {
-    "php": "^7.0",
+    "php": ">=7.2",
+    "ext-json": "*",
     "bytic/auth": "^1.0",
     "bytic/framework": "^1.0",
     "bytic/mail-module": "^1.0",
     "bytic/document-generator": "^1.0",
     "bytic/models-smart-properties": "^1.0",
     "bytic/newrelic": "^1.0",
-    "bytic/money": "^1.0",
-    "ext-json": "*"
+    "bytic/money": "^1.0"
   },
   "require-dev": {
     "bytic/codeception": "^1.0",
-    "phpunit/phpunit": "^6.2",
-    "mockery/mockery": "^1.0",
-    "symfony/dom-crawler": "^3.3",
-    "symfony/css-selector": "^3.3",
-    "bytic/medialibrary": "^0.9",
-    "bytic/payments": "^1.0"
+    "bytic/payments": "^0.9|^1.0",
+    "bytic/document-generator": "^0.9|^1.0"
   }
 }
