@@ -26,10 +26,12 @@
   "require": {
     "php": ">=7.2",
     "ext-json": "*",
-    "bytic/auth": "^1.0",
     "bytic/framework": "^1.0",
+    "bytic/auth": "^1.0",
+    "bytic/assets": "^1.0",
+    "bytic/http-error-pages": "^1.0",
     "bytic/mail-module": "^1.0",
-    "bytic/document-generator": "^1.0",
+    "bytic/migrations": "^0.10",
     "bytic/models-smart-properties": "^1.0",
     "bytic/newrelic": "^1.0",
     "bytic/money": "^1.0"
