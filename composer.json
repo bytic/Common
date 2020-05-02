@@ -37,7 +37,7 @@
     "bytic/money": "^1.0"
   },
   "require-dev": {
-    "bytic/codeception": "^1.0",
+    "bytic/codeception": "^1.0|^4.0",
     "bytic/payments": "^0.9|^1.0",
     "bytic/document-generator": "^0.9|^1.0"
   }
