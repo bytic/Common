@@ -2,6 +2,7 @@
 
 namespace ByTIC\Common\Library;
 
+use ByTIC\Common\Library\Application\HasAutoloaderTrait;
 use Nip\Application\Application as NipApplication;
 use Nip\Config\Config;
 use Nip\Http\Response\Response;
@@ -13,10 +14,12 @@ use Nip\Request;
  */
 abstract class Application extends NipApplication
 {
+    use HasAutoloaderTrait;
+
     public function setupConfig()
     {
         parent::setupConfig();
-        app('config')->mergeFile(CONFIG_PATH . 'general.ini');
+        app('config')->mergeFile(CONFIG_PATH.'general.ini');
         $this->mergeDefaultFilesystem();
     }
 
@@ -49,47 +52,6 @@ abstract class Application extends NipApplication
         app('config')->merge($config);
     }
 
-    public function setupAutoLoaderCache()
-    {
-        $this->getAutoLoader()->setCachePath(CACHE_PATH . "autoloader" . DS);
-    }
-
-    public function setupAutoLoaderPaths()
-    {
-        $paths = $this->getAutoLoaderClassmapPaths();
-        foreach ($paths as $path) {
-            $this->getAutoLoader()->addDirectory($path);
-        }
-
-        $namespaces = $this->getAutoLoaderNamespaces();
-        foreach ($namespaces as $namespace => $path) {
-            $this->getAutoLoader()->addNamespace($namespace, $path);
-        }
-
-        ini_set("include_path", ini_get("include_path") . PATH_SEPARATOR . LIBRARY_PATH);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAutoLoaderClassmapPaths()
-    {
-        return [APPLICATION_PATH, LIBRARY_PATH];
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAutoLoaderNamespaces()
-    {
-        return [
-            $this->getRootNamespace() . 'Models\\' => APPLICATION_PATH . 'models',
-            $this->getRootNamespace() . 'Modules\\' => MODULES_PATH,
-            $this->getRootNamespace() . 'Admin\\' => MODULES_PATH . 'admin',
-            $this->getRootNamespace() . 'Frontend\\' => MODULES_PATH . 'default',
-            $this->getRootNamespace() . 'Organizers\\' => MODULES_PATH . 'organizers',
-        ];
-    }
 
     public function setupURLConstants()
     {
@@ -99,26 +61,18 @@ abstract class Application extends NipApplication
 
     protected function setupURLConstantsFromFile()
     {
-        require_once(ROOT_PATH . 'config.php');
+        require_once(ROOT_PATH.'config.php');
     }
 
-//    public function initLanguages()
-//    {
-//        $stageConfig = $this->getStaging()->getStage()->getConfig();
-//        $availableLanguages = explode(',', $stageConfig->get('LOCALE.languages'));
-//        $availableLanguages = is_array($availableLanguages) ? $availableLanguages : ['ro'];
-//
-//        $translator = $this->getTranslator();
-//
-//        $backend = new \Nip\I18n\Translator\Backend\File();
-//        $translator->setBackend($backend);
-//
-//        foreach ($availableLanguages as $language) {
-//            $backend->addLanguage($language, LANGUAGES_PATH . $language . DS);
-//        }
-//
-//        $translator->setDefaultLanguage($stageConfig->get('LOCALE.language_default'));
-//    }
+    /**
+     * @return array
+     */
+    public function getGenericProviders()
+    {
+        $config = require dirname(dirname(__DIR__)).'/config/app.php';
+
+        return $config['providers'];
+    }
 
     /**
      * @param Request $request
