@@ -24,6 +24,16 @@ abstract class Application extends NipApplication
     }
 
     /**
+     * @return array
+     */
+    public function getGenericProviders()
+    {
+        $config = require dirname(dirname(__DIR__)).'/config/app.php';
+
+        return $config['providers'];
+    }
+
+    /**
      * @param Request $request
      * @param Response $response
      * @return Response
