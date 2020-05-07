@@ -4,6 +4,7 @@ return [
     'providers' => [
         Nip\AutoLoader\AutoLoaderServiceProvider::class,
         Nip\Inflector\InflectorServiceProvider::class,
+        Nip\Config\ConfigServiceProvider::class,
         Nip\Logger\LoggerServiceProvider::class,
         Nip\Debug\DebugServiceProvider::class,
         Nip\Locale\LocaleServiceProvider::class,
