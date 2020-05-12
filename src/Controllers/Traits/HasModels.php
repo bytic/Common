@@ -48,18 +48,4 @@ trait HasModels
      * @return string
      */
     abstract public function getClassName();
-
-    protected function dispatchAccessDeniedResponse()
-    {
-        //        ->getTrace()->add('Acces denied to item');
-        $this->getDispatcher()->forward("index", "access");
-    }
-
-    protected function dispatchNotFoundResponse()
-    {
-        //        ->getTrace()->add(
-//            'No valid item [manager:'.get_class($this->getModelManager()).']'
-//        );
-        $this->getDispatcher()->forward("index", "error");
-    }
 }
