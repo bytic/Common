@@ -156,7 +156,6 @@ trait CrudModels
         $this->getView()->set('form', $form);
         $this->getView()->set('title', $record->getName());
 
-        $this->getView()->append('title', $record->getName());
         $this->getView()->append('section', ".view");
         $this->getView()->TinyMCE()->setEnabled();
 
@@ -256,7 +255,6 @@ trait CrudModels
         $this->getView()->set('form', $form);
         $this->getView()->set('title', $record->getName());
 
-        $this->getView()->append('title', $record->getName());
         $this->getView()->append('section', ".edit");
         $this->getView()->TinyMCE()->setEnabled();
 
