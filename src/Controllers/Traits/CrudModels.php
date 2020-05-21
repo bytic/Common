@@ -192,7 +192,7 @@ trait CrudModels
     protected function viewRedirect($item = null)
     {
         if ($item == null) {
-            $item = $this->item;
+            $item = $this->getModelFromRequest();
             trigger_error('$item needed in viewRedirect', E_USER_DEPRECATED);
         }
 
@@ -392,79 +392,6 @@ trait CrudModels
     protected function newIndexQuery()
     {
         return $this->getModelManager()->paramsToQuery();
-    }
-
-    /**
-     * @return Record|HasFilesRecordTrait
-     */
-    protected function initExistingItem()
-    {
-        if (!isset($this->item)) {
-            $this->item = $this->getModelFromRequest();
-        }
-
-        return $this->item;
-    }
-
-    /**
-     * @param Form $form
-     */
-    protected function processForm($form)
-    {
-        if ($form->execute()) {
-            $this->viewRedirect($form->getModel());
-        }
-    }
-
-    /**
-     * @param Record|boolean $item
-     */
-    protected function viewRedirect($item = null)
-    {
-        if ($item == null) {
-            $item = $this->getModelFromRequest();
-            trigger_error('$item needed in viewRedirect', E_USER_DEPRECATED);
-        }
-
-        $url = $this->getAfterUrl('after-edit', $item->getURL());
-        $flashName = $this->getAfterFlashName("after-edit", $this->getModelManager()->getController());
-        $this->flashRedirect($this->getModelManager()->getMessage('update'), $url, 'success', $flashName);
-    }
-
-    /**
-     * @param string $key
-     * @param string|null $default
-     * @return string
-     */
-    protected function getAfterUrl($key, $default = null)
-    {
-        return isset($this->_urls[$key]) && $this->_urls[$key] ? $this->_urls[$key] : $default;
-    }
-
-    /**
-     * @param string $key
-     * @param string|null $default
-     * @return string
-     */
-    protected function getAfterFlashName($key, $default = null)
-    {
-        return isset($this->_flash[$key]) && $this->_flash[$key] ? $this->_flash[$key] : $default;
-    }
-
-    /**
-     * @param bool|Record $item
-     */
-    protected function setItemBreadcrumbs($item = false)
-    {
-        $item = $item ? $item : $this->getModelFromRequest();
-        $this->getView()->Breadcrumbs()->addItem($item->getName(), $item->getURL());
-
-        $this->getView()->Meta()->prependTitle($item->getName());
-    }
-
-    protected function postView()
-    {
-        $this->setItemBreadcrumbs();
     }
 
     /**
