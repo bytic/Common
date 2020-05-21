@@ -42,7 +42,6 @@ trait CrudModels
             $items = $this->items;
         } else {
             $items = $this->getModelManager()->findByQuery($query);
-            $paginator->count();
         }
 
         $this->getView()->set('items', $items);
@@ -130,6 +129,7 @@ trait CrudModels
         $this->getView()->set('form', $form);
         $this->getView()->set('title', $record->getName());
 
+        $this->getView()->append('title', $record->getName());
         $this->getView()->append('section', ".view");
         $this->getView()->TinyMCE()->setEnabled();
 
@@ -151,6 +151,7 @@ trait CrudModels
         $this->getView()->set('form', $form);
         $this->getView()->set('title', $record->getName());
 
+        $this->getView()->append('title', $record->getName());
         $this->getView()->append('section', ".edit");
         $this->getView()->TinyMCE()->setEnabled();
 
@@ -181,9 +182,10 @@ trait CrudModels
         $record = $this->initExistingItem();
 
         $record->activate();
+
         $this->flashRedirect(
             $this->getModelManager()->getMessage('activate'),
-            $this->item->getURL()
+            $record->getURL()
         );
     }
 
@@ -192,9 +194,10 @@ trait CrudModels
         $record = $this->initExistingItem();
 
         $record->deactivate();
+
         $this->flashRedirect(
             $this->getModelManager()->getMessage('deactivate'),
-            $this->item->getURL()
+            $record->getURL()
         );
     }
 
@@ -289,7 +292,7 @@ trait CrudModels
     protected function viewRedirect($item = null)
     {
         if ($item == null) {
-            $item = $this->item;
+            $item = $this->getModelFromRequest();
             trigger_error('$item needed in viewRedirect', E_USER_DEPRECATED);
         }
 
