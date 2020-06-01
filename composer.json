@@ -33,8 +33,9 @@
     "bytic/mail-module": "^0.9|^1.0",
     "bytic/migrations": "^0.10",
     "bytic/models-smart-properties": "^0.9|^1.0",
+    "bytic/money": "^1.0",
     "bytic/newrelic": "^1.0",
-    "bytic/money": "^1.0"
+    "bytic/navigation": "^1.0"
   },
   "require-dev": {
     "bytic/codeception": "^1.0|^4.0",
