@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
-use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
+use Nip\Controllers\Traits\AbstractControllerTrait;
 use ByTIC\Common\Controllers\Traits\HasUser;
 
 /**

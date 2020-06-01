@@ -3,6 +3,8 @@
 namespace ByTIC\Common\Application\Controllers\Traits;
 
 use ByTIC\Common\Controllers\Traits\HasForms;
+use ByTIC\Navigation\Breadcrumbs\Controllers\HasBreadcrumbsTrait;
+use Nip\Config\Config;
 use Nip\Html\Head\Entities\Favicon;
 
 /**
@@ -11,8 +13,9 @@ use Nip\Html\Head\Entities\Favicon;
  */
 trait PageControllerTrait
 {
+    use \Nip\Controllers\Traits\AbstractControllerTrait;
+    use HasBreadcrumbsTrait;
     use HasForms;
-    use AbstractControllerTrait;
 
     /**
      * @inheritdoc
@@ -26,25 +29,18 @@ trait PageControllerTrait
     /**
      * @inheritdoc
      */
-    protected function setBreadcrumbs()
-    {
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function afterAction()
     {
         $this->setMeta();
         $this->prepareResponseHeaders();
         $this->afterActionViewVariables();
 
-        $content = $this->getView()->load(
-            '/layouts/'.$this->getLayout(),
-            [],
-            true
-        );
-        $this->getResponse()->setContent($content);
+//        $content = $this->getView()->load(
+//            '/layouts/'.$this->getLayout(),
+//            [],
+//            true
+//        );
+//        $this->getResponse()->setContent($content);
 
         parent::afterAction();
     }
@@ -59,10 +55,13 @@ trait PageControllerTrait
 //        $tagline = Options::instance()->website_tagline->value;
 //        $this->getView()->Meta()->setTitleBase('Galantom'.(!empty($tagline) ? ' - '.$tagline : ''));
 
-        $this->getView()->Meta()->populateFromConfig($this->getConfig()->get('META'));
+        $metaConfig = $this->getConfig()->get('META');
+        if ($metaConfig instanceof Config) {
+            $this->getView()->Meta()->populateFromConfig($metaConfig);
+        }
 
         $favicon = new Favicon();
-        $favicon->setBaseDir(IMAGES_URL.'/favicon');
+        $favicon->setBaseDir(IMAGES_URL . '/favicon');
         $favicon->addAll();
         $this->getView()->set('favicon', $favicon);
     }
@@ -74,16 +73,7 @@ trait PageControllerTrait
      */
     protected function prepareResponseHeaders()
     {
-        $this->getResponse(true)->headers->set('Content-Type', 'text/html');
-        $this->getResponse()->setCharset('utf-8');
-
-
-        // FIX FOR IE SESSION COOKIE
-        // CAO IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT
-        // ALL ADM DEV PSAi COM OUR OTRo STP IND ONL
-//        header('P3P: CP="NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM"');
-
-        $this->getResponse()->headers->set('P3P', 'CP="CAO PSA OUR"');
+        $this->payload()->addP3PHeader('CP="CAO PSA OUR"');
     }
 
     protected function afterActionViewVariables()
@@ -109,8 +99,4 @@ trait PageControllerTrait
      * @return string
      */
     abstract public function getLayout();
-
-    protected function setClassBreadcrumbs()
-    {
-    }
 }
