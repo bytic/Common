@@ -120,6 +120,6 @@ trait HasModelManagerTrait
      */
     protected function newModelManagerInstance($managerName)
     {
-        return call_user_func([$managerName, "instance"]);
+        return ModelLocator::get($managerName);
     }
 }
