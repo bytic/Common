@@ -4,7 +4,9 @@ return [
     'providers' => [
         Nip\AutoLoader\AutoLoaderServiceProvider::class,
         Nip\Inflector\InflectorServiceProvider::class,
+        Nip\Cache\CacheServiceProvider::class,
         Nip\Config\ConfigServiceProvider::class,
+        ByTIC\Assets\AssetsServiceProvider::class,
         Nip\Logger\LoggerServiceProvider::class,
         Nip\Debug\DebugServiceProvider::class,
         Nip\Locale\LocaleServiceProvider::class,
@@ -18,6 +20,5 @@ return [
         Nip\I18n\TranslatorServiceProvider::class,
         Nip\FlashData\FlashServiceProvider::class,
         Nip\Filesystem\FilesystemServiceProvider::class,
-        Nip\Cache\CacheServiceProvider::class
     ]
 ];
