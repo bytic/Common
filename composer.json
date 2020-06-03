@@ -33,7 +33,7 @@
     "bytic/http-error-pages": "^1.0",
     "bytic/mail-module": "^0.9|^1.0",
     "bytic/media-library-module": "^0.9|^1.0",
-    "bytic/migrations": "^0.10",
+    "bytic/migrations": "^0.12",
     "bytic/models-smart-properties": "^0.9|^1.0",
     "bytic/money": "^1.0",
     "bytic/newrelic": "^1.0",
