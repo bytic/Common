@@ -29,6 +29,7 @@
     "bytic/framework": "^0.9",
     "bytic/auth": "^0.9|^1.0",
     "bytic/assets": "^1.0",
+    "bytic/debugbar": "^0.9|^1.0",
     "bytic/event-dispatcher": "^0.9|^1.0",
     "bytic/http-error-pages": "^1.0",
     "bytic/mail-module": "^0.9|^1.0",

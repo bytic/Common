@@ -9,6 +9,7 @@ return [
         ByTIC\Assets\AssetsServiceProvider::class,
         Nip\Logger\LoggerServiceProvider::class,
         Nip\Debug\DebugServiceProvider::class,
+        Nip\DebugBar\DebugBarServiceProvider::class,
         Nip\Locale\LocaleServiceProvider::class,
         Nip\Mail\MailServiceProvider::class,
         Nip\Mvc\MvcServiceProvider::class,
