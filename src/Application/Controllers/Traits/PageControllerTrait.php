@@ -22,7 +22,6 @@ trait PageControllerTrait
      */
     protected function beforeAction()
     {
-        parent::beforeAction();
         $this->setBreadcrumbs();
     }
 
@@ -41,8 +40,6 @@ trait PageControllerTrait
 //            true
 //        );
 //        $this->getResponse()->setContent($content);
-
-        parent::afterAction();
     }
 
     /**

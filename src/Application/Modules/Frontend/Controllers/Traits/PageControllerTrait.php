@@ -2,7 +2,11 @@
 
 namespace ByTIC\Common\Application\Modules\Frontend\Controllers\Traits;
 
-use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait;
+use ByTIC\Common\Application\Controllers\Traits\PageControllerTrait as BasePageControllerTrait;
+use ByTIC\Common\Controllers\Traits\HasModels;
+use ByTIC\Common\Controllers\Traits\HasUser;
+use ByTIC\Common\Controllers\Traits\PageTrait;
+use Nip\Controllers\Traits\HasViewTrait;
 use function Nip\url;
 
 /**
@@ -12,18 +16,20 @@ use function Nip\url;
  */
 trait PageControllerTrait
 {
-    use AbstractControllerTrait;
+    use BasePageControllerTrait;
+    use HasUser;
+    use HasModels;
+    use PageTrait;
+    use HasViewTrait;
 
     protected function beforeAction()
     {
-        parent::beforeAction();
-
         $this->getView()->set(
             'messages',
             [
                 "error" => flash_get("error"),
                 "success" => flash_get("success"),
-                "warning" => flash_get("warning")
+                "warning" => flash_get("warning"),
             ]
         );
 
@@ -38,13 +44,5 @@ trait PageControllerTrait
     protected function setBreadcrumbs()
     {
         $this->getView()->Breadcrumbs()->addItem("Home", url()->to('/'));
-    }
-
-    protected function _checkUser()
-    {
-        if (!$this->_getUser()->authenticated()) {
-            $this->loginRedirect();
-        }
-        return $this;
     }
 }
