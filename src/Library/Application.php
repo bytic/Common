@@ -20,36 +20,6 @@ abstract class Application extends NipApplication
     {
         parent::setupConfig();
         app('config')->mergeFile(CONFIG_PATH.'general.ini');
-        $this->mergeDefaultFilesystem();
-    }
-
-    protected function mergeDefaultFilesystem()
-    {
-        $config = app('config');
-
-        if ($config->has('filesystem')) {
-            return;
-        }
-
-        $urlUploads = defined('UPLOADS_URL') ? UPLOADS_URL : '';
-
-        $config = new Config([
-            'filesystems' => [
-                'disks' => [
-                    'local' => [
-                        'driver' => 'local',
-                        'root' => UPLOADS_PATH,
-                    ],
-                    'public' => [
-                        'driver' => 'local',
-                        'root' => UPLOADS_PATH,
-                        'url' => $urlUploads,
-                        'visibility' => 'public',
-                    ]
-                ]
-            ]
-        ]);
-        app('config')->merge($config);
     }
 
 
