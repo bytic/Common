@@ -2,12 +2,9 @@
 
 namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
-use ByTIC\Common\Controllers\Traits\Async\Files;
-use ByTIC\Common\Controllers\Traits\Async\Gallery;
-use ByTIC\Common\Controllers\Traits\Async\Images;
-use ByTIC\Common\Controllers\Traits\Async\Logos;
 use ByTIC\Common\Controllers\Traits\Async\Models;
 use ByTIC\Common\Controllers\Traits\Async\ResponseTrait;
+use ByTIC\MediaLibraryModule\Application\Modules\AbstractModule\Controllers\Traits\HasMediaAsyncTrait;
 
 /**
  * Class AbstractAsyncControllerTrait
@@ -15,10 +12,7 @@ use ByTIC\Common\Controllers\Traits\Async\ResponseTrait;
  */
 trait AbstractAsyncControllerTrait
 {
+    use HasMediaAsyncTrait;
     use ResponseTrait;
-    use Images;
-    use Gallery;
-    use Files;
-    use Logos;
     use Models;
 }
