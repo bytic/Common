@@ -22,5 +22,6 @@ return [
         Nip\FlashData\FlashServiceProvider::class,
         Nip\Filesystem\FilesystemServiceProvider::class,
         ByTIC\Notifications\NotificationServiceProvider::class,
+        ByTIC\Migrations\MigrationsServiceProvider::class,
     ]
 ];
