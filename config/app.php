@@ -12,6 +12,7 @@ return [
         Nip\DebugBar\DebugBarServiceProvider::class,
         Nip\Locale\LocaleServiceProvider::class,
         Nip\Mail\MailServiceProvider::class,
+        ByTIC\Money\MoneyServiceProvider::class,
         Nip\Mvc\MvcServiceProvider::class,
         Nip\Dispatcher\DispatcherServiceProvider::class,
         Nip\Staging\StagingServiceProvider::class,
