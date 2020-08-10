@@ -2,7 +2,7 @@
 
 return [
     'providers' => [
-        Nip\AutoLoader\AutoLoaderServiceProvider::class,
+        ByTIC\Autoloader\AutoloaderServiceProvider::class,
         Nip\Inflector\InflectorServiceProvider::class,
         Nip\Cache\CacheServiceProvider::class,
         Nip\Config\ConfigServiceProvider::class,
