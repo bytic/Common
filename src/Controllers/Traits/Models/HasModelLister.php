@@ -15,6 +15,7 @@ use Nip\Records\RecordManager;
  */
 trait HasModelLister
 {
+    use \Nip\Records\Filters\Controllers\HasFiltersTrait;
 
     /**
      * Does the model listing
@@ -36,14 +37,14 @@ trait HasModelLister
         $items = $this->indexFindItems($query);
         $this->indexPrepareItems($items);
 
-        $this->getView()->set('filters', $filters);
-        $this->getView()->set('filters', $filters);
-        $this->getView()->set('filtersManager', $this->getModelManager()->getFilterManager());
-        $this->getView()->set('title', $this->getModelManager()->getLabel('title'));
 
+        $this->getView()->with([
+            'filters' => $filters,
+            'filtersManager'  => $this->getModelManager()->getFilterManager(),
+            'title'  => $this->getModelManager()->getLabel('title')
+        ]);
         $this->getView()->Paginator()->setPaginator($this->getRecordPaginator());
-        $this->getView()->Paginator()->setURL($this->getModelManager()->getURL($filters));
-
+        $this->getView()->Paginator()->setURL($this->getModelManager()->getURL((array) $filters));
 //        if ($pageNumber * $itemsPerPage < $this->recordLimit) {
 //        } else {
 //            $this->getView()->set('recordLimit', true);
@@ -59,11 +60,14 @@ trait HasModelLister
     }
 
     /**
-     * @return mixed
+     * @param null $session
+     * @return \Nip\Records\Filters\Sessions\Session
      */
-    protected function getRequestFilters()
+    protected function getRequestFilters($session = null)
     {
-        return $this->getModelManager()->requestFilters($this->getRequest());
+        $filterManager = $this->getModelManager()->getFilterManager();
+        $filterManager->setRequest($this->getRequest());
+        return $filterManager->getSession($session);
     }
 
     /**
