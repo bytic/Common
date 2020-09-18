@@ -247,14 +247,6 @@ trait CrudModels
     }
 
     /**
-     * @return mixed
-     */
-    protected function getRequestFilters()
-    {
-        return $this->getModelManager()->requestFilters($this->getRequest());
-    }
-
-    /**
      * @return \Nip\Database\Query\Select
      */
     protected function newIndexQuery()
