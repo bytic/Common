@@ -2,15 +2,16 @@
 
 namespace ByTIC\Common\Controllers\Traits\Models;
 
-use ByTIC\Common\Records\Record;
-use ByTIC\Common\Records\Records;
-use Nip\Controller;
-use Nip\Request;
+use Nip\Records\AbstractModels\Record;
+use Nip\Records\AbstractModels\RecordManager;
+use Nip\Controllers\Controller;
+use Nip\Http\Request;
 
 /**
  * Class HasModelFinder
- *
  * @package ByTIC\Common\Controllers\Traits\Models
+ *
+ * @method \Nip\Http\Request getRequest
  */
 trait HasModelFinder
 {
@@ -280,7 +281,7 @@ trait HasModelFinder
     /**
      * Get Model Manager
      *
-     * @return Records
+     * @return RecordManager
      */
     abstract protected function getModelManager();
 }
