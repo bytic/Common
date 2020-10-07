@@ -10,6 +10,7 @@ use ZipArchive;
 /**
  * Class Model
  * @package ByTIC\Common\Records\Media\Files
+ * @deprecated use media library repo
  */
 class Model
 {

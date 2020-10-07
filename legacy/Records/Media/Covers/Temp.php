@@ -2,6 +2,11 @@
 
 namespace ByTIC\Common\Records\Media\Covers;
 
+/**
+ * Class Temp
+ * @package ByTIC\Common\Records\Media\Covers
+ * @deprecated use media library repo
+ */
 class Temp extends \ByTIC\Common\Records\Media\Images\Temp
 {
 

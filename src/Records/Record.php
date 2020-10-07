@@ -39,7 +39,7 @@ class Record extends NipRecord
      */
     public function getName()
     {
-        return $this->name;
+        return $this->getAttributeFromArray('name');
     }
 
     /**

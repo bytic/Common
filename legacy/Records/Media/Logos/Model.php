@@ -4,6 +4,11 @@ namespace ByTIC\Common\Records\Media\Logos;
 
 use Nip_File_System;
 
+/**
+ * Class Model
+ * @package ByTIC\Common\Records\Media\Logos
+ * @deprecated use media library repo
+ */
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {
 
