@@ -7,9 +7,7 @@ use Nip_File_System;
 /**
  * Class Model
  * @package ByTIC\Common\Records\Media\Logos
- *
- * @method \ByTIC\Common\Records\Traits\Media\Logos\RecordTrait getModel()
- *
+ * @deprecated use media library repo
  */
 abstract class Model extends \ByTIC\Common\Records\Media\Images\Model
 {

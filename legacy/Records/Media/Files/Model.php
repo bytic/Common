@@ -11,8 +11,7 @@ use ZipArchive;
  * Class Model
  *
  * @package ByTIC\Common\Records\Media\Files
- *
- * @method FileDisk getFilesystem()
+ * @deprecated use media library repo
  */
 class Model extends File
 {

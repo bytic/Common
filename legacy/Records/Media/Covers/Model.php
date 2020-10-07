@@ -5,6 +5,7 @@ namespace ByTIC\Common\Records\Media\Covers;
 /**
  * Class Model
  * @package ByTIC\Common\Records\Media\Covers
+ * @deprecated use media library repo
  */
 class Model extends \ByTIC\Common\Records\Media\Images\Model
 {

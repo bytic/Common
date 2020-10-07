@@ -2,7 +2,16 @@
 
 namespace ByTIC\Common\Records\Media\Images;
 
-use Nip\Filesystem\Image;
+use Nip\Records\Record as Record;
+use Nip_File_Image;
+
+/**
+ * Class Model
+ * @package ByTIC\Common\Records\Media\Images
+ * @deprecated use media library repo
+ */
+class Model extends Nip_File_Image
+{
 
 /**
  * Class Model
