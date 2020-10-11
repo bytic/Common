@@ -36,7 +36,7 @@ trait RecordTrait
 
     public function initOptions()
     {
-        $options = unserialize($this->options);
+        $options = unserialize($this->getAttributeFromArray('options'));
         $options = (is_array($options)) ? $options : [];
         $this->optionsArray = $options;
     }
