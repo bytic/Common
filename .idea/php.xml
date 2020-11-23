@@ -261,6 +261,10 @@
       <path value="$PROJECT_DIR$/vendor/starkbank/ecdsa" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/orm-filters" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-paylike" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-plationline" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/controllers-extra" />
+      <path value="$PROJECT_DIR$/vendor/softcreatr/jsonpath" />
+      <path value="$PROJECT_DIR$/vendor/nyholm/psr7" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
