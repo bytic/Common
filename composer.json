@@ -24,7 +24,7 @@
     }
   },
   "require": {
-    "php": ">=7.2",
+    "php": "^7.2|^8.0",
     "ext-json": "*",
     "bytic/framework": "^1.0",
     "bytic/auth": "^0.9|^1.0",
@@ -34,10 +34,10 @@
     "bytic/event-dispatcher": "^0.9|^1.0",
     "bytic/http-error-pages": "^1.0",
     "bytic/mail-module": "^0.9|^1.0",
-    "bytic/media-library-module": "^0.9|^1.0",
     "bytic/migrations": "^0.10|^0.12",
     "bytic/models-smart-properties": "^0.9|^1.0",
     "bytic/money": "^1.0",
+    "bytic/orm-behaviors": "^1.0",
     "bytic/navigation": "^1.0",
     "bytic/newrelic": "^1.0",
     "bytic/notifications": "^0.9|^1.0"

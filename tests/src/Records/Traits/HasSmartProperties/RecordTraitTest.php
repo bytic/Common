@@ -3,9 +3,9 @@
 namespace ByTIC\Common\Tests\Records\Traits\HasSmartProperties;
 
 use ByTIC\Common\Records\Properties\AbstractProperty\Generic;
+use ByTIC\Common\Tests\AbstractTest;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasSmartProperties\Record;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasSmartProperties\Records;
-use ByTIC\Common\Tests\AbstractTest;
 
 /**
  * Class TraitsTest
@@ -53,7 +53,7 @@ class RecordTraitTest extends AbstractTest
         self::assertSame('allocated', $this->object->getSmartProperty('Status')->getName());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->object = new Record();

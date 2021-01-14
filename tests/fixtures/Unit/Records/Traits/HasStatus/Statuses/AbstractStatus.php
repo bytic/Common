@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Statuses;
 
-use ByTIC\Common\Records\Properties\Statuses\Generic;
+use ByTIC\Models\SmartProperties\Properties\Statuses\Generic;
 
 /**
  * Class AbstractStatus

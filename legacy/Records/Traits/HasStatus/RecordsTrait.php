@@ -2,9 +2,6 @@
 
 namespace ByTIC\Common\Records\Traits\HasStatus;
 
-use ByTIC\Common\Records\Properties\Statuses\Generic as GenericStatus;
-use Exception;
-
 /**
  * Class RecordsTrait
  * @package ByTIC\Common\Records\Traits\HasStatus

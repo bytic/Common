@@ -2,7 +2,7 @@
 
 namespace ByTIC\Common\Tests\Records\Traits\HasStatus;
 
-use ByTIC\Common\Records\Properties\AbstractProperty\Generic;
+use ByTIC\Models\SmartProperties\Properties\Statuses\Generic;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Record;
 use ByTIC\Common\Tests\Fixtures\Unit\Records\Traits\HasStatus\Records;
 use ByTIC\Common\Tests\AbstractTest;
@@ -34,7 +34,7 @@ class RecordTraitTest extends AbstractTest
         self::assertSame('applicant', $status->getName());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->object = new Record();
