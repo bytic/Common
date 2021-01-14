@@ -1,5 +1,5 @@
 .idea/workspace.xml
-
+.phpunit.result.cache
 tests/.env
 tests/_output/*
 tests/_support/_generated/
