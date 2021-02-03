@@ -2,9 +2,9 @@
 
 namespace ByTIC\Common\Records\Emails\Builder;
 
-use ByTIC\Common\Records\Emails\EmailsTrait;
-use ByTIC\Common\Records\Emails\EmailTrait;
-use Nip\Records\Record;
+use Nip\MailModule\Models\EmailsTable\EmailsTrait;
+use Nip\MailModule\Models\EmailsTable\EmailTrait;
+use Nip\Records\AbstractModels\Record;
 
 /**
  * Class AbstractBuilder
@@ -141,11 +141,11 @@ abstract class AbstractBuilder
      */
     public function hasItem()
     {
-        return $this->item instanceof \Record;
+        return $this->item instanceof Record;
     }
 
     /**
-     * @return \Record
+     * @return Record
      */
     public function getItem()
     {
