@@ -108,7 +108,7 @@ class Model extends File
      *
      * @return string
      */
-    public function getDefaultName()
+    public function getDefaultName(): string
     {
         return 'file';
     }
