@@ -147,7 +147,6 @@
       <path value="$PROJECT_DIR$/vendor/lcobucci/jwt" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-twispay" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-euplatesc" />
-      <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-mobilpay" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-common" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-romcard" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/omnipay-payu" />
@@ -250,7 +249,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/filesystem" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-core" />
       <path value="$PROJECT_DIR$/vendor/symfony/security-guard" />
-      <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/namefy" />
       <path value="$PROJECT_DIR$/vendor/symfony/routing" />
       <path value="$PROJECT_DIR$/vendor/ByTIC/data-objects" />
@@ -272,6 +270,15 @@
       <path value="$PROJECT_DIR$/vendor/symfony/cache" />
       <path value="$PROJECT_DIR$/vendor/codeception/codeception" />
       <path value="$PROJECT_DIR$/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/vendor/symfony/form" />
+      <path value="$PROJECT_DIR$/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/vendor/symfony/password-hasher" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php81" />
+      <path value="$PROJECT_DIR$/vendor/symfony/workflow" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/html-helpers" />
+      <path value="$PROJECT_DIR$/vendor/league/event" />
+      <path value="$PROJECT_DIR$/vendor/ByTIC/seo-meta" />
+      <path value="$PROJECT_DIR$/vendor/symfony/security-http" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

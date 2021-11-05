@@ -8,16 +8,9 @@ use Nip\I18n\Translatable\HasTranslations;
 /**
  * Class RecordsTrait
  * @package ByTIC\Common\Records\Traits\I18n
+ * @deprecated use ByTIC\Records\Behaviors\I18n\I18nRecordsTrait
  */
 trait RecordsTrait
 {
-    use HasTranslations;
-
-    /**
-     * @return string
-     */
-    public function getTranslateRoot()
-    {
-        return $this->getController();
-    }
+    use \ByTIC\Records\Behaviors\I18n\I18nRecordsTrait;
 }

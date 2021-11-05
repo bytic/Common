@@ -4,9 +4,7 @@ namespace ByTIC\Common\Records;
 
 use ByTIC\Common\Records\Export\AbstractExport;
 use ByTIC\Common\Records\Filters\FilterManager;
-use ByTIC\Common\Records\Traits\HasForms\RecordsTrait as HasFormsRecordsTrait;
 use ByTIC\Common\Records\Traits\HasUrlGeneration\HasUrlGenerationRecordsTrait;
-use ByTIC\Common\Records\Traits\I18n\RecordsTrait as I18nRecordsTrait;
 use Nip\Records\Filters\Records\HasFiltersRecordsTrait;
 use Nip\Records\RecordManager;
 
@@ -17,8 +15,8 @@ use Nip\Records\RecordManager;
  */
 abstract class Records extends RecordManager
 {
-    use HasFormsRecordsTrait;
-    use I18nRecordsTrait;
+    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordsTrait;
+    use \ByTIC\Records\Behaviors\I18n\I18nRecordsTrait;
     use HasFiltersRecordsTrait;
 
     /**

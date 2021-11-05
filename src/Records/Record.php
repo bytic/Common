@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Records;
 
-use ByTIC\Common\Records\Traits\HasForms\RecordTrait as HasFormRecordTrait;
 use ByTIC\Common\Records\Traits\HasUrlGeneration\HasUrlGenerationRecordTrait;
 use Nip\Collections\Registry;
 use Nip\Records\Record as NipRecord;
@@ -20,7 +19,7 @@ use Nip\Records\Record as NipRecord;
  */
 class Record extends NipRecord
 {
-    use HasFormRecordTrait;
+    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordTrait;
 
     /**
      * @var Registry
