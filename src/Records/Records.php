@@ -15,7 +15,7 @@ use Nip\Records\RecordManager;
  */
 abstract class Records extends RecordManager
 {
-    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordsTrait;
+    use \ByTIC\Records\Behaviors\HasForms\HasFormsRecordsTrait;
     use \ByTIC\Records\Behaviors\I18n\I18nRecordsTrait;
     use HasFiltersRecordsTrait;
 

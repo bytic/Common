@@ -19,7 +19,7 @@ use Nip\Records\Record as NipRecord;
  */
 class Record extends NipRecord
 {
-    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordTrait;
+    use \ByTIC\Records\Behaviors\HasForms\HasFormsRecordTrait;
 
     /**
      * @var Registry

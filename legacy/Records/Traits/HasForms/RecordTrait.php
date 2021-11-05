@@ -12,5 +12,5 @@ use Nip_Form_Model as Form;
  */
 trait RecordTrait
 {
-    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordTrait;
+    use \ByTIC\Records\Behaviors\HasForms\HasFormsRecordTrait;
 }

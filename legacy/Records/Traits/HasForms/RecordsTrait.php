@@ -9,5 +9,5 @@ namespace ByTIC\Common\Records\Traits\HasForms;
  */
 trait RecordsTrait
 {
-    use ByTIC\Records\Behaviors\HasForms\HasFormsRecordsTrait;
+    use \ByTIC\Records\Behaviors\HasForms\HasFormsRecordsTrait;
 }
