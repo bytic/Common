@@ -41,7 +41,7 @@
     "bytic/orm-behaviors": "^1.0",
     "bytic/navigation": "^1.0",
     "bytic/newrelic": "^1.0",
-    "bytic/notifications": "^0.9|^1.0"
+    "bytic/notifier": "^0.9|^1.0"
   },
   "require-dev": {
     "bytic/codeception": "^1.0|^4.0",
