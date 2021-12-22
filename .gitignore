@@ -1,5 +1,8 @@
 .idea/workspace.xml
+.idea/codestream.xml
+
 .phpunit.result.cache
+
 tests/.env
 tests/_output/*
 tests/_support/_generated/

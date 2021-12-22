@@ -3,6 +3,7 @@
 return [
     'providers' => [
         Nip\Inflector\InflectorServiceProvider::class,
+        \ByTIC\Auth\AuthServiceProvider::class,
         Nip\Cache\CacheServiceProvider::class,
         Nip\Config\ConfigServiceProvider::class,
         ByTIC\Assets\AssetsServiceProvider::class,
