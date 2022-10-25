@@ -34,7 +34,7 @@
     "bytic/event-dispatcher": "^1.0|^2.0",
     "bytic/http-error-pages": "^1.0|^2.0",
     "bytic/mail-module": "^1.0|^2.0",
-    "bytic/migrations": "^0.10|^0.12",
+    "bytic/migrations": "^0.12|^0.13",
     "bytic/media-library-module": "^1.0|^2.0",
     "bytic/models-smart-properties": "^1.0|^2.0",
     "bytic/money": "^1.0|^2.0",
