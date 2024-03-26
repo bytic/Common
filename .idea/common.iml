@@ -319,6 +319,17 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/paytic/omnipay-common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/paytic/omnipay-romcard" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/notifier" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/psr/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/seld/signal-handler" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bytic/event-discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paytic/common-objects" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/namshi/jose" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-csrf" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mailer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stella-maris/clock" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

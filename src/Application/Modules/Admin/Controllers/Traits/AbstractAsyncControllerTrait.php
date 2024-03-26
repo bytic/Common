@@ -2,8 +2,6 @@
 
 namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
-use ByTIC\Common\Controllers\Traits\Async\Models;
-use ByTIC\Common\Controllers\Traits\Async\ResponseTrait;
 use ByTIC\MediaLibraryModule\Application\Modules\AbstractModule\Controllers\Traits\HasMediaAsyncTrait;
 
 /**
@@ -13,6 +11,6 @@ use ByTIC\MediaLibraryModule\Application\Modules\AbstractModule\Controllers\Trai
 trait AbstractAsyncControllerTrait
 {
     use HasMediaAsyncTrait;
-    use ResponseTrait;
-    use Models;
+    use \ByTIC\Controllers\Behaviors\Async\ResponseTrait;
+    use \ByTIC\Controllers\Behaviors\Async\Models;
 }

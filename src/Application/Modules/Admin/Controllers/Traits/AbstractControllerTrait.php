@@ -2,7 +2,6 @@
 
 namespace ByTIC\Common\Application\Modules\Admin\Controllers\Traits;
 
-use Admin_View as AdminView;
 use ByTIC\Common\Application\Controllers\Traits\AbstractControllerTrait as GenericAbstractControllerTrait;
 
 /**
@@ -30,16 +29,9 @@ trait AbstractControllerTrait
 
     protected function afterAction()
     {
-        $this->getView()->set('user', $this->_getUser());
+        $this->payload()->set('user', $this->_getUser());
 
         parent::afterAction();
     }
 
-    /**
-     * @return AdminView
-     */
-    protected function getViewObject()
-    {
-        return new AdminView();
-    }
 }

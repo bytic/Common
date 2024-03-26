@@ -44,9 +44,9 @@
     "bytic/notifier": "^1.0"
   },
   "require-dev": {
-    "bytic/codeception": "^4.0",
-    "bytic/payments": "^1.0",
+    "bytic/phpqatools": "^4.0",
+    "paytic/payments": "^1.0",
     "bytic/document-generator": "^1.0",
-    "php-http/guzzle6-adapter": "^2.0"
+    "symfony/http-client": "^5.0|^6.0|^7.0"
   }
 }
